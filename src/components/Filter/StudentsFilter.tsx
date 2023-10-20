@@ -1,13 +1,13 @@
-import TextField from "@mui/material/TextField"
-import Autocomplete from "@mui/material/Autocomplete"
-import Button from "@mui/material/Button"
-import styles from "./Filter.module.css"
+import TextField from '@mui/material/TextField'
+import Autocomplete from '@mui/material/Autocomplete'
+import Button from '@mui/material/Button'
+import styles from './Filter.module.css'
 
 export const StudentsFilter = () => {
-  const inputWidth = "220px"
+  const inputWidth = '220px'
 
   return (
-    <div className={styles["students-filter-wrapper"]}>
+    <div className={styles['students-filter-wrapper']}>
       <div className={styles.fields}>
         <Autocomplete
           freeSolo
@@ -19,10 +19,10 @@ export const StudentsFilter = () => {
           renderInput={(params) => (
             <TextField
               {...params}
-              label="ПІБ"
+              label="Пошук за полем"
               InputProps={{
                 ...params.InputProps,
-                type: "search",
+                type: 'search',
               }}
             />
           )}
@@ -30,14 +30,14 @@ export const StudentsFilter = () => {
 
         <TextField
           size="small"
-          label="Група"
+          label="Пошук"
           sx={{ width: inputWidth }}
           InputProps={{
-            type: "search",
+            type: 'search',
           }}
         />
 
-        <TextField
+        {/* <TextField
           size="small"
           label="Мережа аптек"
           sx={{ width: inputWidth }}
@@ -62,42 +62,25 @@ export const StudentsFilter = () => {
           InputProps={{
             type: "search",
           }}
-        />
+        /> */}
       </div>
       <div className={styles.actions}>
-        <Button variant="contained">Завантажити направлення в PDF</Button>
-        <Button variant="contained">Знайти студентів</Button>
+        {/* <Button variant="contained">Завантажити направлення в PDF</Button> */}
+        {/* <Button variant="contained">Знайти студентів</Button> */}
+        <Button variant="contained">Знайти</Button>
       </div>
     </div>
   )
 }
 
 const top100Films = [
-  { title: "The Shawshank Redemption", year: 1994 },
-  { title: "The Godfather", year: 1972 },
-  { title: "The Godfather: Part II", year: 1974 },
-  { title: "The Dark Knight", year: 2008 },
-  { title: "12 Angry Men", year: 1957 },
+  { title: 'The Shawshank Redemption', year: 1994 },
+  { title: 'The Godfather', year: 1972 },
+  { title: 'The Godfather: Part II', year: 1974 },
+  { title: 'The Dark Knight', year: 2008 },
+  { title: '12 Angry Men', year: 1957 },
   { title: "Schindler's List", year: 1993 },
-  { title: "Pulp Fiction", year: 1994 },
-  {
-    title: "The Lord of the Rings: The Return of the King",
-    year: 2003,
-  },
-  { title: "The Good, the Bad and the Ugly", year: 1966 },
-  { title: "Fight Club", year: 1999 },
-  {
-    title: "The Lord of the Rings: The Fellowship of the Ring",
-    year: 2001,
-  },
-  {
-    title: "Star Wars: Episode V - The Empire Strikes Back",
-    year: 1980,
-  },
-  { title: "Forrest Gump", year: 1994 },
-  { title: "Inception", year: 2010 },
-  {
-    title: "The Lord of the Rings: The Two Towers",
-    year: 2002,
-  },
+  { title: 'Pulp Fiction', year: 1994 },
+  { title: 'The Good, the Bad and the Ugly', year: 1966 },
+  { title: 'Fight Club', year: 1999 },
 ]

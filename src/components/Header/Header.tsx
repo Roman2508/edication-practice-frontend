@@ -1,11 +1,11 @@
-import React from "react"
-import AppBar from "@mui/material/AppBar"
-import { IconButton, Menu, MenuItem, Toolbar, Typography } from "@mui/material"
-import MenuIcon from "@mui/icons-material/Menu"
-import AccountCircle from "@mui/icons-material/AccountCircle"
-import logoWhite from "../../assets/logo_white.svg"
-import logo from "../../assets/logo.png"
-import { Link } from "react-router-dom"
+import React from 'react'
+import AppBar from '@mui/material/AppBar'
+import { IconButton, Menu, MenuItem, Toolbar, Typography } from '@mui/material'
+import MenuIcon from '@mui/icons-material/Menu'
+import AccountCircle from '@mui/icons-material/AccountCircle'
+import logoWhite from '../../assets/logo_white.svg'
+import logo from '../../assets/logo.png'
+import { Link } from 'react-router-dom'
 
 export const Header = () => {
   const [auth, setAuth] = React.useState(true)
@@ -75,23 +75,23 @@ export const Header = () => {
               id="menu-appbar"
               anchorEl={anchorEl}
               anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
+                vertical: 'top',
+                horizontal: 'right',
               }}
               keepMounted
               transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
+                vertical: 'top',
+                horizontal: 'right',
               }}
               open={Boolean(anchorEl)}
               onClose={handleClose}
             >
-              <MenuItem onClick={handleClose}>
-                <Link to="/print">Друк</Link>
-              </MenuItem>
-              <MenuItem onClick={handleClose}>
-                <Link to="/settings">Налаштування</Link>
-              </MenuItem>
+              <Link to="/print">
+                <MenuItem onClick={handleClose}>Друк</MenuItem>
+              </Link>
+              <Link to="/settings">
+                <MenuItem onClick={handleClose}>Налаштування</MenuItem>
+              </Link>
               <MenuItem onClick={handleClose}>Вихід</MenuItem>
             </Menu>
           </div>
