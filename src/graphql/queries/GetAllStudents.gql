@@ -1,0 +1,20 @@
+query GetAllStudents {
+  students {
+    data {
+      attributes {
+        email
+        name
+        group {
+          data {
+            attributes {
+              name
+              courseNumber
+            }
+          }
+        }
+        access
+        picture
+      }
+    }
+  }
+}

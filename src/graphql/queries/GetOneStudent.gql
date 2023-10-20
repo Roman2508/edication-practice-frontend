@@ -1,0 +1,20 @@
+query GetOneStudent($email: String) {
+  students(filters: { email: { contains: $email } }) {
+    data {
+      attributes {
+        email
+        name
+        group {
+          data {
+            attributes {
+              name
+              courseNumber
+            }
+          }
+        }
+        access
+        picture
+      }
+    }
+  }
+}

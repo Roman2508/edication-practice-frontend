@@ -1,19 +1,38 @@
-import React from 'react'
-import AppBar from '@mui/material/AppBar'
-import { IconButton, Menu, MenuItem, Toolbar, Typography } from '@mui/material'
-import MenuIcon from '@mui/icons-material/Menu'
-import AccountCircle from '@mui/icons-material/AccountCircle'
-import logoWhite from '../../assets/logo_white.svg'
-import logo from '../../assets/logo.png'
-import { Link } from 'react-router-dom'
+import React from "react"
+import AppBar from "@mui/material/AppBar"
+import { googleLogout } from "@react-oauth/google"
+import { Link, useNavigate } from "react-router-dom"
+import { IconButton, Menu, MenuItem, Toolbar, Typography } from "@mui/material"
+
+import styles from "./Header.module.css"
+import logo from "../../assets/logo.png"
+import { getAuthData } from "../../utils/getAuthData"
+import { IAuthData } from "../GoogleLogin/GoogleLogin"
 
 export const Header = () => {
-  const [auth, setAuth] = React.useState(true)
+  const navigate = useNavigate()
+
+  const initialAuthData = { name: "", email: "", picture: "" }
+
+  const [auth, setAuth] = React.useState<IAuthData>(initialAuthData)
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
 
-  //   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //     setAuth(event.target.checked)
-  //   }
+  React.useEffect(() => {
+    const fetchData = async () => {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/students`)
+      const data = await res.json()
+      console.log(res, data)
+    }
+    fetchData()
+
+    const data = getAuthData()
+
+    if (data) {
+      setAuth(data)
+    } else {
+      navigate("/auth")
+    }
+  }, [])
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
@@ -21,6 +40,15 @@ export const Header = () => {
 
   const handleClose = () => {
     setAnchorEl(null)
+  }
+
+  const logout = () => {
+    if (window.confirm("Ви дійсно хочете вийти з акаунта?")) {
+      window.localStorage.removeItem("pharm-practice")
+      googleLogout()
+      handleClose()
+      navigate("/auth")
+    }
   }
 
   return (
@@ -33,34 +61,11 @@ export const Header = () => {
             </IconButton>
           </Link>
         </Typography>
-        {/* <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
-          <MenuIcon />
-        </IconButton> */}
 
-        {/* <Typography
-          variant="h6"
-          noWrap
-          component="a"
-          href="#app-bar-with-responsive-menu"
-          sx={{
-            mr: 2,
-            display: { xs: "none", md: "flex" },
-            fontFamily: "monospace",
-            fontWeight: 700,
-            letterSpacing: ".3rem",
-            color: "inherit",
-            textDecoration: "none",
-            flexGrow: 1,
-          }}
-        >
-          LOGO
-        </Typography> */}
+        {auth.name && (
+          <div className={styles["account-wrapper"]}>
+            <Typography>{auth.name}</Typography>
 
-        {/* <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          Photos
-        </Typography> */}
-        {auth && (
-          <div>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -69,19 +74,20 @@ export const Header = () => {
               onClick={handleMenu}
               color="inherit"
             >
-              <AccountCircle />
+              {/* <AccountCircle /> */}
+              <img className={styles.avatar} src={auth.picture} alt="account avatar" />
             </IconButton>
             <Menu
               id="menu-appbar"
               anchorEl={anchorEl}
               anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
+                vertical: "top",
+                horizontal: "right",
               }}
               keepMounted
               transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
+                vertical: "top",
+                horizontal: "right",
               }}
               open={Boolean(anchorEl)}
               onClose={handleClose}
@@ -92,7 +98,7 @@ export const Header = () => {
               <Link to="/settings">
                 <MenuItem onClick={handleClose}>Налаштування</MenuItem>
               </Link>
-              <MenuItem onClick={handleClose}>Вихід</MenuItem>
+              <MenuItem onClick={logout}>Вихід</MenuItem>
             </Menu>
           </div>
         )}

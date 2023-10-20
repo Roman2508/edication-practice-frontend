@@ -1,0 +1,12 @@
+mutation CreateStudent($name: String, $email: String, $picture: String) {
+  createStudent(data: { name: $name, email: $email, picture: $picture }) {
+    data {
+      id
+      attributes {
+        name
+        email
+        picture
+      }
+    }
+  }
+}

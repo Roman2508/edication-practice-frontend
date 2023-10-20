@@ -4,6 +4,7 @@ import { Home } from "./pages/Home"
 import { Layout } from "./layout/Layout"
 import { PharmacyPage } from "./pages/PharmacyPage"
 import PrintPage from "./pages/PrintPage"
+import LoginPage from "./pages/LoginPage/LoginPage"
 
 const App = () => {
   return (
@@ -14,6 +15,8 @@ const App = () => {
         <Route element={<PrintPage />} path="/print" />
         <Route element={<div>settings</div>} path="/settings" />
       </Route>
+
+      <Route element={<LoginPage />} path="/auth" />
     </Routes>
   )
 }
