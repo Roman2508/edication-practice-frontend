@@ -1,0 +1,15 @@
+query GetAllPharmacies {
+  pharmacies {
+    data {
+      id
+      attributes {
+        name
+        city
+        address
+        places
+        brand
+        number
+      }
+    }
+  }
+}

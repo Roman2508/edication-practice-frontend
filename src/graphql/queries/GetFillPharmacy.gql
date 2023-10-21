@@ -1,0 +1,25 @@
+query GetFillPharmacy($id: ID!) {
+  pharmacies(filters: { id: { contains: $id } }) {
+    data {
+      id
+      attributes {
+        name
+        city
+        address
+        places
+        location
+        contractNumber
+        brand
+        number
+        logo {
+          data {
+            attributes {
+              url
+              name
+            }
+          }
+        }
+      }
+    }
+  }
+}

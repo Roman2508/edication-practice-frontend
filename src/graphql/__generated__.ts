@@ -514,10 +514,10 @@ export type Pharmacy = {
   readonly contractNumber: Scalars['String']['output'];
   readonly createdAt: Maybe<Scalars['DateTime']['output']>;
   readonly location: Maybe<Scalars['String']['output']>;
+  readonly logo: Maybe<UploadFileEntityResponse>;
   readonly name: Scalars['String']['output'];
   readonly number: Maybe<Scalars['String']['output']>;
   readonly places: Scalars['Int']['output'];
-  readonly publishedAt: Maybe<Scalars['DateTime']['output']>;
   readonly updatedAt: Maybe<Scalars['DateTime']['output']>;
 };
 
@@ -552,7 +552,6 @@ export type PharmacyFiltersInput = {
   readonly number: InputMaybe<StringFilterInput>;
   readonly or: InputMaybe<ReadonlyArray<InputMaybe<PharmacyFiltersInput>>>;
   readonly places: InputMaybe<IntFilterInput>;
-  readonly publishedAt: InputMaybe<DateTimeFilterInput>;
   readonly updatedAt: InputMaybe<DateTimeFilterInput>;
 };
 
@@ -562,10 +561,10 @@ export type PharmacyInput = {
   readonly city: InputMaybe<Scalars['String']['input']>;
   readonly contractNumber: InputMaybe<Scalars['String']['input']>;
   readonly location: InputMaybe<Scalars['String']['input']>;
+  readonly logo: InputMaybe<Scalars['ID']['input']>;
   readonly name: InputMaybe<Scalars['String']['input']>;
   readonly number: InputMaybe<Scalars['String']['input']>;
   readonly places: InputMaybe<Scalars['Int']['input']>;
-  readonly publishedAt: InputMaybe<Scalars['DateTime']['input']>;
 };
 
 export enum PublicationState {
@@ -623,7 +622,6 @@ export type QueryI18NLocalesArgs = {
 export type QueryPharmaciesArgs = {
   filters: InputMaybe<PharmacyFiltersInput>;
   pagination?: InputMaybe<PaginationArg>;
-  publicationState?: InputMaybe<PublicationState>;
   sort?: InputMaybe<ReadonlyArray<InputMaybe<Scalars['String']['input']>>>;
 };
 
@@ -1175,10 +1173,22 @@ export type GetAllGroupsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetAllGroupsQuery = { readonly __typename?: 'Query', readonly groups: { readonly __typename?: 'GroupEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'GroupEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Group', readonly name: string, readonly courseNumber: number } }> } };
 
+export type GetAllPharmaciesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAllPharmaciesQuery = { readonly __typename?: 'Query', readonly pharmacies: { readonly __typename?: 'PharmacyEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'PharmacyEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Pharmacy', readonly name: string, readonly city: string, readonly address: string, readonly places: number, readonly brand: string, readonly number: string } }> } };
+
 export type GetAllStudentsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetAllStudentsQuery = { readonly __typename?: 'Query', readonly students: { readonly __typename?: 'StudentEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'StudentEntity', readonly attributes: { readonly __typename?: 'Student', readonly email: string, readonly name: string, readonly access: Enum_Student_Access, readonly picture: string, readonly group: { readonly __typename?: 'GroupRelationResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'GroupEntity', readonly attributes: { readonly __typename?: 'Group', readonly name: string, readonly courseNumber: number } }> } } }> } };
+
+export type GetFillPharmacyQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type GetFillPharmacyQuery = { readonly __typename?: 'Query', readonly pharmacies: { readonly __typename?: 'PharmacyEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'PharmacyEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Pharmacy', readonly name: string, readonly city: string, readonly address: string, readonly places: number, readonly location: string, readonly contractNumber: string, readonly brand: string, readonly number: string, readonly logo: { readonly __typename?: 'UploadFileEntityResponse', readonly data: { readonly __typename?: 'UploadFileEntity', readonly attributes: { readonly __typename?: 'UploadFile', readonly url: string, readonly name: string } } } } }> } };
 
 export type GetOneStudentQueryVariables = Exact<{
   email: InputMaybe<Scalars['String']['input']>;
@@ -1237,6 +1247,23 @@ export const GetAllGroupsDocument = gql`
   }
 }
     `;
+export const GetAllPharmaciesDocument = gql`
+    query GetAllPharmacies {
+  pharmacies {
+    data {
+      id
+      attributes {
+        name
+        city
+        address
+        places
+        brand
+        number
+      }
+    }
+  }
+}
+    `;
 export const GetAllStudentsDocument = gql`
     query GetAllStudents {
   students {
@@ -1254,6 +1281,33 @@ export const GetAllStudentsDocument = gql`
         }
         access
         picture
+      }
+    }
+  }
+}
+    `;
+export const GetFillPharmacyDocument = gql`
+    query GetFillPharmacy($id: ID!) {
+  pharmacies(filters: {id: {contains: $id}}) {
+    data {
+      id
+      attributes {
+        name
+        city
+        address
+        places
+        location
+        contractNumber
+        brand
+        number
+        logo {
+          data {
+            attributes {
+              url
+              name
+            }
+          }
+        }
       }
     }
   }
@@ -1299,8 +1353,14 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     GetAllGroups(variables?: GetAllGroupsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetAllGroupsQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetAllGroupsQuery>(GetAllGroupsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetAllGroups', 'query');
     },
+    GetAllPharmacies(variables?: GetAllPharmaciesQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetAllPharmaciesQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetAllPharmaciesQuery>(GetAllPharmaciesDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetAllPharmacies', 'query');
+    },
     GetAllStudents(variables?: GetAllStudentsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetAllStudentsQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetAllStudentsQuery>(GetAllStudentsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetAllStudents', 'query');
+    },
+    GetFillPharmacy(variables: GetFillPharmacyQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetFillPharmacyQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetFillPharmacyQuery>(GetFillPharmacyDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetFillPharmacy', 'query');
     },
     GetOneStudent(variables?: GetOneStudentQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetOneStudentQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetOneStudentQuery>(GetOneStudentDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetOneStudent', 'query');
