@@ -1,0 +1,11 @@
+query GetAllGroups {
+  groups {
+    data {
+      id
+      attributes {
+        name
+        courseNumber
+      }
+    }
+  }
+}

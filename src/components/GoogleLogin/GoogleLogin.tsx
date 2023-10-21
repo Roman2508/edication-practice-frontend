@@ -1,6 +1,8 @@
+import React from "react"
 import jwt_decode from "jwt-decode"
-import { GoogleLogin } from "@react-oauth/google"
 import { gql } from "../../graphql/client"
+import { useNavigate } from "react-router-dom"
+import { GoogleLogin } from "@react-oauth/google"
 
 export interface IAuthData {
   email: string
@@ -8,7 +10,11 @@ export interface IAuthData {
   picture: string
 }
 
-const Login = () => {
+const Login: React.FC<{ setRegisterStep: React.Dispatch<React.SetStateAction<1 | 2>> }> = ({
+  setRegisterStep,
+}) => {
+  const navigate = useNavigate()
+
   return (
     <GoogleLogin
       onSuccess={async (credentialResponse) => {
@@ -21,20 +27,58 @@ const Login = () => {
         }
 
         const student = await gql.GetOneStudent({ email: response.email })
+        const isStudentExisted = !!student.students.data.length
 
-        const userData = {
-          email: response.email,
-          name: response.name,
-          picture: response.picture,
-        }
-        if (student) {
-          window.localStorage.setItem("pharm-practice", JSON.stringify(userData))
+        if (isStudentExisted) {
+          const userData = {
+            id: student.students.data[0].id,
+            email: student.students.data[0].attributes.email,
+            name: student.students.data[0].attributes.name,
+            picture: student.students.data[0].attributes.picture,
+          }
 
-          window.location.replace("/")
+          const isStudentHasGroup = !!student.students.data[0].attributes.group.data[0]
+
+          if (isStudentHasGroup) {
+            const { name, courseNumber } =
+              student.students.data[0].attributes.group.data[0].attributes
+
+            window.localStorage.setItem(
+              "pharm-practice",
+              JSON.stringify({
+                ...userData,
+                group: {
+                  name,
+                  courseNumber,
+                },
+              })
+            )
+
+            navigate("/")
+            /*  */
+          } else {
+            window.localStorage.setItem(
+              "pharm-practice",
+              JSON.stringify({ ...userData, group: null })
+            )
+            setRegisterStep(2)
+          }
+          /*  */
         } else {
-          const newStudent = await gql.CreateStudent({ ...userData })
+          const userData = {
+            email: response.email,
+            name: response.name,
+            picture: response.picture,
+          }
 
-          window.localStorage.setItem("pharm-practice", JSON.stringify(newStudent))
+          const responce = await gql.CreateStudent({ ...userData })
+
+          window.localStorage.setItem(
+            "pharm-practice",
+            JSON.stringify({ ...userData, id: responce.createStudent.data.id, group: null })
+          )
+
+          setRegisterStep(2)
         }
       }}
       onError={() => {

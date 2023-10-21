@@ -1153,6 +1153,14 @@ export type UsersPermissionsUserRelationResponseCollection = {
   readonly data: ReadonlyArray<UsersPermissionsUserEntity>;
 };
 
+export type ChangeStudentGroupMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+  group: Scalars['ID']['input'];
+}>;
+
+
+export type ChangeStudentGroupMutation = { readonly __typename?: 'Mutation', readonly updateStudent: { readonly __typename?: 'StudentEntityResponse', readonly data: { readonly __typename?: 'StudentEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Student', readonly name: string, readonly email: string, readonly picture: string, readonly group: { readonly __typename?: 'GroupRelationResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'GroupEntity', readonly attributes: { readonly __typename?: 'Group', readonly name: string, readonly courseNumber: number } }> } } } } };
+
 export type CreateStudentMutationVariables = Exact<{
   name: InputMaybe<Scalars['String']['input']>;
   email: InputMaybe<Scalars['String']['input']>;
@@ -1161,6 +1169,11 @@ export type CreateStudentMutationVariables = Exact<{
 
 
 export type CreateStudentMutation = { readonly __typename?: 'Mutation', readonly createStudent: { readonly __typename?: 'StudentEntityResponse', readonly data: { readonly __typename?: 'StudentEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Student', readonly name: string, readonly email: string, readonly picture: string } } } };
+
+export type GetAllGroupsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAllGroupsQuery = { readonly __typename?: 'Query', readonly groups: { readonly __typename?: 'GroupEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'GroupEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Group', readonly name: string, readonly courseNumber: number } }> } };
 
 export type GetAllStudentsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1172,9 +1185,31 @@ export type GetOneStudentQueryVariables = Exact<{
 }>;
 
 
-export type GetOneStudentQuery = { readonly __typename?: 'Query', readonly students: { readonly __typename?: 'StudentEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'StudentEntity', readonly attributes: { readonly __typename?: 'Student', readonly email: string, readonly name: string, readonly access: Enum_Student_Access, readonly picture: string, readonly group: { readonly __typename?: 'GroupRelationResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'GroupEntity', readonly attributes: { readonly __typename?: 'Group', readonly name: string, readonly courseNumber: number } }> } } }> } };
+export type GetOneStudentQuery = { readonly __typename?: 'Query', readonly students: { readonly __typename?: 'StudentEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'StudentEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Student', readonly email: string, readonly name: string, readonly access: Enum_Student_Access, readonly picture: string, readonly group: { readonly __typename?: 'GroupRelationResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'GroupEntity', readonly attributes: { readonly __typename?: 'Group', readonly name: string, readonly courseNumber: number } }> } } }> } };
 
 
+export const ChangeStudentGroupDocument = gql`
+    mutation ChangeStudentGroup($id: ID!, $group: ID!) {
+  updateStudent(id: $id, data: {group: [$group]}) {
+    data {
+      id
+      attributes {
+        name
+        email
+        picture
+        group {
+          data {
+            attributes {
+              name
+              courseNumber
+            }
+          }
+        }
+      }
+    }
+  }
+}
+    `;
 export const CreateStudentDocument = gql`
     mutation CreateStudent($name: String, $email: String, $picture: String) {
   createStudent(data: {name: $name, email: $email, picture: $picture}) {
@@ -1184,6 +1219,19 @@ export const CreateStudentDocument = gql`
         name
         email
         picture
+      }
+    }
+  }
+}
+    `;
+export const GetAllGroupsDocument = gql`
+    query GetAllGroups {
+  groups {
+    data {
+      id
+      attributes {
+        name
+        courseNumber
       }
     }
   }
@@ -1215,6 +1263,7 @@ export const GetOneStudentDocument = gql`
     query GetOneStudent($email: String) {
   students(filters: {email: {contains: $email}}) {
     data {
+      id
       attributes {
         email
         name
@@ -1241,8 +1290,14 @@ const defaultWrapper: SdkFunctionWrapper = (action, _operationName, _operationTy
 
 export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
   return {
+    ChangeStudentGroup(variables: ChangeStudentGroupMutationVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<ChangeStudentGroupMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<ChangeStudentGroupMutation>(ChangeStudentGroupDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'ChangeStudentGroup', 'mutation');
+    },
     CreateStudent(variables?: CreateStudentMutationVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<CreateStudentMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<CreateStudentMutation>(CreateStudentDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'CreateStudent', 'mutation');
+    },
+    GetAllGroups(variables?: GetAllGroupsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetAllGroupsQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetAllGroupsQuery>(GetAllGroupsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetAllGroups', 'query');
     },
     GetAllStudents(variables?: GetAllStudentsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetAllStudentsQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetAllStudentsQuery>(GetAllStudentsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetAllStudents', 'query');

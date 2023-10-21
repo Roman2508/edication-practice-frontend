@@ -18,12 +18,12 @@ export const Header = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
 
   React.useEffect(() => {
-    const fetchData = async () => {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/students`)
-      const data = await res.json()
-      console.log(res, data)
-    }
-    fetchData()
+    // const fetchData = async () => {
+    //   const res = await fetch(`${import.meta.env.VITE_API_URL}/students`)
+    //   const data = await res.json()
+    //   console.log(res, data)
+    // }
+    // fetchData()
 
     const data = getAuthData()
 
