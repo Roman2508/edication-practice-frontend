@@ -1,31 +1,32 @@
-import React from "react"
-import { Document, Page, Text, View, StyleSheet, Font, Image } from "@react-pdf/renderer"
-import TimesNewRomanNormal from "../assets/times-new-roman.ttf"
-import TimesNewRomanBold from "../assets/Times New Roman Bold.ttf"
-import logo from "../assets/logo.png"
+import React from 'react'
+import { Document, Page, Text, View, StyleSheet, Font, Image } from '@react-pdf/renderer'
+import TimesNewRomanNormal from '../assets/times-new-roman.ttf'
+import TimesNewRomanBold from '../assets/Times New Roman Bold.ttf'
+import logo from '../assets/logo-from-pdf.jpg'
+// import logo from "../assets/logo.png"
 
 Font.register({
-  family: "Times-New-Roman-Normal",
+  family: 'Times-New-Roman-Normal',
   src: TimesNewRomanNormal,
-  fontWeight: "normal",
+  fontWeight: 'normal',
 })
 Font.register({
-  family: "Times-New-Roman-Bold",
+  family: 'Times-New-Roman-Bold',
   src: TimesNewRomanBold,
-  fontWeight: "bold",
+  fontWeight: 'bold',
 })
 
 // Create styles
 const styles = StyleSheet.create({
   page: {
     // flexDirection: "row",
-    backgroundColor: "#ffffff",
+    backgroundColor: '#ffffff',
     paddingTop: 20,
     paddingBottom: 20,
     paddingHorizontal: 20,
   },
   section: {
-    flexDirection: "row",
+    flexDirection: 'row',
   },
   // col2: {
   //   fontFamily: "Times-New-Roman",
@@ -36,29 +37,29 @@ const styles = StyleSheet.create({
   //   textAlign: "center",
   // },
   leftCol: {
-    fontFamily: "Times-New-Roman-Normal",
+    fontFamily: 'Times-New-Roman-Normal',
     flexGrow: 1,
     fontSize: 10,
     padding: 10,
     maxWidth: 220,
-    textAlign: "center",
+    textAlign: 'center',
   },
   rightCol: {
-    fontFamily: "Times-New-Roman-Bold",
+    fontFamily: 'Times-New-Roman-Bold',
     flexGrow: 1,
     fontSize: 14,
     padding: 10,
-    maxWidth: "100%",
-    textAlign: "center",
+    maxWidth: '100%',
+    textAlign: 'center',
   },
   text: {
     // margin: 10,
     // padding: 28,
     // flexGrow: 1,
-    fontFamily: "Times-New-Roman-Normal",
+    fontFamily: 'Times-New-Roman-Normal',
     fontSize: 14,
     maxWidth: 200,
-    textAlign: "center",
+    textAlign: 'center',
   },
   wrapper: {
     // paddingTop: 35,
@@ -69,9 +70,9 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 10,
     fontSize: 14,
-    color: "grey",
-    textAlign: "center",
-    fontFamily: "Times-New-Roman-Normal",
+    color: 'grey',
+    textAlign: 'center',
+    fontFamily: 'Times-New-Roman-Normal',
   },
   logo: {
     width: 80,
@@ -88,10 +89,7 @@ export const PdfDocument = () => {
         <View style={styles.section}>
           <View style={styles.leftCol}>
             <View>
-              <Text>
-                Міністерство охорони здоров’я України Житомирський базовий фармацевтичний фаховий
-                коледж
-              </Text>
+              <Text>Міністерство охорони здоров’я України Житомирський базовий фармацевтичний фаховий коледж</Text>
             </View>
             <View>
               <Image src={logo} style={styles.logo} />
