@@ -3,7 +3,6 @@ import { Document, Page, Text, View, StyleSheet, Font, Image } from '@react-pdf/
 import TimesNewRomanNormal from '../assets/times-new-roman.ttf'
 import TimesNewRomanBold from '../assets/Times New Roman Bold.ttf'
 import logo from '../assets/logo-from-pdf.jpg'
-// import logo from "../assets/logo.png"
 
 Font.register({
   family: 'Times-New-Roman-Normal',
@@ -19,23 +18,15 @@ Font.register({
 // Create styles
 const styles = StyleSheet.create({
   page: {
-    // flexDirection: "row",
     backgroundColor: '#ffffff',
     paddingTop: 20,
     paddingBottom: 20,
-    paddingHorizontal: 20,
+    paddingHorizontal: 40,
   },
   section: {
     flexDirection: 'row',
   },
-  // col2: {
-  //   fontFamily: "Times-New-Roman",
-  //   flexGrow: 1,
-  //   fontSize: 10,
-  //   padding: 10,
-  //   maxWidth: 280,
-  //   textAlign: "center",
-  // },
+
   leftCol: {
     fontFamily: 'Times-New-Roman-Normal',
     flexGrow: 1,
@@ -52,10 +43,10 @@ const styles = StyleSheet.create({
     maxWidth: '100%',
     textAlign: 'center',
   },
+  collageName: {
+    marginLeft: 10,
+  },
   text: {
-    // margin: 10,
-    // padding: 28,
-    // flexGrow: 1,
     fontFamily: 'Times-New-Roman-Normal',
     fontSize: 14,
     maxWidth: 200,
@@ -75,7 +66,49 @@ const styles = StyleSheet.create({
     fontFamily: 'Times-New-Roman-Normal',
   },
   logo: {
-    width: 80,
+    width: 60,
+    marginTop: 10,
+    marginLeft: 10,
+    marginRight: 15,
+  },
+  address: {
+    marginTop: 10,
+  },
+  mainTitle: {
+    textAlign: 'center',
+    fontFamily: 'Times-New-Roman-Bold',
+    fontSize: 14,
+    marginTop: 20,
+  },
+  subTitle: {
+    textAlign: 'center',
+    fontFamily: 'Times-New-Roman-Normal',
+    fontSize: 10,
+  },
+  defaultText: {
+    fontFamily: 'Times-New-Roman-Normal',
+    textAlign: 'justify',
+    fontSize: 14,
+    lineHeight: 1.5,
+    marginTop: 10,
+  },
+
+  practiceName: {
+    fontFamily: 'Times-New-Roman-Bold',
+    paddingLeft: 5,
+    textDecoration: 'underline',
+  },
+  practiceTerm: {
+    marginLeft: 150,
+  },
+  footer: {
+    marginTop: 20,
+    marginBottom: 10,
+    fontSize: 14,
+    color: 'grey',
+    textAlign: 'center',
+    fontFamily: 'Times-New-Roman-Normal',
+    // fontStyle: 'italic',
   },
 })
 
@@ -88,12 +121,12 @@ export const PdfDocument = () => {
 
         <View style={styles.section}>
           <View style={styles.leftCol}>
-            <View>
+            <View style={styles.collageName}>
               <Text>Міністерство охорони здоров’я України Житомирський базовий фармацевтичний фаховий коледж</Text>
             </View>
-            <View>
+            <View style={styles.section}>
               <Image src={logo} style={styles.logo} />
-              <View>
+              <View style={styles.address}>
                 <Text>10005</Text>
                 <Text>м. Житомир</Text>
                 <Text>вул. Чуднівська, 99</Text>
@@ -101,8 +134,51 @@ export const PdfDocument = () => {
               </View>
             </View>
           </View>
-          <Text style={styles.rightCol}>КЕРІВНИКУ</Text>
+          <View style={styles.rightCol}>
+            <Text>КЕРІВНИКУ</Text>
+            <Text>__________________________________________</Text>
+            <Text>__________________________________________</Text>
+            <Text>__________________________________________</Text>
+            <Text>__________________________________________</Text>
+            <Text>__________________________________________</Text>
+          </View>
         </View>
+
+        <Text style={styles.mainTitle}>НАПРАВЛЕННЯ НА ПРАКТИКУ № ______</Text>
+        <Text style={styles.subTitle}>/є підставою для зарахування на практику/</Text>
+        <Text style={styles.defaultText}>
+          Згідно із ______________________________________________________________ направляємо на практику здобувачку(а)
+          освіти ________ курсу, _________ групи, яка(ий) навчається на ОПП «Фармація» спеціальності 226 Фармація,
+          промислова фармація ОПС фаховий молодший бакалавр.
+        </Text>
+
+        <View style={{ ...styles.section, marginTop: 10 }}>
+          <Text style={{ ...styles.defaultText, marginLeft: 50 }}>Назва практики:</Text>
+          <Text style={{ ...styles.defaultText, ...styles.practiceName }}>пропедевтична практика</Text>
+        </View>
+
+        <Text style={{ ...styles.defaultText, marginLeft: 50 }}>
+          Термін практики з «___» ______________ 20____ року
+        </Text>
+        <Text style={{ ...styles.defaultText, marginLeft: 150 }}>по «___» ______________ 20____ року</Text>
+
+        <Text style={{ ...styles.defaultText, marginTop: 20 }}>
+          Методичний керівник практики ____________________________________________
+        </Text>
+        <Text style={{ ...styles.subTitle, marginLeft: 220 }}>( прізвище, ім’я, по батькові)</Text>
+
+        <Text style={{ ...styles.mainTitle, marginTop: 40 }}>ПРІЗВИЩА, ІМЕНА ТА ПО БАТЬКОВІ ЗДОБУВАЧІВ ОСВІТИ</Text>
+        <Text>____________________________________________________</Text>
+        <Text>____________________________________________________</Text>
+        <Text>____________________________________________________</Text>
+        <Text>____________________________________________________</Text>
+        <Text>____________________________________________________</Text>
+
+        <Text style={{ ...styles.defaultText, marginTop: 40 }}>
+          Завідувач практики (навчальної, виробничої) ___________ Наталія КОСЯЧЕНКО
+        </Text>
+
+        <Text style={{ ...styles.footer, marginTop: 80 }}>м. Житомир</Text>
       </Page>
     </Document>
   )

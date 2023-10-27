@@ -97,7 +97,7 @@ const LoginPage = () => {
           Практика
         </Typography>
 
-        {registerStep !== 1 ? (
+        {registerStep === 1 ? (
           <Login setRegisterStep={setRegisterStep} />
         ) : (
           <Box className={styles['box']}>
@@ -113,18 +113,21 @@ const LoginPage = () => {
               </Select>
             </FormControl>
 
-            <PatternFormat
-              mask="_"
-              className={styles['phone']}
-              allowEmptyFormatting
-              format="+38 (###) ### ## ##"
-              onValueChange={({ formattedValue, value }) => setPhone({ formattedValue, value })}
-              // placeholder="+38 (099) 333 22 11"
-              // value={inputValue.value}
-            />
+            <div className={styles['phone-wrapper']}>
+              <label className={styles['phone-label']}>Номер телефону</label>
+              <PatternFormat
+                mask="_"
+                className={styles['phone']}
+                allowEmptyFormatting
+                format="+38 (###) ### ## ##"
+                onValueChange={({ formattedValue, value }) => setPhone({ formattedValue, value })}
+                // placeholder="+38 (099) 333 22 11"
+                // value={inputValue.value}
+              />
+            </div>
 
             <Button
-              sx={{ minWidth: '280px' }}
+              sx={{ minWidth: '280px', height: '56px' }}
               className={styles.button}
               disabled={!phoneDisabled || !selectedGroup || isLoading}
               onClick={updateGroup}
