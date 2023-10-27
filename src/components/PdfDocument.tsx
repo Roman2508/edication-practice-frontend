@@ -1,8 +1,8 @@
-import React from 'react'
 import { Document, Page, Text, View, StyleSheet, Font, Image } from '@react-pdf/renderer'
+
+import logo from '../assets/logo-from-pdf.jpg'
 import TimesNewRomanNormal from '../assets/times-new-roman.ttf'
 import TimesNewRomanBold from '../assets/Times New Roman Bold.ttf'
-import logo from '../assets/logo-from-pdf.jpg'
 
 Font.register({
   family: 'Times-New-Roman-Normal',
@@ -92,7 +92,6 @@ const styles = StyleSheet.create({
     lineHeight: 1.5,
     marginTop: 10,
   },
-
   practiceName: {
     fontFamily: 'Times-New-Roman-Bold',
     paddingLeft: 5,
@@ -108,7 +107,6 @@ const styles = StyleSheet.create({
     color: 'grey',
     textAlign: 'center',
     fontFamily: 'Times-New-Roman-Normal',
-    // fontStyle: 'italic',
   },
 })
 

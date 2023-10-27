@@ -20,13 +20,13 @@ export const Home = () => {
 
   return (
     <div className="pdf-iframe">
-      <PDFViewer>
+      {/* <PDFViewer>
         <PdfDocument />
       </PDFViewer>
 
       <PDFDownloadLink document={<PdfDocument />} fileName="somename.pdf">
         {({ blob, url, loading, error }) => (loading ? 'Loading document...' : 'Download now!')}
-      </PDFDownloadLink>
+      </PDFDownloadLink> */}
 
       <PharmacyFilter />
       <PharmacyTable pharmacies={pharmacies} />
