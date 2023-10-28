@@ -21,10 +21,12 @@ const rows = [
 ]
 
 interface IPharmacyTableProps {
-  pharmacies?: PharmacyEntity
+  pharmacies?: PharmacyEntity[]
 }
 
 export const PharmacyTable: React.FC<IPharmacyTableProps> = ({ pharmacies }) => {
+  if (!pharmacies) return <div>Loading...</div>
+
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -34,24 +36,18 @@ export const PharmacyTable: React.FC<IPharmacyTableProps> = ({ pharmacies }) => 
             <TableCell align="left">Місто</TableCell>
             <TableCell align="left">Адреса</TableCell>
             <TableCell align="left">К-ть місць</TableCell>
-            {/* <TableCell align="right">Вибрати</TableCell> */}
           </TableRow>
         </TableHead>
+
         <TableBody>
-          {rows.map((row) => (
-            <TableRow
-              key={row.name}
-              component={Link}
-              to={`/pharmacy/${row.name}`}
-              // sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
+          {pharmacies.map((row: PharmacyEntity) => (
+            <TableRow key={row.id} component={Link} to={`/pharmacy/${row.id}`}>
               <TableCell component="th" scope="row">
-                {row.name}
+                {row.attributes.name}
               </TableCell>
-              <TableCell align="left">{row.calories}</TableCell>
-              <TableCell align="left">{row.fat}</TableCell>
-              <TableCell align="left">{row.carbs}</TableCell>
-              {/* <TableCell align="right">{row.protein}</TableCell> */}
+              <TableCell align="left">{row.attributes.city}</TableCell>
+              <TableCell align="left">{row.attributes.address}</TableCell>
+              <TableCell align="left">{row.attributes.places}</TableCell>
             </TableRow>
           ))}
         </TableBody>

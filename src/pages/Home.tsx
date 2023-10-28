@@ -1,12 +1,12 @@
-import React from 'react'
-import { PharmacyEntity, gql } from '../graphql/client'
-import { PdfDocument } from '../components/PdfDocument'
-import { PDFViewer, PDFDownloadLink } from '@react-pdf/renderer'
-import { PharmacyTable } from '../components/Table/PharmacyTable'
-import { PharmacyFilter } from '../components/Filter/PharmacyFilter'
+import React from "react"
+import { PharmacyEntity, gql } from "../graphql/client"
+// import { PdfDocument } from "../components/PdfDocument"
+// import { PDFViewer, PDFDownloadLink } from "@react-pdf/renderer"
+import { PharmacyTable } from "../components/Table/PharmacyTable"
+import { PharmacyFilter } from "../components/Filter/PharmacyFilter"
 
 export const Home = () => {
-  const [pharmacies, setPharmacies] = React.useState<PharmacyEntity>()
+  const [pharmacies, setPharmacies] = React.useState<PharmacyEntity[]>()
 
   React.useEffect(() => {
     const fetchData = async () => {

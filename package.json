@@ -17,6 +17,7 @@
     "@graphql-codegen/typescript": "^4.0.1",
     "@graphql-codegen/typescript-graphql-request": "^6.0.0",
     "@graphql-codegen/typescript-operations": "^4.0.1",
+    "@maptiler/sdk": "^1.1.2",
     "@mui/icons-material": "^5.14.14",
     "@mui/material": "^5.14.14",
     "@react-oauth/google": "^0.11.1",

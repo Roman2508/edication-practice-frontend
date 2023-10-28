@@ -1,5 +1,19 @@
-query GetFillPharmacy($id: ID!) {
-  pharmacies(filters: { id: { contains: $id } }) {
+mutation CreatePharmacy(
+  $name: String
+  $city: String
+  $address: String
+  $contractNumber: String
+  $places: Int
+) {
+  createPharmacy(
+    data: {
+      name: $name
+      city: $city
+      address: $address
+      contractNumber: $contractNumber
+      places: $places
+    }
+  ) {
     data {
       id
       attributes {
@@ -15,7 +29,6 @@ query GetFillPharmacy($id: ID!) {
           data {
             attributes {
               url
-              name
             }
           }
         }

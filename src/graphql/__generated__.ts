@@ -17,6 +17,7 @@ export type Scalars = {
   Float: { input: number; output: number; }
   DateTime: { input: any; output: any; }
   JSON: { input: any; output: any; }
+  Long: { input: any; output: any; }
   Upload: { input: any; output: any; }
 };
 
@@ -269,6 +270,31 @@ export type JsonFilterInput = {
   readonly null: InputMaybe<Scalars['Boolean']['input']>;
   readonly or: InputMaybe<ReadonlyArray<InputMaybe<Scalars['JSON']['input']>>>;
   readonly startsWith: InputMaybe<Scalars['JSON']['input']>;
+};
+
+export type LongFilterInput = {
+  readonly and: InputMaybe<ReadonlyArray<InputMaybe<Scalars['Long']['input']>>>;
+  readonly between: InputMaybe<ReadonlyArray<InputMaybe<Scalars['Long']['input']>>>;
+  readonly contains: InputMaybe<Scalars['Long']['input']>;
+  readonly containsi: InputMaybe<Scalars['Long']['input']>;
+  readonly endsWith: InputMaybe<Scalars['Long']['input']>;
+  readonly eq: InputMaybe<Scalars['Long']['input']>;
+  readonly eqi: InputMaybe<Scalars['Long']['input']>;
+  readonly gt: InputMaybe<Scalars['Long']['input']>;
+  readonly gte: InputMaybe<Scalars['Long']['input']>;
+  readonly in: InputMaybe<ReadonlyArray<InputMaybe<Scalars['Long']['input']>>>;
+  readonly lt: InputMaybe<Scalars['Long']['input']>;
+  readonly lte: InputMaybe<Scalars['Long']['input']>;
+  readonly ne: InputMaybe<Scalars['Long']['input']>;
+  readonly nei: InputMaybe<Scalars['Long']['input']>;
+  readonly not: InputMaybe<LongFilterInput>;
+  readonly notContains: InputMaybe<Scalars['Long']['input']>;
+  readonly notContainsi: InputMaybe<Scalars['Long']['input']>;
+  readonly notIn: InputMaybe<ReadonlyArray<InputMaybe<Scalars['Long']['input']>>>;
+  readonly notNull: InputMaybe<Scalars['Boolean']['input']>;
+  readonly null: InputMaybe<Scalars['Boolean']['input']>;
+  readonly or: InputMaybe<ReadonlyArray<InputMaybe<Scalars['Long']['input']>>>;
+  readonly startsWith: InputMaybe<Scalars['Long']['input']>;
 };
 
 export type Mutation = {
@@ -727,6 +753,7 @@ export type Student = {
   readonly email: Scalars['String']['output'];
   readonly group: Maybe<GroupRelationResponseCollection>;
   readonly name: Scalars['String']['output'];
+  readonly phone: Scalars['Long']['output'];
   readonly picture: Maybe<Scalars['String']['output']>;
   readonly updatedAt: Maybe<Scalars['DateTime']['output']>;
 };
@@ -766,6 +793,7 @@ export type StudentFiltersInput = {
   readonly name: InputMaybe<StringFilterInput>;
   readonly not: InputMaybe<StudentFiltersInput>;
   readonly or: InputMaybe<ReadonlyArray<InputMaybe<StudentFiltersInput>>>;
+  readonly phone: InputMaybe<LongFilterInput>;
   readonly picture: InputMaybe<StringFilterInput>;
   readonly updatedAt: InputMaybe<DateTimeFilterInput>;
 };
@@ -775,6 +803,7 @@ export type StudentInput = {
   readonly email: InputMaybe<Scalars['String']['input']>;
   readonly group: InputMaybe<ReadonlyArray<InputMaybe<Scalars['ID']['input']>>>;
   readonly name: InputMaybe<Scalars['String']['input']>;
+  readonly phone: InputMaybe<Scalars['Long']['input']>;
   readonly picture: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -1159,6 +1188,17 @@ export type ChangeStudentGroupMutationVariables = Exact<{
 
 export type ChangeStudentGroupMutation = { readonly __typename?: 'Mutation', readonly updateStudent: { readonly __typename?: 'StudentEntityResponse', readonly data: { readonly __typename?: 'StudentEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Student', readonly name: string, readonly email: string, readonly picture: string, readonly group: { readonly __typename?: 'GroupRelationResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'GroupEntity', readonly attributes: { readonly __typename?: 'Group', readonly name: string, readonly courseNumber: number } }> } } } } };
 
+export type CreatePharmacyMutationVariables = Exact<{
+  name: InputMaybe<Scalars['String']['input']>;
+  city: InputMaybe<Scalars['String']['input']>;
+  address: InputMaybe<Scalars['String']['input']>;
+  contractNumber: InputMaybe<Scalars['String']['input']>;
+  places: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type CreatePharmacyMutation = { readonly __typename?: 'Mutation', readonly createPharmacy: { readonly __typename?: 'PharmacyEntityResponse', readonly data: { readonly __typename?: 'PharmacyEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Pharmacy', readonly name: string, readonly city: string, readonly address: string, readonly places: number, readonly location: string, readonly contractNumber: string, readonly brand: string, readonly number: string, readonly logo: { readonly __typename?: 'UploadFileEntityResponse', readonly data: { readonly __typename?: 'UploadFileEntity', readonly attributes: { readonly __typename?: 'UploadFile', readonly url: string } } } } } } };
+
 export type CreateStudentMutationVariables = Exact<{
   name: InputMaybe<Scalars['String']['input']>;
   email: InputMaybe<Scalars['String']['input']>;
@@ -1183,12 +1223,12 @@ export type GetAllStudentsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetAllStudentsQuery = { readonly __typename?: 'Query', readonly students: { readonly __typename?: 'StudentEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'StudentEntity', readonly attributes: { readonly __typename?: 'Student', readonly email: string, readonly name: string, readonly access: Enum_Student_Access, readonly picture: string, readonly group: { readonly __typename?: 'GroupRelationResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'GroupEntity', readonly attributes: { readonly __typename?: 'Group', readonly name: string, readonly courseNumber: number } }> } } }> } };
 
-export type GetFillPharmacyQueryVariables = Exact<{
+export type GetFullPharmacyQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type GetFillPharmacyQuery = { readonly __typename?: 'Query', readonly pharmacies: { readonly __typename?: 'PharmacyEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'PharmacyEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Pharmacy', readonly name: string, readonly city: string, readonly address: string, readonly places: number, readonly location: string, readonly contractNumber: string, readonly brand: string, readonly number: string, readonly logo: { readonly __typename?: 'UploadFileEntityResponse', readonly data: { readonly __typename?: 'UploadFileEntity', readonly attributes: { readonly __typename?: 'UploadFile', readonly url: string, readonly name: string } } } } }> } };
+export type GetFullPharmacyQuery = { readonly __typename?: 'Query', readonly pharmacies: { readonly __typename?: 'PharmacyEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'PharmacyEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Pharmacy', readonly name: string, readonly city: string, readonly address: string, readonly places: number, readonly location: string, readonly contractNumber: string, readonly brand: string, readonly number: string, readonly logo: { readonly __typename?: 'UploadFileEntityResponse', readonly data: { readonly __typename?: 'UploadFileEntity', readonly attributes: { readonly __typename?: 'UploadFile', readonly url: string, readonly name: string } } } } }> } };
 
 export type GetOneStudentQueryVariables = Exact<{
   email: InputMaybe<Scalars['String']['input']>;
@@ -1212,6 +1252,34 @@ export const ChangeStudentGroupDocument = gql`
             attributes {
               name
               courseNumber
+            }
+          }
+        }
+      }
+    }
+  }
+}
+    `;
+export const CreatePharmacyDocument = gql`
+    mutation CreatePharmacy($name: String, $city: String, $address: String, $contractNumber: String, $places: Int) {
+  createPharmacy(
+    data: {name: $name, city: $city, address: $address, contractNumber: $contractNumber, places: $places}
+  ) {
+    data {
+      id
+      attributes {
+        name
+        city
+        address
+        places
+        location
+        contractNumber
+        brand
+        number
+        logo {
+          data {
+            attributes {
+              url
             }
           }
         }
@@ -1286,8 +1354,8 @@ export const GetAllStudentsDocument = gql`
   }
 }
     `;
-export const GetFillPharmacyDocument = gql`
-    query GetFillPharmacy($id: ID!) {
+export const GetFullPharmacyDocument = gql`
+    query GetFullPharmacy($id: ID!) {
   pharmacies(filters: {id: {contains: $id}}) {
     data {
       id
@@ -1347,6 +1415,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     ChangeStudentGroup(variables: ChangeStudentGroupMutationVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<ChangeStudentGroupMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<ChangeStudentGroupMutation>(ChangeStudentGroupDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'ChangeStudentGroup', 'mutation');
     },
+    CreatePharmacy(variables?: CreatePharmacyMutationVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<CreatePharmacyMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<CreatePharmacyMutation>(CreatePharmacyDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'CreatePharmacy', 'mutation');
+    },
     CreateStudent(variables?: CreateStudentMutationVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<CreateStudentMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<CreateStudentMutation>(CreateStudentDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'CreateStudent', 'mutation');
     },
@@ -1359,8 +1430,8 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     GetAllStudents(variables?: GetAllStudentsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetAllStudentsQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetAllStudentsQuery>(GetAllStudentsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetAllStudents', 'query');
     },
-    GetFillPharmacy(variables: GetFillPharmacyQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetFillPharmacyQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetFillPharmacyQuery>(GetFillPharmacyDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetFillPharmacy', 'query');
+    GetFullPharmacy(variables: GetFullPharmacyQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetFullPharmacyQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetFullPharmacyQuery>(GetFullPharmacyDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetFullPharmacy', 'query');
     },
     GetOneStudent(variables?: GetOneStudentQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetOneStudentQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetOneStudentQuery>(GetOneStudentDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetOneStudent', 'query');
