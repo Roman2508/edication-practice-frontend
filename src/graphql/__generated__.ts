@@ -753,7 +753,7 @@ export type Student = {
   readonly email: Scalars['String']['output'];
   readonly group: Maybe<GroupRelationResponseCollection>;
   readonly name: Scalars['String']['output'];
-  readonly phone: Scalars['Long']['output'];
+  readonly phone: Maybe<Scalars['Long']['output']>;
   readonly picture: Maybe<Scalars['String']['output']>;
   readonly updatedAt: Maybe<Scalars['DateTime']['output']>;
 };
@@ -1237,6 +1237,15 @@ export type GetOneStudentQueryVariables = Exact<{
 
 export type GetOneStudentQuery = { readonly __typename?: 'Query', readonly students: { readonly __typename?: 'StudentEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'StudentEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Student', readonly email: string, readonly name: string, readonly access: Enum_Student_Access, readonly picture: string, readonly group: { readonly __typename?: 'GroupRelationResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'GroupEntity', readonly attributes: { readonly __typename?: 'Group', readonly name: string, readonly courseNumber: number } }> } } }> } };
 
+export type GetSearchPharmaciesQueryVariables = Exact<{
+  name?: InputMaybe<Scalars['String']['input']>;
+  city?: InputMaybe<Scalars['String']['input']>;
+  address?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type GetSearchPharmaciesQuery = { readonly __typename?: 'Query', readonly pharmacies: { readonly __typename?: 'PharmacyEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'PharmacyEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Pharmacy', readonly name: string, readonly city: string, readonly address: string, readonly places: number, readonly brand: string, readonly number: string } }> } };
+
 
 export const ChangeStudentGroupDocument = gql`
     mutation ChangeStudentGroup($id: ID!, $group: ID!) {
@@ -1404,6 +1413,25 @@ export const GetOneStudentDocument = gql`
   }
 }
     `;
+export const GetSearchPharmaciesDocument = gql`
+    query GetSearchPharmacies($name: String = "", $city: String = "", $address: String = "") {
+  pharmacies(
+    filters: {name: {contains: $name}, city: {contains: $city}, address: {contains: $address}}
+  ) {
+    data {
+      id
+      attributes {
+        name
+        city
+        address
+        places
+        brand
+        number
+      }
+    }
+  }
+}
+    `;
 
 export type SdkFunctionWrapper = <T>(action: (requestHeaders?:Record<string, string>) => Promise<T>, operationName: string, operationType?: string) => Promise<T>;
 
@@ -1435,6 +1463,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     GetOneStudent(variables?: GetOneStudentQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetOneStudentQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetOneStudentQuery>(GetOneStudentDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetOneStudent', 'query');
+    },
+    GetSearchPharmacies(variables?: GetSearchPharmaciesQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetSearchPharmaciesQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetSearchPharmaciesQuery>(GetSearchPharmaciesDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetSearchPharmacies', 'query');
     }
   };
 }

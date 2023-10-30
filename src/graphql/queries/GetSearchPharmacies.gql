@@ -1,0 +1,15 @@
+query GetSearchPharmacies($name: String = "", $city: String = "", $address: String = "") {
+  pharmacies(filters: { name: { contains: $name }, city: { contains: $city }, address: { contains: $address } }) {
+    data {
+      id
+      attributes {
+        name
+        city
+        address
+        places
+        brand
+        number
+      }
+    }
+  }
+}

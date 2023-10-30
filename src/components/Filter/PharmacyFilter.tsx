@@ -1,81 +1,77 @@
-import TextField from "@mui/material/TextField"
-import Autocomplete from "@mui/material/Autocomplete"
-import Button from "@mui/material/Button"
-import styles from "./Filter.module.css"
+import React from 'react'
+import Button from '@mui/material/Button'
+import TextField from '@mui/material/TextField'
 
-export const PharmacyFilter = () => {
-  const inputWidth = "220px"
+import styles from './Filter.module.css'
+import { IPharmacyFilter } from '../../pages/Home'
+import { PharmacyEntity, gql } from '../../graphql/client'
+
+interface IPharmacyFilterProps {
+  filter: IPharmacyFilter
+  setFilter: React.Dispatch<React.SetStateAction<IPharmacyFilter>>
+  setPharmacies: React.Dispatch<React.SetStateAction<PharmacyEntity[]>>
+}
+
+export const PharmacyFilter: React.FC<IPharmacyFilterProps> = ({ filter, setFilter, setPharmacies }) => {
+  const inputWidth = '220px'
+
+  const [isLoading, setIsLoading] = React.useState(false)
+
+  const onChangeFilterData = (key: keyof IPharmacyFilter, value: string) => {
+    setFilter((prev) => ({ ...prev, [key]: value }))
+  }
+
+  const findPharmacies = async () => {
+    try {
+      setIsLoading(true)
+      const data = await gql.GetSearchPharmacies({ ...filter })
+      // @ts-ignore
+      setPharmacies(data.pharmacies.data)
+    } catch (err) {
+      alert('Помилка при отриманні даних!')
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   return (
     <div className={styles.wrapper}>
-      <Autocomplete
-        freeSolo
-        id="free-solo-2-demo"
-        disableClearable
-        options={top100Films.map((option) => option.title)}
+      <TextField
+        label="Мережа аптек"
+        size="small"
+        value={filter.name}
+        onChange={(e) => onChangeFilterData('name', e.target.value)}
         sx={{ width: inputWidth }}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            size="small"
-            label="Мережа аптек"
-            InputProps={{
-              ...params.InputProps,
-              type: "search",
-            }}
-          />
-        )}
+        InputProps={{
+          type: 'search',
+        }}
       />
 
       <TextField
         label="Місто"
         size="small"
+        value={filter.city}
+        onChange={(e) => onChangeFilterData('city', e.target.value)}
         sx={{ width: inputWidth }}
         InputProps={{
-          type: "search",
+          type: 'search',
         }}
       />
 
       <TextField
         label="Адреса"
         size="small"
+        value={filter.address}
+        onChange={(e) => onChangeFilterData('address', e.target.value)}
         sx={{ width: inputWidth }}
         InputProps={{
-          type: "search",
+          type: 'search',
         }}
       />
 
-      <Button variant="contained">Знайти</Button>
+      <Button variant="contained" onClick={findPharmacies} disabled={isLoading} sx={{ width: '160px' }}>
+        {isLoading ? 'Завантаження...' : 'Знайти'}
+      </Button>
     </div>
   )
 }
-
-const top100Films = [
-  { title: "The Shawshank Redemption", year: 1994 },
-  { title: "The Godfather", year: 1972 },
-  { title: "The Godfather: Part II", year: 1974 },
-  { title: "The Dark Knight", year: 2008 },
-  { title: "12 Angry Men", year: 1957 },
-  { title: "Schindler's List", year: 1993 },
-  { title: "Pulp Fiction", year: 1994 },
-  {
-    title: "The Lord of the Rings: The Return of the King",
-    year: 2003,
-  },
-  { title: "The Good, the Bad and the Ugly", year: 1966 },
-  { title: "Fight Club", year: 1999 },
-  {
-    title: "The Lord of the Rings: The Fellowship of the Ring",
-    year: 2001,
-  },
-  {
-    title: "Star Wars: Episode V - The Empire Strikes Back",
-    year: 1980,
-  },
-  { title: "Forrest Gump", year: 1994 },
-  { title: "Inception", year: 2010 },
-  {
-    title: "The Lord of the Rings: The Two Towers",
-    year: 2002,
-  },
-]

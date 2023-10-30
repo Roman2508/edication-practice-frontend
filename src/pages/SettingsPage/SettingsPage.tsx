@@ -1,10 +1,10 @@
-import React from "react"
-import * as XLSX from "xlsx"
-import Radio from "@mui/material/Radio"
-import { Button, Paper, FormLabel, RadioGroup, FormControl, FormControlLabel } from "@mui/material"
+import React from 'react'
+import * as XLSX from 'xlsx'
+import Radio from '@mui/material/Radio'
+import { Button, Paper, FormLabel, RadioGroup, FormControl, FormControlLabel } from '@mui/material'
 
-import { gql } from "../../graphql/client"
-import styles from "./Settings.page.module.css"
+import { gql } from '../../graphql/client'
+import styles from './Settings.page.module.css'
 
 interface IPharmacyData {
   name: string
@@ -17,14 +17,14 @@ interface IPharmacyData {
 export const SettingsPage = () => {
   const fileRef = React.useRef<HTMLInputElement | null>(null)
 
-  const [uploadedFileName, setUploadedFileName] = React.useState("")
+  const [uploadedFileName, setUploadedFileName] = React.useState('')
 
   const onClickUpload = () => {
     if (!fileRef.current) return
     fileRef.current.click()
   }
 
-  const handleChangeUpload = (e: Event) => {
+  const handleChangeUpload = (e: any /* Event */) => {
     e.preventDefault()
 
     const files = (e.target as HTMLInputElement).files
@@ -38,7 +38,7 @@ export const SettingsPage = () => {
       if (e.target === null) return
 
       const data = e.target.result
-      let readedData = XLSX.read(data, { type: "binary" })
+      let readedData = XLSX.read(data, { type: 'binary' })
       const wsname = readedData.SheetNames[0]
       const ws = readedData.Sheets[wsname]
 
@@ -77,12 +77,7 @@ export const SettingsPage = () => {
   return (
     <div>
       <Paper elevation={3} className={styles.wrapper}>
-        <input
-          type="file"
-          ref={fileRef}
-          onChange={handleChangeUpload}
-          style={{ display: "none" }}
-        />
+        <input type="file" ref={fileRef} onChange={handleChangeUpload} style={{ display: 'none' }} />
         {uploadedFileName && <span>{uploadedFileName}</span>}
         <Button variant="outlined" className={styles.button} onClick={onClickUpload}>
           Завантажити бази практик
