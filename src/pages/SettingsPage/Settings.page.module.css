@@ -16,3 +16,9 @@
   gap: 20px;
   justify-content: center;
 }
+
+.alert {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+}

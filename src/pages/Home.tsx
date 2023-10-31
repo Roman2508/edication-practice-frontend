@@ -1,9 +1,9 @@
-import React from 'react'
-import { PharmacyEntity, gql } from '../graphql/client'
+import React from "react"
+import { PharmacyEntity, gql } from "../graphql/client"
 // import { PdfDocument } from "../components/PdfDocument"
 // import { PDFViewer, PDFDownloadLink } from "@react-pdf/renderer"
-import { PharmacyTable } from '../components/Table/PharmacyTable'
-import { PharmacyFilter } from '../components/Filter/PharmacyFilter'
+import { PharmacyTable } from "../components/Table/PharmacyTable"
+import { PharmacyFilter } from "../components/Filter/PharmacyFilter"
 
 export interface IPharmacyFilter {
   name: string
@@ -12,9 +12,9 @@ export interface IPharmacyFilter {
 }
 
 const initialFilterData = {
-  name: '',
-  city: '',
-  address: '',
+  name: "",
+  city: "",
+  address: "",
 }
 
 export const Home = () => {

@@ -1,0 +1,7 @@
+query GetAllPharmacyIds {
+  pharmacies(pagination: { pageSize: 10000 }) {
+    data {
+      id
+    }
+  }
+}

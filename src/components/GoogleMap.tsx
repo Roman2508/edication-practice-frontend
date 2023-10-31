@@ -1,5 +1,6 @@
-import React from 'react'
-import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api'
+import React from "react"
+import Skeleton from "@mui/material/Skeleton"
+import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api"
 
 const initialCenter = {
   lat: 50.244395,
@@ -13,9 +14,9 @@ interface IGoogleMapComponentProps {
 
 export const GoogleMapComponent: React.FC<IGoogleMapComponentProps> = ({ city, address }) => {
   const { isLoaded } = useJsApiLoader({
-    id: 'google-map-script',
+    id: "google-map-script",
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_KEY,
-    libraries: ['places'],
+    libraries: ["places"],
   })
 
   const [markerCenter, setMarkerCenter] = React.useState(initialCenter)
@@ -24,7 +25,7 @@ export const GoogleMapComponent: React.FC<IGoogleMapComponentProps> = ({ city, a
     //
     const request = {
       query: `${city} ${address}`,
-      fields: ['name', 'geometry'],
+      fields: ["name", "geometry"],
     }
 
     const placeService = new google.maps.places.PlacesService(map)
@@ -53,7 +54,7 @@ export const GoogleMapComponent: React.FC<IGoogleMapComponentProps> = ({ city, a
 
   return isLoaded ? (
     <GoogleMap
-      mapContainerStyle={{ width: '100%', height: '350px' }}
+      mapContainerStyle={{ width: "100%", height: "350px" }}
       center={markerCenter}
       onLoad={onLoad}
       zoom={15}
@@ -65,6 +66,6 @@ export const GoogleMapComponent: React.FC<IGoogleMapComponentProps> = ({ city, a
       <Marker position={markerCenter} />
     </GoogleMap>
   ) : (
-    <>Map Loading...</>
+    <Skeleton variant="rectangular" width={"100%"} height={350} />
   )
 }

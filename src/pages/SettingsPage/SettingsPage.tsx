@@ -1,10 +1,21 @@
-import React from 'react'
-import * as XLSX from 'xlsx'
-import Radio from '@mui/material/Radio'
-import { Button, Paper, FormLabel, RadioGroup, FormControl, FormControlLabel } from '@mui/material'
+import React from "react"
+import * as XLSX from "xlsx"
+import {
+  Alert,
+  Radio,
+  Paper,
+  Button,
+  FormLabel,
+  RadioGroup,
+  IconButton,
+  AlertColor,
+  FormControl,
+  FormControlLabel,
+} from "@mui/material"
+import CloseIcon from "@mui/icons-material/Close"
 
-import { gql } from '../../graphql/client'
-import styles from './Settings.page.module.css'
+import { gql } from "../../graphql/client"
+import styles from "./Settings.page.module.css"
 
 interface IPharmacyData {
   name: string
@@ -14,10 +25,32 @@ interface IPharmacyData {
   contractNumber: string
 }
 
+interface IAlert {
+  isShow: boolean
+  message: string
+  severity: AlertColor | undefined
+}
+
+interface IButtonDisabled {
+  uploadPharmacies: boolean
+  deletePharmacies: boolean
+  deleteStudents: boolean
+}
+
 export const SettingsPage = () => {
   const fileRef = React.useRef<HTMLInputElement | null>(null)
 
-  const [uploadedFileName, setUploadedFileName] = React.useState('')
+  const [buttonDisabled, setButtonDisabled] = React.useState({
+    uploadPharmacies: false,
+    deletePharmacies: false,
+    deleteStudents: false,
+  })
+
+  const [alert, setAlert] = React.useState<IAlert>({
+    isShow: false,
+    message: "",
+    severity: "success",
+  })
 
   const onClickUpload = () => {
     if (!fileRef.current) return
@@ -38,11 +71,11 @@ export const SettingsPage = () => {
       if (e.target === null) return
 
       const data = e.target.result
-      let readedData = XLSX.read(data, { type: 'binary' })
+      let readedData = XLSX.read(data, { type: "binary" })
       const wsname = readedData.SheetNames[0]
       const ws = readedData.Sheets[wsname]
 
-      setUploadedFileName(f.name)
+      // setUploadedFileName(f.name)
 
       /* Convert array to json*/
       const dataParse = XLSX.utils.sheet_to_json(ws, { header: 1 })
@@ -67,38 +100,125 @@ export const SettingsPage = () => {
 
       Promise.all(
         newPharmacies.map(async (el) => {
-          await gql.CreatePharmacy(el)
+          try {
+            setButtonDisabled((prev) => ({ ...prev, uploadPharmacies: true }))
+            await gql.CreatePharmacy(el)
+            setAlert({
+              isShow: true,
+              message: "Бази практик успішно завантажені",
+              severity: "success",
+            })
+          } catch (err) {
+            setAlert({
+              isShow: true,
+              message: "Помилка при завантажені баз практик",
+              severity: "error",
+            })
+            console.log(err)
+          } finally {
+            setButtonDisabled((prev) => ({ ...prev, uploadPharmacies: false }))
+            setTimeout(() => {
+              setAlert((prev) => ({ ...prev, isShow: false }))
+            }, 3000)
+          }
         })
       )
     }
     reader.readAsBinaryString(f)
   }
 
-  return (
-    <div>
-      <Paper elevation={3} className={styles.wrapper}>
-        <input type="file" ref={fileRef} onChange={handleChangeUpload} style={{ display: 'none' }} />
-        {uploadedFileName && <span>{uploadedFileName}</span>}
-        <Button variant="outlined" className={styles.button} onClick={onClickUpload}>
-          Завантажити бази практик
-        </Button>
-        <Button variant="outlined" color="error" className={styles.button}>
-          Видалити всі бази практик
-        </Button>
-        <Button variant="outlined" color="error" className={styles.button}>
-          Видалити всіх студентів
-        </Button>
+  const onDeleteAllPharmacies = async () => {
+    if (window.confirm("Ви дійсно хочете видалити всі бази практик?")) {
+      try {
+        setButtonDisabled((prev) => ({ ...prev, deletePharmacies: true }))
+        const allPharmacyIds = await gql.GetAllPharmacyIds()
 
-        <FormControl>
-          <FormLabel id="demo-radio-buttons-group-label">
-            Дозволити студентам вказувати терміни проходження практики:
-          </FormLabel>
-          <RadioGroup defaultValue={false} className={styles.ragioGroup}>
-            <FormControlLabel value={true} control={<Radio />} label="Так" />
-            <FormControlLabel value={false} control={<Radio />} label="Ні" />
-          </RadioGroup>
-        </FormControl>
-      </Paper>
-    </div>
+        if (!allPharmacyIds || !allPharmacyIds.pharmacies.data.length) return
+
+        Promise.all(
+          allPharmacyIds.pharmacies.data.map(async (el) => {
+            await gql.DeletePharmacy({ id: el.id })
+          })
+        )
+
+        setAlert({
+          isShow: true,
+          message: "Бази практик успішно видалені!",
+          severity: "success",
+        })
+      } catch (err) {
+        setAlert({
+          isShow: true,
+          message: "Помилка при видалені баз практик!",
+          severity: "error",
+        })
+        console.log(err)
+      } finally {
+        setButtonDisabled((prev) => ({ ...prev, deletePharmacies: false }))
+        setTimeout(() => {
+          setAlert((prev) => ({ ...prev, isShow: false }))
+        }, 3000)
+      }
+    }
+  }
+
+  return (
+    <>
+      {alert.isShow && (
+        <Alert variant="filled" severity={alert.severity} className={styles.alert}>
+          <span>{alert.message}</span>
+          <IconButton
+            sx={{ ml: 1 }}
+            onClick={() => setAlert((prev) => ({ ...prev, isShow: false }))}
+          >
+            <CloseIcon sx={{ color: "#fff" }} />
+          </IconButton>
+        </Alert>
+      )}
+
+      <div>
+        <Paper elevation={3} className={styles.wrapper}>
+          <input
+            type="file"
+            ref={fileRef}
+            onChange={handleChangeUpload}
+            style={{ display: "none" }}
+          />
+          {/* {uploadedFileName && <span>{uploadedFileName}</span>} */}
+          <Button
+            variant="outlined"
+            disabled={buttonDisabled.uploadPharmacies}
+            onClick={onClickUpload}
+            className={styles.button}
+          >
+            {buttonDisabled.uploadPharmacies ? "Завантаження..." : "Завантажити бази практик"}
+          </Button>
+
+          <Button
+            variant="outlined"
+            color="error"
+            className={styles.button}
+            onClick={onDeleteAllPharmacies}
+            disabled={buttonDisabled.deletePharmacies}
+          >
+            {buttonDisabled.uploadPharmacies ? "Видалення..." : "Видалити всі бази практик"}
+          </Button>
+
+          <Button variant="outlined" color="error" className={styles.button}>
+            Видалити всіх студентів
+          </Button>
+
+          <FormControl>
+            <FormLabel id="demo-radio-buttons-group-label">
+              Дозволити студентам вказувати терміни проходження практики:
+            </FormLabel>
+            <RadioGroup defaultValue={false} className={styles.ragioGroup}>
+              <FormControlLabel value={true} control={<Radio />} label="Так" />
+              <FormControlLabel value={false} control={<Radio />} label="Ні" />
+            </RadioGroup>
+          </FormControl>
+        </Paper>
+      </div>
+    </>
   )
 }

@@ -1,0 +1,7 @@
+mutation DeletePharmacy($id: ID!) {
+  deletePharmacy(id: $id) {
+    data {
+      id
+    }
+  }
+}

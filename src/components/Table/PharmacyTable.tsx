@@ -7,6 +7,8 @@ import TableRow from "@mui/material/TableRow"
 import Paper from "@mui/material/Paper"
 import { Link } from "react-router-dom"
 import { PharmacyEntity } from "../../graphql/__generated__"
+import Box from "@mui/material/Box"
+import CircularProgress from "@mui/material/CircularProgress"
 
 function createData(name: string, calories: string, fat: string, carbs: number) {
   return { name, calories, fat, carbs }
@@ -25,8 +27,6 @@ interface IPharmacyTableProps {
 }
 
 export const PharmacyTable: React.FC<IPharmacyTableProps> = ({ pharmacies }) => {
-  if (!pharmacies) return <div>Loading...</div>
-
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -40,16 +40,26 @@ export const PharmacyTable: React.FC<IPharmacyTableProps> = ({ pharmacies }) => 
         </TableHead>
 
         <TableBody>
-          {pharmacies.map((row: PharmacyEntity) => (
-            <TableRow key={row.id} component={Link} to={`/pharmacy/${row.id}`}>
-              <TableCell component="th" scope="row">
-                {row.attributes.name}
+          {pharmacies && pharmacies.length ? (
+            pharmacies.map((row: PharmacyEntity) => (
+              <TableRow key={row.id} component={Link} to={`/pharmacy/${row.id}`}>
+                <TableCell component="th" scope="row">
+                  {row.attributes.name}
+                </TableCell>
+                <TableCell align="left">{row.attributes.city}</TableCell>
+                <TableCell align="left">{row.attributes.address}</TableCell>
+                <TableCell align="left">{row.attributes.places}</TableCell>
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={4}>
+                <Box sx={{ display: "flex", justifyContent: "center", padding: "60px 0" }}>
+                  <CircularProgress />
+                </Box>
               </TableCell>
-              <TableCell align="left">{row.attributes.city}</TableCell>
-              <TableCell align="left">{row.attributes.address}</TableCell>
-              <TableCell align="left">{row.attributes.places}</TableCell>
             </TableRow>
-          ))}
+          )}
         </TableBody>
       </Table>
     </TableContainer>

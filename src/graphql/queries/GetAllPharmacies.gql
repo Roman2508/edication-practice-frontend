@@ -1,5 +1,5 @@
 query GetAllPharmacies {
-  pharmacies {
+  pharmacies(pagination: { pageSize: 5000 }) {
     data {
       id
       attributes {

@@ -753,7 +753,7 @@ export type Student = {
   readonly email: Scalars['String']['output'];
   readonly group: Maybe<GroupRelationResponseCollection>;
   readonly name: Scalars['String']['output'];
-  readonly phone: Maybe<Scalars['Long']['output']>;
+  readonly phone: Scalars['Long']['output'];
   readonly picture: Maybe<Scalars['String']['output']>;
   readonly updatedAt: Maybe<Scalars['DateTime']['output']>;
 };
@@ -1208,6 +1208,13 @@ export type CreateStudentMutationVariables = Exact<{
 
 export type CreateStudentMutation = { readonly __typename?: 'Mutation', readonly createStudent: { readonly __typename?: 'StudentEntityResponse', readonly data: { readonly __typename?: 'StudentEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Student', readonly name: string, readonly email: string, readonly picture: string } } } };
 
+export type DeletePharmacyMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type DeletePharmacyMutation = { readonly __typename?: 'Mutation', readonly deletePharmacy: { readonly __typename?: 'PharmacyEntityResponse', readonly data: { readonly __typename?: 'PharmacyEntity', readonly id: string } } };
+
 export type GetAllGroupsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1217,6 +1224,11 @@ export type GetAllPharmaciesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetAllPharmaciesQuery = { readonly __typename?: 'Query', readonly pharmacies: { readonly __typename?: 'PharmacyEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'PharmacyEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Pharmacy', readonly name: string, readonly city: string, readonly address: string, readonly places: number, readonly brand: string, readonly number: string } }> } };
+
+export type GetAllPharmacyIdsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAllPharmacyIdsQuery = { readonly __typename?: 'Query', readonly pharmacies: { readonly __typename?: 'PharmacyEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'PharmacyEntity', readonly id: string }> } };
 
 export type GetAllStudentsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1311,6 +1323,15 @@ export const CreateStudentDocument = gql`
   }
 }
     `;
+export const DeletePharmacyDocument = gql`
+    mutation DeletePharmacy($id: ID!) {
+  deletePharmacy(id: $id) {
+    data {
+      id
+    }
+  }
+}
+    `;
 export const GetAllGroupsDocument = gql`
     query GetAllGroups {
   groups {
@@ -1326,7 +1347,7 @@ export const GetAllGroupsDocument = gql`
     `;
 export const GetAllPharmaciesDocument = gql`
     query GetAllPharmacies {
-  pharmacies {
+  pharmacies(pagination: {pageSize: 5000}) {
     data {
       id
       attributes {
@@ -1337,6 +1358,15 @@ export const GetAllPharmaciesDocument = gql`
         brand
         number
       }
+    }
+  }
+}
+    `;
+export const GetAllPharmacyIdsDocument = gql`
+    query GetAllPharmacyIds {
+  pharmacies(pagination: {pageSize: 10000}) {
+    data {
+      id
     }
   }
 }
@@ -1449,11 +1479,17 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     CreateStudent(variables?: CreateStudentMutationVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<CreateStudentMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<CreateStudentMutation>(CreateStudentDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'CreateStudent', 'mutation');
     },
+    DeletePharmacy(variables: DeletePharmacyMutationVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<DeletePharmacyMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<DeletePharmacyMutation>(DeletePharmacyDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'DeletePharmacy', 'mutation');
+    },
     GetAllGroups(variables?: GetAllGroupsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetAllGroupsQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetAllGroupsQuery>(GetAllGroupsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetAllGroups', 'query');
     },
     GetAllPharmacies(variables?: GetAllPharmaciesQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetAllPharmaciesQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetAllPharmaciesQuery>(GetAllPharmaciesDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetAllPharmacies', 'query');
+    },
+    GetAllPharmacyIds(variables?: GetAllPharmacyIdsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetAllPharmacyIdsQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetAllPharmacyIdsQuery>(GetAllPharmacyIdsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetAllPharmacyIds', 'query');
     },
     GetAllStudents(variables?: GetAllStudentsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetAllStudentsQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetAllStudentsQuery>(GetAllStudentsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetAllStudents', 'query');
