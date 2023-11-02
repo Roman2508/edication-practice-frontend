@@ -1,9 +1,10 @@
-import React from 'react'
-import { PharmacyEntity, gql } from '../graphql/client'
+import React from "react"
+import { PharmacyEntity, gql } from "../graphql/client"
+import { PharmacyTable } from "../components/Table/PharmacyTable"
+import { PharmacyFilter } from "../components/Filter/PharmacyFilter"
+
 // import { PdfDocument } from "../components/PdfDocument"
 // import { PDFViewer, PDFDownloadLink } from "@react-pdf/renderer"
-import { PharmacyTable } from '../components/Table/PharmacyTable'
-import { PharmacyFilter } from '../components/Filter/PharmacyFilter'
 
 export interface IPharmacyFilter {
   name: string
@@ -12,21 +13,28 @@ export interface IPharmacyFilter {
 }
 
 const initialFilterData = {
-  name: '',
-  city: '',
-  address: '',
+  name: "",
+  city: "",
+  address: "",
 }
 
 export const Home = () => {
+  const [isLoading, setIsLoading] = React.useState(false)
   const [pharmacies, setPharmacies] = React.useState<PharmacyEntity[]>([])
-
   const [filter, setFilter] = React.useState<IPharmacyFilter>(initialFilterData)
 
   React.useEffect(() => {
     const fetchData = async () => {
-      const res = await gql.GetAllPharmacies()
-      // @ts-ignore
-      setPharmacies(res.pharmacies.data)
+      try {
+        setIsLoading(true)
+        const res = await gql.GetAllPharmacies()
+        // @ts-ignore
+        setPharmacies(res.pharmacies.data)
+      } catch (err) {
+        console.log(err)
+      } finally {
+        setIsLoading(false)
+      }
     }
 
     fetchData()
@@ -44,8 +52,14 @@ export const Home = () => {
       </PDFDownloadLink> */}
       </div>
 
-      <PharmacyFilter filter={filter} setFilter={setFilter} setPharmacies={setPharmacies} />
-      <PharmacyTable pharmacies={pharmacies} />
+      <PharmacyFilter
+        filter={filter}
+        setFilter={setFilter}
+        isLoading={isLoading}
+        setIsLoading={setIsLoading}
+        setPharmacies={setPharmacies}
+      />
+      <PharmacyTable pharmacies={pharmacies} isLoading={isLoading} />
     </div>
   )
 }

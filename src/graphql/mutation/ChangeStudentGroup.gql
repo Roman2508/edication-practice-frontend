@@ -1,5 +1,5 @@
-mutation ChangeStudentGroup($id: ID!, $group: ID!) {
-  updateStudent(id: $id, data: { group: [$group] }) {
+mutation ChangeStudentData($id: ID!, $group: ID!, $phone: String!) {
+  updateStudent(id: $id, data: { group: [$group], phone: $phone }) {
     data {
       id
       attributes {

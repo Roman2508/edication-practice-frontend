@@ -1,18 +1,18 @@
-import React from 'react'
-import { Routes, Route, useNavigate } from 'react-router-dom'
-import { Alert, IconButton } from '@mui/material'
-import CloseIcon from '@mui/icons-material/Close'
+import React from "react"
+import { Routes, Route, useNavigate } from "react-router-dom"
+import { Alert, IconButton } from "@mui/material"
+import CloseIcon from "@mui/icons-material/Close"
 
-import { Home } from './pages/Home'
-import { gql } from './graphql/client'
-import { IAlert } from './types/IAlert'
-import { Layout } from './layout/Layout'
-import PrintPage from './pages/PrintPage'
-import { PharmacyPage } from './pages/PharmacyPage'
-import LoginPage from './pages/LoginPage/LoginPage'
-import { SettingsPage } from './pages/SettingsPage/SettingsPage'
-import { getAuthData } from './utils/getAuthData'
-import SelectedSuccessfullyPage from './pages/selectedSuccessfullyPage'
+import { Home } from "./pages/Home"
+import { gql } from "./graphql/client"
+import { IAlert } from "./types/IAlert"
+import { Layout } from "./layout/Layout"
+import PrintPage from "./pages/PrintPage"
+import { PharmacyPage } from "./pages/PharmacyPage"
+import LoginPage from "./pages/LoginPage/LoginPage"
+import { SettingsPage } from "./pages/SettingsPage/SettingsPage"
+import { getAuthData } from "./utils/getAuthData"
+import SelectedSuccessfullyPage from "./pages/SelectedSuccessfullyPage"
 
 interface IAppContext {
   alert: IAlert
@@ -23,7 +23,7 @@ interface IAppContext {
 const appInitialData = {
   alert: {
     isShow: false,
-    message: '',
+    message: "",
     severity: undefined,
   },
   canUserChoosePracticeBase: false,
@@ -38,7 +38,7 @@ const App = () => {
 
   const [alert, setAlert] = React.useState({
     isShow: false,
-    message: '',
+    message: "",
     severity: undefined,
   })
   const [canUserChoosePracticeBase, setCanUserChoosePracticeBase] = React.useState(true)
@@ -59,7 +59,7 @@ const App = () => {
 
   React.useEffect(() => {
     if (!canUserChoosePracticeBase) {
-      navigate('/selected')
+      navigate("/selected")
     }
   }, [canUserChoosePracticeBase])
 
@@ -68,8 +68,11 @@ const App = () => {
       {alert.isShow && (
         <Alert variant="filled" severity={alert.severity} className="alert">
           <span>{alert.message}</span>
-          <IconButton sx={{ ml: 1 }} onClick={() => setAlert((prev) => ({ ...prev, isShow: false }))}>
-            <CloseIcon sx={{ color: '#fff' }} />
+          <IconButton
+            sx={{ ml: 1 }}
+            onClick={() => setAlert((prev) => ({ ...prev, isShow: false }))}
+          >
+            <CloseIcon sx={{ color: "#fff" }} />
           </IconButton>
         </Alert>
       )}

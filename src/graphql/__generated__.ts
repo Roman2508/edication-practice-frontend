@@ -17,7 +17,6 @@ export type Scalars = {
   Float: { input: number; output: number; }
   DateTime: { input: any; output: any; }
   JSON: { input: any; output: any; }
-  Long: { input: any; output: any; }
   Upload: { input: any; output: any; }
 };
 
@@ -270,31 +269,6 @@ export type JsonFilterInput = {
   readonly null: InputMaybe<Scalars['Boolean']['input']>;
   readonly or: InputMaybe<ReadonlyArray<InputMaybe<Scalars['JSON']['input']>>>;
   readonly startsWith: InputMaybe<Scalars['JSON']['input']>;
-};
-
-export type LongFilterInput = {
-  readonly and: InputMaybe<ReadonlyArray<InputMaybe<Scalars['Long']['input']>>>;
-  readonly between: InputMaybe<ReadonlyArray<InputMaybe<Scalars['Long']['input']>>>;
-  readonly contains: InputMaybe<Scalars['Long']['input']>;
-  readonly containsi: InputMaybe<Scalars['Long']['input']>;
-  readonly endsWith: InputMaybe<Scalars['Long']['input']>;
-  readonly eq: InputMaybe<Scalars['Long']['input']>;
-  readonly eqi: InputMaybe<Scalars['Long']['input']>;
-  readonly gt: InputMaybe<Scalars['Long']['input']>;
-  readonly gte: InputMaybe<Scalars['Long']['input']>;
-  readonly in: InputMaybe<ReadonlyArray<InputMaybe<Scalars['Long']['input']>>>;
-  readonly lt: InputMaybe<Scalars['Long']['input']>;
-  readonly lte: InputMaybe<Scalars['Long']['input']>;
-  readonly ne: InputMaybe<Scalars['Long']['input']>;
-  readonly nei: InputMaybe<Scalars['Long']['input']>;
-  readonly not: InputMaybe<LongFilterInput>;
-  readonly notContains: InputMaybe<Scalars['Long']['input']>;
-  readonly notContainsi: InputMaybe<Scalars['Long']['input']>;
-  readonly notIn: InputMaybe<ReadonlyArray<InputMaybe<Scalars['Long']['input']>>>;
-  readonly notNull: InputMaybe<Scalars['Boolean']['input']>;
-  readonly null: InputMaybe<Scalars['Boolean']['input']>;
-  readonly or: InputMaybe<ReadonlyArray<InputMaybe<Scalars['Long']['input']>>>;
-  readonly startsWith: InputMaybe<Scalars['Long']['input']>;
 };
 
 export type Mutation = {
@@ -822,7 +796,7 @@ export type Student = {
   readonly email: Scalars['String']['output'];
   readonly group: Maybe<GroupRelationResponseCollection>;
   readonly name: Scalars['String']['output'];
-  readonly phone: Maybe<Scalars['Long']['output']>;
+  readonly phone: Maybe<Scalars['String']['output']>;
   readonly picture: Maybe<Scalars['String']['output']>;
   readonly updatedAt: Maybe<Scalars['DateTime']['output']>;
 };
@@ -862,7 +836,7 @@ export type StudentFiltersInput = {
   readonly name: InputMaybe<StringFilterInput>;
   readonly not: InputMaybe<StudentFiltersInput>;
   readonly or: InputMaybe<ReadonlyArray<InputMaybe<StudentFiltersInput>>>;
-  readonly phone: InputMaybe<LongFilterInput>;
+  readonly phone: InputMaybe<StringFilterInput>;
   readonly picture: InputMaybe<StringFilterInput>;
   readonly updatedAt: InputMaybe<DateTimeFilterInput>;
 };
@@ -872,7 +846,7 @@ export type StudentInput = {
   readonly email: InputMaybe<Scalars['String']['input']>;
   readonly group: InputMaybe<ReadonlyArray<InputMaybe<Scalars['ID']['input']>>>;
   readonly name: InputMaybe<Scalars['String']['input']>;
-  readonly phone: InputMaybe<Scalars['Long']['input']>;
+  readonly phone: InputMaybe<Scalars['String']['input']>;
   readonly picture: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -1257,13 +1231,14 @@ export type ChangePlacesCountInPharmacyMutationVariables = Exact<{
 
 export type ChangePlacesCountInPharmacyMutation = { readonly __typename?: 'Mutation', readonly updatePharmacy: { readonly __typename?: 'PharmacyEntityResponse', readonly data: { readonly __typename?: 'PharmacyEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Pharmacy', readonly places: number } } } };
 
-export type ChangeStudentGroupMutationVariables = Exact<{
+export type ChangeStudentDataMutationVariables = Exact<{
   id: Scalars['ID']['input'];
   group: Scalars['ID']['input'];
+  phone: Scalars['String']['input'];
 }>;
 
 
-export type ChangeStudentGroupMutation = { readonly __typename?: 'Mutation', readonly updateStudent: { readonly __typename?: 'StudentEntityResponse', readonly data: { readonly __typename?: 'StudentEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Student', readonly name: string, readonly email: string, readonly picture: string, readonly group: { readonly __typename?: 'GroupRelationResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'GroupEntity', readonly attributes: { readonly __typename?: 'Group', readonly name: string, readonly courseNumber: number } }> } } } } };
+export type ChangeStudentDataMutation = { readonly __typename?: 'Mutation', readonly updateStudent: { readonly __typename?: 'StudentEntityResponse', readonly data: { readonly __typename?: 'StudentEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Student', readonly name: string, readonly email: string, readonly picture: string, readonly group: { readonly __typename?: 'GroupRelationResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'GroupEntity', readonly attributes: { readonly __typename?: 'Group', readonly name: string, readonly courseNumber: number } }> } } } } };
 
 export type CreatePharmacyMutationVariables = Exact<{
   name: Scalars['String']['input'];
@@ -1299,7 +1274,7 @@ export type SelectBaseOfPracticeMutationVariables = Exact<{
 }>;
 
 
-export type SelectBaseOfPracticeMutation = { readonly __typename?: 'Mutation', readonly createSelectedBasesOfPractice: { readonly __typename?: 'SelectedBasesOfPracticeEntityResponse', readonly data: { readonly __typename?: 'SelectedBasesOfPracticeEntity', readonly id: string, readonly attributes: { readonly __typename?: 'SelectedBasesOfPractice', readonly student: { readonly __typename?: 'StudentEntityResponse', readonly data: { readonly __typename?: 'StudentEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Student', readonly name: string, readonly email: string, readonly picture: string, readonly phone: any, readonly group: { readonly __typename?: 'GroupRelationResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'GroupEntity', readonly attributes: { readonly __typename?: 'Group', readonly name: string } }> } } } }, readonly pharmacy: { readonly __typename?: 'PharmacyEntityResponse', readonly data: { readonly __typename?: 'PharmacyEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Pharmacy', readonly name: string, readonly city: string, readonly address: string, readonly places: number, readonly contractNumber: string, readonly legalName: string, readonly number: string } } } } } } };
+export type SelectBaseOfPracticeMutation = { readonly __typename?: 'Mutation', readonly createSelectedBasesOfPractice: { readonly __typename?: 'SelectedBasesOfPracticeEntityResponse', readonly data: { readonly __typename?: 'SelectedBasesOfPracticeEntity', readonly id: string, readonly attributes: { readonly __typename?: 'SelectedBasesOfPractice', readonly student: { readonly __typename?: 'StudentEntityResponse', readonly data: { readonly __typename?: 'StudentEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Student', readonly name: string, readonly email: string, readonly picture: string, readonly phone: string, readonly group: { readonly __typename?: 'GroupRelationResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'GroupEntity', readonly attributes: { readonly __typename?: 'Group', readonly name: string } }> } } } }, readonly pharmacy: { readonly __typename?: 'PharmacyEntityResponse', readonly data: { readonly __typename?: 'PharmacyEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Pharmacy', readonly name: string, readonly city: string, readonly address: string, readonly places: number, readonly contractNumber: string, readonly legalName: string, readonly number: string } } } } } } };
 
 export type CanUserChoosePracticeBaseQueryVariables = Exact<{
   userId?: Scalars['ID']['input'];
@@ -1326,12 +1301,12 @@ export type GetAllPharmacyIdsQuery = { readonly __typename?: 'Query', readonly p
 export type GetAllSelectedPracticeBaseQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllSelectedPracticeBaseQuery = { readonly __typename?: 'Query', readonly selectedBasesOfPractices: { readonly __typename?: 'SelectedBasesOfPracticeEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'SelectedBasesOfPracticeEntity', readonly id: string, readonly attributes: { readonly __typename?: 'SelectedBasesOfPractice', readonly student: { readonly __typename?: 'StudentEntityResponse', readonly data: { readonly __typename?: 'StudentEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Student', readonly name: string, readonly group: { readonly __typename?: 'GroupRelationResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'GroupEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Group', readonly name: string, readonly courseNumber: number } }> } } } }, readonly pharmacy: { readonly __typename?: 'PharmacyEntityResponse', readonly data: { readonly __typename?: 'PharmacyEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Pharmacy', readonly name: string, readonly city: string, readonly address: string } } } } }> } };
+export type GetAllSelectedPracticeBaseQuery = { readonly __typename?: 'Query', readonly selectedBasesOfPractices: { readonly __typename?: 'SelectedBasesOfPracticeEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'SelectedBasesOfPracticeEntity', readonly id: string, readonly attributes: { readonly __typename?: 'SelectedBasesOfPractice', readonly student: { readonly __typename?: 'StudentEntityResponse', readonly data: { readonly __typename?: 'StudentEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Student', readonly name: string, readonly group: { readonly __typename?: 'GroupRelationResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'GroupEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Group', readonly name: string, readonly courseNumber: number } }> } } } }, readonly pharmacy: { readonly __typename?: 'PharmacyEntityResponse', readonly data: { readonly __typename?: 'PharmacyEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Pharmacy', readonly name: string, readonly city: string, readonly address: string, readonly contractNumber: string } } } } }> } };
 
 export type GetAllStudentsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllStudentsQuery = { readonly __typename?: 'Query', readonly students: { readonly __typename?: 'StudentEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'StudentEntity', readonly attributes: { readonly __typename?: 'Student', readonly email: string, readonly name: string, readonly access: Enum_Student_Access, readonly picture: string, readonly group: { readonly __typename?: 'GroupRelationResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'GroupEntity', readonly attributes: { readonly __typename?: 'Group', readonly name: string, readonly courseNumber: number } }> } } }> } };
+export type GetAllStudentsQuery = { readonly __typename?: 'Query', readonly students: { readonly __typename?: 'StudentEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'StudentEntity', readonly attributes: { readonly __typename?: 'Student', readonly email: string, readonly name: string, readonly access: Enum_Student_Access, readonly picture: string, readonly phone: string, readonly group: { readonly __typename?: 'GroupRelationResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'GroupEntity', readonly attributes: { readonly __typename?: 'Group', readonly name: string, readonly courseNumber: number } }> } } }> } };
 
 export type GetFullPharmacyQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1345,7 +1320,7 @@ export type GetOneStudentQueryVariables = Exact<{
 }>;
 
 
-export type GetOneStudentQuery = { readonly __typename?: 'Query', readonly students: { readonly __typename?: 'StudentEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'StudentEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Student', readonly email: string, readonly name: string, readonly access: Enum_Student_Access, readonly picture: string, readonly group: { readonly __typename?: 'GroupRelationResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'GroupEntity', readonly attributes: { readonly __typename?: 'Group', readonly name: string, readonly courseNumber: number } }> } } }> } };
+export type GetOneStudentQuery = { readonly __typename?: 'Query', readonly students: { readonly __typename?: 'StudentEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'StudentEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Student', readonly email: string, readonly name: string, readonly phone: string, readonly access: Enum_Student_Access, readonly picture: string, readonly group: { readonly __typename?: 'GroupRelationResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'GroupEntity', readonly attributes: { readonly __typename?: 'Group', readonly name: string, readonly courseNumber: number } }> } } }> } };
 
 export type GetSearchPharmaciesQueryVariables = Exact<{
   name?: InputMaybe<Scalars['String']['input']>;
@@ -1369,9 +1344,9 @@ export const ChangePlacesCountInPharmacyDocument = gql`
   }
 }
     `;
-export const ChangeStudentGroupDocument = gql`
-    mutation ChangeStudentGroup($id: ID!, $group: ID!) {
-  updateStudent(id: $id, data: {group: [$group]}) {
+export const ChangeStudentDataDocument = gql`
+    mutation ChangeStudentData($id: ID!, $group: ID!, $phone: String!) {
+  updateStudent(id: $id, data: {group: [$group], phone: $phone}) {
     data {
       id
       attributes {
@@ -1557,6 +1532,7 @@ export const GetAllSelectedPracticeBaseDocument = gql`
               name
               city
               address
+              contractNumber
             }
           }
         }
@@ -1582,6 +1558,7 @@ export const GetAllStudentsDocument = gql`
         }
         access
         picture
+        phone
       }
     }
   }
@@ -1621,6 +1598,7 @@ export const GetOneStudentDocument = gql`
             }
           }
         }
+        phone
         access
         picture
       }
@@ -1658,8 +1636,8 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     changePlacesCountInPharmacy(variables: ChangePlacesCountInPharmacyMutationVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<ChangePlacesCountInPharmacyMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<ChangePlacesCountInPharmacyMutation>(ChangePlacesCountInPharmacyDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'changePlacesCountInPharmacy', 'mutation');
     },
-    ChangeStudentGroup(variables: ChangeStudentGroupMutationVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<ChangeStudentGroupMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<ChangeStudentGroupMutation>(ChangeStudentGroupDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'ChangeStudentGroup', 'mutation');
+    ChangeStudentData(variables: ChangeStudentDataMutationVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<ChangeStudentDataMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<ChangeStudentDataMutation>(ChangeStudentDataDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'ChangeStudentData', 'mutation');
     },
     CreatePharmacy(variables: CreatePharmacyMutationVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<CreatePharmacyMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<CreatePharmacyMutation>(CreatePharmacyDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'CreatePharmacy', 'mutation');

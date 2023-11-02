@@ -27,6 +27,7 @@ query GetAllSelectedPracticeBase {
               name
               city
               address
+              contractNumber
             }
           }
         }

@@ -1,35 +1,26 @@
+import Box from "@mui/material/Box"
+import Paper from "@mui/material/Paper"
+import { Link } from "react-router-dom"
 import Table from "@mui/material/Table"
+import TableRow from "@mui/material/TableRow"
+import TableHead from "@mui/material/TableHead"
 import TableBody from "@mui/material/TableBody"
 import TableCell from "@mui/material/TableCell"
 import TableContainer from "@mui/material/TableContainer"
-import TableHead from "@mui/material/TableHead"
-import TableRow from "@mui/material/TableRow"
-import Paper from "@mui/material/Paper"
-import { Link } from "react-router-dom"
-import { PharmacyEntity } from "../../graphql/__generated__"
-import Box from "@mui/material/Box"
 import CircularProgress from "@mui/material/CircularProgress"
 
-function createData(name: string, calories: string, fat: string, carbs: number) {
-  return { name, calories, fat, carbs }
-}
-
-const rows = [
-  createData("Frozen yoghurt", "Житомир", "Чуднівська 99", 24),
-  createData("Ice cream sandwich", "Житомир", "Небесної Сотні 10", 37),
-  createData("Eclair", "Житомир", "Небесної Сотні 68", 24),
-  createData("Cupcake", "Житомир", "Чуднівська 99", 67),
-  createData("Gingerbread", "Житомир", "Велика Бердичівська 33", 49),
-]
+import { EmptyRow } from "./EmptyRow"
+import { PharmacyEntity } from "../../graphql/__generated__"
 
 interface IPharmacyTableProps {
-  pharmacies?: PharmacyEntity[]
+  pharmacies: PharmacyEntity[]
+  isLoading: boolean
 }
 
-export const PharmacyTable: React.FC<IPharmacyTableProps> = ({ pharmacies }) => {
+export const PharmacyTable: React.FC<IPharmacyTableProps> = ({ pharmacies, isLoading }) => {
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <Table sx={{ minWidth: 650 }} aria-label="table">
         <TableHead>
           <TableRow>
             <TableCell>Мережа аптек</TableCell>
@@ -40,18 +31,7 @@ export const PharmacyTable: React.FC<IPharmacyTableProps> = ({ pharmacies }) => 
         </TableHead>
 
         <TableBody>
-          {pharmacies && pharmacies.length ? (
-            pharmacies.map((row: PharmacyEntity) => (
-              <TableRow key={row.id} component={Link} to={`/pharmacy/${row.id}`}>
-                <TableCell component="th" scope="row">
-                  {row.attributes.name}
-                </TableCell>
-                <TableCell align="left">{row.attributes.city}</TableCell>
-                <TableCell align="left">{row.attributes.address}</TableCell>
-                <TableCell align="left">{row.attributes.places}</TableCell>
-              </TableRow>
-            ))
-          ) : (
+          {isLoading && (
             <TableRow>
               <TableCell colSpan={4}>
                 <Box sx={{ display: "flex", justifyContent: "center", padding: "60px 0" }}>
@@ -60,8 +40,50 @@ export const PharmacyTable: React.FC<IPharmacyTableProps> = ({ pharmacies }) => 
               </TableCell>
             </TableRow>
           )}
+
+          {!isLoading && !pharmacies.length && <EmptyRow colSpan={6} />}
+
+          {!isLoading &&
+            pharmacies.length &&
+            pharmacies.map((row: PharmacyEntity) => (
+              <TableRow component={Link} to={`/pharmacy/${row.id}`}>
+                <TableCell component="th" scope="row">
+                  {row.attributes.name}
+                </TableCell>
+                <TableCell align="left">{row.attributes.city}</TableCell>
+                <TableCell align="left">{row.attributes.address}</TableCell>
+                <TableCell align="left">{row.attributes.places}</TableCell>
+              </TableRow>
+            ))}
         </TableBody>
       </Table>
     </TableContainer>
   )
 }
+
+/* 
+{isLoading ? (
+    pharmacies && pharmacies.length ? (
+      pharmacies.map((row: PharmacyEntity) => (
+        <TableRow key={row.id} component={Link} to={`/pharmacy/${row.id}`}>
+          <TableCell component="th" scope="row">
+            {row.attributes.name}
+          </TableCell>
+          <TableCell align="left">{row.attributes.city}</TableCell>
+          <TableCell align="left">{row.attributes.address}</TableCell>
+          <TableCell align="left">{row.attributes.places}</TableCell>
+        </TableRow>
+      ))
+    ) : (
+      <EmptyRow colSpan={6} />
+    )
+  ) : (
+    <TableRow>
+      <TableCell colSpan={4}>
+        <Box sx={{ display: "flex", justifyContent: "center", padding: "60px 0" }}>
+          <CircularProgress />
+        </Box>
+      </TableCell>
+    </TableRow>
+)} 
+*/
