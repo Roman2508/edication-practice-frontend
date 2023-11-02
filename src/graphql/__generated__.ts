@@ -107,7 +107,7 @@ export type FloatFilterInput = {
   readonly startsWith: InputMaybe<Scalars['Float']['input']>;
 };
 
-export type GenericMorph = Group | I18NLocale | Pharmacy | Student | UploadFile | UploadFolder | UsersPermissionsPermission | UsersPermissionsRole | UsersPermissionsUser;
+export type GenericMorph = Group | I18NLocale | Pharmacy | SelectedBasesOfPractice | Student | UploadFile | UploadFolder | UsersPermissionsPermission | UsersPermissionsRole | UsersPermissionsUser;
 
 export type Group = {
   readonly __typename?: 'Group';
@@ -303,6 +303,7 @@ export type Mutation = {
   readonly changePassword: Maybe<UsersPermissionsLoginPayload>;
   readonly createGroup: Maybe<GroupEntityResponse>;
   readonly createPharmacy: Maybe<PharmacyEntityResponse>;
+  readonly createSelectedBasesOfPractice: Maybe<SelectedBasesOfPracticeEntityResponse>;
   readonly createStudent: Maybe<StudentEntityResponse>;
   readonly createUploadFile: Maybe<UploadFileEntityResponse>;
   readonly createUploadFolder: Maybe<UploadFolderEntityResponse>;
@@ -312,6 +313,7 @@ export type Mutation = {
   readonly createUsersPermissionsUser: UsersPermissionsUserEntityResponse;
   readonly deleteGroup: Maybe<GroupEntityResponse>;
   readonly deletePharmacy: Maybe<PharmacyEntityResponse>;
+  readonly deleteSelectedBasesOfPractice: Maybe<SelectedBasesOfPracticeEntityResponse>;
   readonly deleteStudent: Maybe<StudentEntityResponse>;
   readonly deleteUploadFile: Maybe<UploadFileEntityResponse>;
   readonly deleteUploadFolder: Maybe<UploadFolderEntityResponse>;
@@ -333,6 +335,7 @@ export type Mutation = {
   readonly updateFileInfo: UploadFileEntityResponse;
   readonly updateGroup: Maybe<GroupEntityResponse>;
   readonly updatePharmacy: Maybe<PharmacyEntityResponse>;
+  readonly updateSelectedBasesOfPractice: Maybe<SelectedBasesOfPracticeEntityResponse>;
   readonly updateStudent: Maybe<StudentEntityResponse>;
   readonly updateUploadFile: Maybe<UploadFileEntityResponse>;
   readonly updateUploadFolder: Maybe<UploadFolderEntityResponse>;
@@ -358,6 +361,11 @@ export type MutationCreateGroupArgs = {
 
 export type MutationCreatePharmacyArgs = {
   data: PharmacyInput;
+};
+
+
+export type MutationCreateSelectedBasesOfPracticeArgs = {
+  data: SelectedBasesOfPracticeInput;
 };
 
 
@@ -392,6 +400,11 @@ export type MutationDeleteGroupArgs = {
 
 
 export type MutationDeletePharmacyArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationDeleteSelectedBasesOfPracticeArgs = {
   id: Scalars['ID']['input'];
 };
 
@@ -479,6 +492,12 @@ export type MutationUpdatePharmacyArgs = {
 };
 
 
+export type MutationUpdateSelectedBasesOfPracticeArgs = {
+  data: SelectedBasesOfPracticeInput;
+  id: Scalars['ID']['input'];
+};
+
+
 export type MutationUpdateStudentArgs = {
   data: StudentInput;
   id: Scalars['ID']['input'];
@@ -535,12 +554,10 @@ export type PaginationArg = {
 export type Pharmacy = {
   readonly __typename?: 'Pharmacy';
   readonly address: Scalars['String']['output'];
-  readonly brand: Maybe<Scalars['String']['output']>;
   readonly city: Scalars['String']['output'];
   readonly contractNumber: Scalars['String']['output'];
   readonly createdAt: Maybe<Scalars['DateTime']['output']>;
-  readonly location: Maybe<Scalars['String']['output']>;
-  readonly logo: Maybe<UploadFileEntityResponse>;
+  readonly legalName: Maybe<Scalars['String']['output']>;
   readonly name: Scalars['String']['output'];
   readonly number: Maybe<Scalars['String']['output']>;
   readonly places: Scalars['Int']['output'];
@@ -567,12 +584,11 @@ export type PharmacyEntityResponseCollection = {
 export type PharmacyFiltersInput = {
   readonly address: InputMaybe<StringFilterInput>;
   readonly and: InputMaybe<ReadonlyArray<InputMaybe<PharmacyFiltersInput>>>;
-  readonly brand: InputMaybe<StringFilterInput>;
   readonly city: InputMaybe<StringFilterInput>;
   readonly contractNumber: InputMaybe<StringFilterInput>;
   readonly createdAt: InputMaybe<DateTimeFilterInput>;
   readonly id: InputMaybe<IdFilterInput>;
-  readonly location: InputMaybe<StringFilterInput>;
+  readonly legalName: InputMaybe<StringFilterInput>;
   readonly name: InputMaybe<StringFilterInput>;
   readonly not: InputMaybe<PharmacyFiltersInput>;
   readonly number: InputMaybe<StringFilterInput>;
@@ -583,11 +599,9 @@ export type PharmacyFiltersInput = {
 
 export type PharmacyInput = {
   readonly address: InputMaybe<Scalars['String']['input']>;
-  readonly brand: InputMaybe<Scalars['String']['input']>;
   readonly city: InputMaybe<Scalars['String']['input']>;
   readonly contractNumber: InputMaybe<Scalars['String']['input']>;
-  readonly location: InputMaybe<Scalars['String']['input']>;
-  readonly logo: InputMaybe<Scalars['ID']['input']>;
+  readonly legalName: InputMaybe<Scalars['String']['input']>;
   readonly name: InputMaybe<Scalars['String']['input']>;
   readonly number: InputMaybe<Scalars['String']['input']>;
   readonly places: InputMaybe<Scalars['Int']['input']>;
@@ -607,6 +621,8 @@ export type Query = {
   readonly me: Maybe<UsersPermissionsMe>;
   readonly pharmacies: Maybe<PharmacyEntityResponseCollection>;
   readonly pharmacy: Maybe<PharmacyEntityResponse>;
+  readonly selectedBasesOfPractice: Maybe<SelectedBasesOfPracticeEntityResponse>;
+  readonly selectedBasesOfPractices: Maybe<SelectedBasesOfPracticeEntityResponseCollection>;
   readonly student: Maybe<StudentEntityResponse>;
   readonly students: Maybe<StudentEntityResponseCollection>;
   readonly uploadFile: Maybe<UploadFileEntityResponse>;
@@ -654,6 +670,18 @@ export type QueryPharmaciesArgs = {
 
 export type QueryPharmacyArgs = {
   id: InputMaybe<Scalars['ID']['input']>;
+};
+
+
+export type QuerySelectedBasesOfPracticeArgs = {
+  id: InputMaybe<Scalars['ID']['input']>;
+};
+
+
+export type QuerySelectedBasesOfPracticesArgs = {
+  filters: InputMaybe<SelectedBasesOfPracticeFiltersInput>;
+  pagination?: InputMaybe<PaginationArg>;
+  sort?: InputMaybe<ReadonlyArray<InputMaybe<Scalars['String']['input']>>>;
 };
 
 
@@ -721,6 +749,47 @@ export type ResponseCollectionMeta = {
   readonly pagination: Pagination;
 };
 
+export type SelectedBasesOfPractice = {
+  readonly __typename?: 'SelectedBasesOfPractice';
+  readonly createdAt: Maybe<Scalars['DateTime']['output']>;
+  readonly pharmacy: Maybe<PharmacyEntityResponse>;
+  readonly student: Maybe<StudentEntityResponse>;
+  readonly updatedAt: Maybe<Scalars['DateTime']['output']>;
+};
+
+export type SelectedBasesOfPracticeEntity = {
+  readonly __typename?: 'SelectedBasesOfPracticeEntity';
+  readonly attributes: Maybe<SelectedBasesOfPractice>;
+  readonly id: Maybe<Scalars['ID']['output']>;
+};
+
+export type SelectedBasesOfPracticeEntityResponse = {
+  readonly __typename?: 'SelectedBasesOfPracticeEntityResponse';
+  readonly data: Maybe<SelectedBasesOfPracticeEntity>;
+};
+
+export type SelectedBasesOfPracticeEntityResponseCollection = {
+  readonly __typename?: 'SelectedBasesOfPracticeEntityResponseCollection';
+  readonly data: ReadonlyArray<SelectedBasesOfPracticeEntity>;
+  readonly meta: ResponseCollectionMeta;
+};
+
+export type SelectedBasesOfPracticeFiltersInput = {
+  readonly and: InputMaybe<ReadonlyArray<InputMaybe<SelectedBasesOfPracticeFiltersInput>>>;
+  readonly createdAt: InputMaybe<DateTimeFilterInput>;
+  readonly id: InputMaybe<IdFilterInput>;
+  readonly not: InputMaybe<SelectedBasesOfPracticeFiltersInput>;
+  readonly or: InputMaybe<ReadonlyArray<InputMaybe<SelectedBasesOfPracticeFiltersInput>>>;
+  readonly pharmacy: InputMaybe<PharmacyFiltersInput>;
+  readonly student: InputMaybe<StudentFiltersInput>;
+  readonly updatedAt: InputMaybe<DateTimeFilterInput>;
+};
+
+export type SelectedBasesOfPracticeInput = {
+  readonly pharmacy: InputMaybe<Scalars['ID']['input']>;
+  readonly student: InputMaybe<Scalars['ID']['input']>;
+};
+
 export type StringFilterInput = {
   readonly and: InputMaybe<ReadonlyArray<InputMaybe<Scalars['String']['input']>>>;
   readonly between: InputMaybe<ReadonlyArray<InputMaybe<Scalars['String']['input']>>>;
@@ -753,7 +822,7 @@ export type Student = {
   readonly email: Scalars['String']['output'];
   readonly group: Maybe<GroupRelationResponseCollection>;
   readonly name: Scalars['String']['output'];
-  readonly phone: Scalars['Long']['output'];
+  readonly phone: Maybe<Scalars['Long']['output']>;
   readonly picture: Maybe<Scalars['String']['output']>;
   readonly updatedAt: Maybe<Scalars['DateTime']['output']>;
 };
@@ -1180,6 +1249,14 @@ export type UsersPermissionsUserRelationResponseCollection = {
   readonly data: ReadonlyArray<UsersPermissionsUserEntity>;
 };
 
+export type ChangePlacesCountInPharmacyMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+  places: Scalars['Int']['input'];
+}>;
+
+
+export type ChangePlacesCountInPharmacyMutation = { readonly __typename?: 'Mutation', readonly updatePharmacy: { readonly __typename?: 'PharmacyEntityResponse', readonly data: { readonly __typename?: 'PharmacyEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Pharmacy', readonly places: number } } } };
+
 export type ChangeStudentGroupMutationVariables = Exact<{
   id: Scalars['ID']['input'];
   group: Scalars['ID']['input'];
@@ -1189,15 +1266,16 @@ export type ChangeStudentGroupMutationVariables = Exact<{
 export type ChangeStudentGroupMutation = { readonly __typename?: 'Mutation', readonly updateStudent: { readonly __typename?: 'StudentEntityResponse', readonly data: { readonly __typename?: 'StudentEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Student', readonly name: string, readonly email: string, readonly picture: string, readonly group: { readonly __typename?: 'GroupRelationResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'GroupEntity', readonly attributes: { readonly __typename?: 'Group', readonly name: string, readonly courseNumber: number } }> } } } } };
 
 export type CreatePharmacyMutationVariables = Exact<{
-  name: InputMaybe<Scalars['String']['input']>;
-  city: InputMaybe<Scalars['String']['input']>;
-  address: InputMaybe<Scalars['String']['input']>;
-  contractNumber: InputMaybe<Scalars['String']['input']>;
-  places: InputMaybe<Scalars['Int']['input']>;
+  name: Scalars['String']['input'];
+  city: Scalars['String']['input'];
+  address: Scalars['String']['input'];
+  contractNumber: Scalars['String']['input'];
+  places?: InputMaybe<Scalars['Int']['input']>;
+  legalName: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
-export type CreatePharmacyMutation = { readonly __typename?: 'Mutation', readonly createPharmacy: { readonly __typename?: 'PharmacyEntityResponse', readonly data: { readonly __typename?: 'PharmacyEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Pharmacy', readonly name: string, readonly city: string, readonly address: string, readonly places: number, readonly location: string, readonly contractNumber: string, readonly brand: string, readonly number: string, readonly logo: { readonly __typename?: 'UploadFileEntityResponse', readonly data: { readonly __typename?: 'UploadFileEntity', readonly attributes: { readonly __typename?: 'UploadFile', readonly url: string } } } } } } };
+export type CreatePharmacyMutation = { readonly __typename?: 'Mutation', readonly createPharmacy: { readonly __typename?: 'PharmacyEntityResponse', readonly data: { readonly __typename?: 'PharmacyEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Pharmacy', readonly name: string, readonly city: string, readonly address: string, readonly places: number, readonly contractNumber: string, readonly legalName: string, readonly number: string } } } };
 
 export type CreateStudentMutationVariables = Exact<{
   name: InputMaybe<Scalars['String']['input']>;
@@ -1215,6 +1293,21 @@ export type DeletePharmacyMutationVariables = Exact<{
 
 export type DeletePharmacyMutation = { readonly __typename?: 'Mutation', readonly deletePharmacy: { readonly __typename?: 'PharmacyEntityResponse', readonly data: { readonly __typename?: 'PharmacyEntity', readonly id: string } } };
 
+export type SelectBaseOfPracticeMutationVariables = Exact<{
+  studentId: Scalars['ID']['input'];
+  pharmacyId: Scalars['ID']['input'];
+}>;
+
+
+export type SelectBaseOfPracticeMutation = { readonly __typename?: 'Mutation', readonly createSelectedBasesOfPractice: { readonly __typename?: 'SelectedBasesOfPracticeEntityResponse', readonly data: { readonly __typename?: 'SelectedBasesOfPracticeEntity', readonly id: string, readonly attributes: { readonly __typename?: 'SelectedBasesOfPractice', readonly student: { readonly __typename?: 'StudentEntityResponse', readonly data: { readonly __typename?: 'StudentEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Student', readonly name: string, readonly email: string, readonly picture: string, readonly phone: any, readonly group: { readonly __typename?: 'GroupRelationResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'GroupEntity', readonly attributes: { readonly __typename?: 'Group', readonly name: string } }> } } } }, readonly pharmacy: { readonly __typename?: 'PharmacyEntityResponse', readonly data: { readonly __typename?: 'PharmacyEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Pharmacy', readonly name: string, readonly city: string, readonly address: string, readonly places: number, readonly contractNumber: string, readonly legalName: string, readonly number: string } } } } } } };
+
+export type CanUserChoosePracticeBaseQueryVariables = Exact<{
+  userId?: Scalars['ID']['input'];
+}>;
+
+
+export type CanUserChoosePracticeBaseQuery = { readonly __typename?: 'Query', readonly selectedBasesOfPractices: { readonly __typename?: 'SelectedBasesOfPracticeEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'SelectedBasesOfPracticeEntity', readonly id: string }> } };
+
 export type GetAllGroupsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1223,12 +1316,17 @@ export type GetAllGroupsQuery = { readonly __typename?: 'Query', readonly groups
 export type GetAllPharmaciesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllPharmaciesQuery = { readonly __typename?: 'Query', readonly pharmacies: { readonly __typename?: 'PharmacyEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'PharmacyEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Pharmacy', readonly name: string, readonly city: string, readonly address: string, readonly places: number, readonly brand: string, readonly number: string } }> } };
+export type GetAllPharmaciesQuery = { readonly __typename?: 'Query', readonly pharmacies: { readonly __typename?: 'PharmacyEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'PharmacyEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Pharmacy', readonly name: string, readonly city: string, readonly address: string, readonly places: number, readonly legalName: string, readonly number: string } }> } };
 
 export type GetAllPharmacyIdsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetAllPharmacyIdsQuery = { readonly __typename?: 'Query', readonly pharmacies: { readonly __typename?: 'PharmacyEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'PharmacyEntity', readonly id: string }> } };
+
+export type GetAllSelectedPracticeBaseQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAllSelectedPracticeBaseQuery = { readonly __typename?: 'Query', readonly selectedBasesOfPractices: { readonly __typename?: 'SelectedBasesOfPracticeEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'SelectedBasesOfPracticeEntity', readonly id: string, readonly attributes: { readonly __typename?: 'SelectedBasesOfPractice', readonly student: { readonly __typename?: 'StudentEntityResponse', readonly data: { readonly __typename?: 'StudentEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Student', readonly name: string, readonly group: { readonly __typename?: 'GroupRelationResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'GroupEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Group', readonly name: string, readonly courseNumber: number } }> } } } }, readonly pharmacy: { readonly __typename?: 'PharmacyEntityResponse', readonly data: { readonly __typename?: 'PharmacyEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Pharmacy', readonly name: string, readonly city: string, readonly address: string } } } } }> } };
 
 export type GetAllStudentsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1240,7 +1338,7 @@ export type GetFullPharmacyQueryVariables = Exact<{
 }>;
 
 
-export type GetFullPharmacyQuery = { readonly __typename?: 'Query', readonly pharmacies: { readonly __typename?: 'PharmacyEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'PharmacyEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Pharmacy', readonly name: string, readonly city: string, readonly address: string, readonly places: number, readonly location: string, readonly contractNumber: string, readonly brand: string, readonly number: string, readonly logo: { readonly __typename?: 'UploadFileEntityResponse', readonly data: { readonly __typename?: 'UploadFileEntity', readonly attributes: { readonly __typename?: 'UploadFile', readonly url: string, readonly name: string } } } } }> } };
+export type GetFullPharmacyQuery = { readonly __typename?: 'Query', readonly pharmacies: { readonly __typename?: 'PharmacyEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'PharmacyEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Pharmacy', readonly name: string, readonly city: string, readonly address: string, readonly places: number, readonly contractNumber: string, readonly legalName: string, readonly number: string } }> } };
 
 export type GetOneStudentQueryVariables = Exact<{
   email: InputMaybe<Scalars['String']['input']>;
@@ -1256,9 +1354,21 @@ export type GetSearchPharmaciesQueryVariables = Exact<{
 }>;
 
 
-export type GetSearchPharmaciesQuery = { readonly __typename?: 'Query', readonly pharmacies: { readonly __typename?: 'PharmacyEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'PharmacyEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Pharmacy', readonly name: string, readonly city: string, readonly address: string, readonly places: number, readonly brand: string, readonly number: string } }> } };
+export type GetSearchPharmaciesQuery = { readonly __typename?: 'Query', readonly pharmacies: { readonly __typename?: 'PharmacyEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'PharmacyEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Pharmacy', readonly name: string, readonly city: string, readonly address: string, readonly places: number, readonly legalName: string, readonly number: string } }> } };
 
 
+export const ChangePlacesCountInPharmacyDocument = gql`
+    mutation changePlacesCountInPharmacy($id: ID!, $places: Int!) {
+  updatePharmacy(id: $id, data: {places: $places}) {
+    data {
+      id
+      attributes {
+        places
+      }
+    }
+  }
+}
+    `;
 export const ChangeStudentGroupDocument = gql`
     mutation ChangeStudentGroup($id: ID!, $group: ID!) {
   updateStudent(id: $id, data: {group: [$group]}) {
@@ -1282,9 +1392,9 @@ export const ChangeStudentGroupDocument = gql`
 }
     `;
 export const CreatePharmacyDocument = gql`
-    mutation CreatePharmacy($name: String, $city: String, $address: String, $contractNumber: String, $places: Int) {
+    mutation CreatePharmacy($name: String!, $city: String!, $address: String!, $contractNumber: String!, $places: Int = 2, $legalName: String) {
   createPharmacy(
-    data: {name: $name, city: $city, address: $address, contractNumber: $contractNumber, places: $places}
+    data: {name: $name, city: $city, address: $address, contractNumber: $contractNumber, places: $places, legalName: $legalName}
   ) {
     data {
       id
@@ -1293,17 +1403,9 @@ export const CreatePharmacyDocument = gql`
         city
         address
         places
-        location
         contractNumber
-        brand
+        legalName
         number
-        logo {
-          data {
-            attributes {
-              url
-            }
-          }
-        }
       }
     }
   }
@@ -1332,6 +1434,60 @@ export const DeletePharmacyDocument = gql`
   }
 }
     `;
+export const SelectBaseOfPracticeDocument = gql`
+    mutation selectBaseOfPractice($studentId: ID!, $pharmacyId: ID!) {
+  createSelectedBasesOfPractice(
+    data: {student: $studentId, pharmacy: $pharmacyId}
+  ) {
+    data {
+      id
+      attributes {
+        student {
+          data {
+            id
+            attributes {
+              name
+              email
+              picture
+              group {
+                data {
+                  attributes {
+                    name
+                  }
+                }
+              }
+              phone
+            }
+          }
+        }
+        pharmacy {
+          data {
+            id
+            attributes {
+              name
+              city
+              address
+              places
+              contractNumber
+              legalName
+              number
+            }
+          }
+        }
+      }
+    }
+  }
+}
+    `;
+export const CanUserChoosePracticeBaseDocument = gql`
+    query CanUserChoosePracticeBase($userId: ID! = "3") {
+  selectedBasesOfPractices(filters: {student: {id: {eq: $userId}}}) {
+    data {
+      id
+    }
+  }
+}
+    `;
 export const GetAllGroupsDocument = gql`
     query GetAllGroups {
   groups {
@@ -1347,7 +1503,7 @@ export const GetAllGroupsDocument = gql`
     `;
 export const GetAllPharmaciesDocument = gql`
     query GetAllPharmacies {
-  pharmacies(pagination: {pageSize: 5000}) {
+  pharmacies(pagination: {pageSize: 5000}, filters: {places: {notIn: 0}}) {
     data {
       id
       attributes {
@@ -1355,7 +1511,7 @@ export const GetAllPharmaciesDocument = gql`
         city
         address
         places
-        brand
+        legalName
         number
       }
     }
@@ -1367,6 +1523,44 @@ export const GetAllPharmacyIdsDocument = gql`
   pharmacies(pagination: {pageSize: 10000}) {
     data {
       id
+    }
+  }
+}
+    `;
+export const GetAllSelectedPracticeBaseDocument = gql`
+    query GetAllSelectedPracticeBase {
+  selectedBasesOfPractices(pagination: {pageSize: 10000}) {
+    data {
+      id
+      attributes {
+        student {
+          data {
+            id
+            attributes {
+              name
+              group {
+                data {
+                  id
+                  attributes {
+                    name
+                    courseNumber
+                  }
+                }
+              }
+            }
+          }
+        }
+        pharmacy {
+          data {
+            id
+            attributes {
+              name
+              city
+              address
+            }
+          }
+        }
+      }
     }
   }
 }
@@ -1403,18 +1597,9 @@ export const GetFullPharmacyDocument = gql`
         city
         address
         places
-        location
         contractNumber
-        brand
+        legalName
         number
-        logo {
-          data {
-            attributes {
-              url
-              name
-            }
-          }
-        }
       }
     }
   }
@@ -1455,7 +1640,7 @@ export const GetSearchPharmaciesDocument = gql`
         city
         address
         places
-        brand
+        legalName
         number
       }
     }
@@ -1470,10 +1655,13 @@ const defaultWrapper: SdkFunctionWrapper = (action, _operationName, _operationTy
 
 export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
   return {
+    changePlacesCountInPharmacy(variables: ChangePlacesCountInPharmacyMutationVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<ChangePlacesCountInPharmacyMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<ChangePlacesCountInPharmacyMutation>(ChangePlacesCountInPharmacyDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'changePlacesCountInPharmacy', 'mutation');
+    },
     ChangeStudentGroup(variables: ChangeStudentGroupMutationVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<ChangeStudentGroupMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<ChangeStudentGroupMutation>(ChangeStudentGroupDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'ChangeStudentGroup', 'mutation');
     },
-    CreatePharmacy(variables?: CreatePharmacyMutationVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<CreatePharmacyMutation> {
+    CreatePharmacy(variables: CreatePharmacyMutationVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<CreatePharmacyMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<CreatePharmacyMutation>(CreatePharmacyDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'CreatePharmacy', 'mutation');
     },
     CreateStudent(variables?: CreateStudentMutationVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<CreateStudentMutation> {
@@ -1481,6 +1669,12 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     DeletePharmacy(variables: DeletePharmacyMutationVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<DeletePharmacyMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<DeletePharmacyMutation>(DeletePharmacyDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'DeletePharmacy', 'mutation');
+    },
+    selectBaseOfPractice(variables: SelectBaseOfPracticeMutationVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<SelectBaseOfPracticeMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<SelectBaseOfPracticeMutation>(SelectBaseOfPracticeDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'selectBaseOfPractice', 'mutation');
+    },
+    CanUserChoosePracticeBase(variables?: CanUserChoosePracticeBaseQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<CanUserChoosePracticeBaseQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<CanUserChoosePracticeBaseQuery>(CanUserChoosePracticeBaseDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'CanUserChoosePracticeBase', 'query');
     },
     GetAllGroups(variables?: GetAllGroupsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetAllGroupsQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetAllGroupsQuery>(GetAllGroupsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetAllGroups', 'query');
@@ -1490,6 +1684,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     GetAllPharmacyIds(variables?: GetAllPharmacyIdsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetAllPharmacyIdsQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetAllPharmacyIdsQuery>(GetAllPharmacyIdsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetAllPharmacyIds', 'query');
+    },
+    GetAllSelectedPracticeBase(variables?: GetAllSelectedPracticeBaseQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetAllSelectedPracticeBaseQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetAllSelectedPracticeBaseQuery>(GetAllSelectedPracticeBaseDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetAllSelectedPracticeBase', 'query');
     },
     GetAllStudents(variables?: GetAllStudentsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetAllStudentsQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetAllStudentsQuery>(GetAllStudentsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetAllStudents', 'query');

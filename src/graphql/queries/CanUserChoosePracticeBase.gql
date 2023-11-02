@@ -1,0 +1,7 @@
+query CanUserChoosePracticeBase($userId: ID! = "3") {
+  selectedBasesOfPractices(filters: { student: { id: { eq: $userId } } }) {
+    data {
+      id
+    }
+  }
+}

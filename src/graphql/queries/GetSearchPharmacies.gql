@@ -7,7 +7,7 @@ query GetSearchPharmacies($name: String = "", $city: String = "", $address: Stri
         city
         address
         places
-        brand
+        legalName
         number
       }
     }

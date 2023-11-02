@@ -1,5 +1,5 @@
 query GetAllPharmacies {
-  pharmacies(pagination: { pageSize: 5000 }) {
+  pharmacies(pagination: { pageSize: 5000 }, filters: { places: { notIn: 0 } }) {
     data {
       id
       attributes {
@@ -7,7 +7,7 @@ query GetAllPharmacies {
         city
         address
         places
-        brand
+        legalName
         number
       }
     }

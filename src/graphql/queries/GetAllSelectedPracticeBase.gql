@@ -1,0 +1,36 @@
+query GetAllSelectedPracticeBase {
+  selectedBasesOfPractices(pagination: { pageSize: 10000 }) {
+    data {
+      id
+      attributes {
+        student {
+          data {
+            id
+            attributes {
+              name
+              group {
+                data {
+                  id
+                  attributes {
+                    name
+                    courseNumber
+                  }
+                }
+              }
+            }
+          }
+        }
+        pharmacy {
+          data {
+            id
+            attributes {
+              name
+              city
+              address
+            }
+          }
+        }
+      }
+    }
+  }
+}

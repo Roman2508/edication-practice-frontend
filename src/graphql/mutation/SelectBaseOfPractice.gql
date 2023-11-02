@@ -1,0 +1,41 @@
+mutation selectBaseOfPractice($studentId: ID!, $pharmacyId: ID!) {
+  createSelectedBasesOfPractice(data: { student: $studentId, pharmacy: $pharmacyId }) {
+    data {
+      id
+      attributes {
+        student {
+          data {
+            id
+            attributes {
+              name
+              email
+              picture
+              group {
+                data {
+                  attributes {
+                    name
+                  }
+                }
+              }
+              phone
+            }
+          }
+        }
+        pharmacy {
+          data {
+            id
+            attributes {
+              name
+              city
+              address
+              places
+              contractNumber
+              legalName
+              number
+            }
+          }
+        }
+      }
+    }
+  }
+}

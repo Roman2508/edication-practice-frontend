@@ -1,3 +1,4 @@
+import React from 'react'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
@@ -6,8 +7,10 @@ import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
 import { alpha } from '@mui/material/styles'
-import { Button, Checkbox, IconButton, Toolbar, Tooltip, Typography } from '@mui/material'
-import React from 'react'
+import { Button, Checkbox, Toolbar, Tooltip, Typography } from '@mui/material'
+import Box from '@mui/material/Box'
+import { GetAllSelectedPracticeBaseQuery, gql } from '../../graphql/client'
+import CircularProgress from '@mui/material/CircularProgress'
 
 function createData(id: number, name: string, calories: string, fat: string, carbs: string, protein: string) {
   return { id, name, calories, fat, carbs, protein }
@@ -59,8 +62,27 @@ export const StudentsTable = () => {
   const [orderBy, setOrderBy] = React.useState<any>('calories')
   const [selected, setSelected] = React.useState<readonly number[]>([])
   const [page, setPage] = React.useState(0)
-  const [dense, setDense] = React.useState(false)
-  const [rowsPerPage, setRowsPerPage] = React.useState(5)
+
+  const [rowsPerPage, setRowsPerPage] = React.useState(10)
+
+  const [isLoading, setIsLoading] = React.useState(false)
+  const [data, setData] = React.useState<GetAllSelectedPracticeBaseQuery | null>(null)
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setIsLoading(true)
+        const data = await gql.GetAllSelectedPracticeBase()
+        setData(data)
+      } catch (err) {
+        console.log(err)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchData()
+  }, [])
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, property: any) => {
     const isAsc = orderBy === property && order === 'asc'
@@ -119,41 +141,53 @@ export const StudentsTable = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row, index) => {
-            const isSelected = (id: number) => selected.indexOf(id) !== -1
+          {data && data.selectedBasesOfPractices.data.length ? (
+            data.selectedBasesOfPractices.data.map((row, index) => {
+              const isSelected = (id: number) => selected.indexOf(id) !== -1
 
-            const isItemSelected = isSelected(row.id)
-            const labelId = `enhanced-table-checkbox-${index}`
+              const isItemSelected = isSelected(Number(row.id))
+              const labelId = `enhanced-table-checkbox-${index}`
 
-            return (
-              <TableRow
-                key={row.name}
-                role="checkbox"
-                sx={{ cursor: 'pointer' }}
-                selected={isItemSelected}
-                aria-checked={isItemSelected}
-                onClick={(event) => handleClick(event, row.id)}
-              >
-                <TableCell padding="checkbox">
-                  <Checkbox
-                    color="primary"
-                    checked={isItemSelected}
-                    inputProps={{
-                      'aria-labelledby': labelId,
-                    }}
-                  />
-                </TableCell>
+              return (
+                <TableRow
+                  key={row.id}
+                  role="checkbox"
+                  sx={{ cursor: 'pointer' }}
+                  selected={isItemSelected}
+                  aria-checked={isItemSelected}
+                  onClick={(event) => handleClick(event, Number(row.id))}
+                >
+                  <TableCell padding="checkbox">
+                    <Checkbox
+                      color="primary"
+                      checked={isItemSelected}
+                      inputProps={{
+                        'aria-labelledby': labelId,
+                      }}
+                    />
+                  </TableCell>
 
-                <TableCell component="th" scope="row">
-                  {row.name}
-                </TableCell>
-                <TableCell align="left">{row.calories}</TableCell>
-                <TableCell align="left">{row.fat}</TableCell>
-                <TableCell align="left">{row.carbs}</TableCell>
-                <TableCell align="left">{row.protein}</TableCell>
-              </TableRow>
-            )
-          })}
+                  <TableCell component="th" scope="row">
+                    {row.attributes.student.data.attributes.name}
+                  </TableCell>
+                  <TableCell align="left">
+                    {row.attributes.student.data.attributes.group.data[0].attributes.name}
+                  </TableCell>
+                  <TableCell align="left">{row.attributes.pharmacy.data.attributes.name}</TableCell>
+                  <TableCell align="left">{row.attributes.pharmacy.data.attributes.city}</TableCell>
+                  <TableCell align="left">{row.attributes.pharmacy.data.attributes.address}</TableCell>
+                </TableRow>
+              )
+            })
+          ) : (
+            <TableRow>
+              <TableCell colSpan={4}>
+                <Box sx={{ display: 'flex', justifyContent: 'center', padding: '60px 0' }}>
+                  <CircularProgress />
+                </Box>
+              </TableCell>
+            </TableRow>
+          )}
         </TableBody>
       </Table>
     </TableContainer>

@@ -1,9 +1,10 @@
 mutation CreatePharmacy(
-  $name: String
-  $city: String
-  $address: String
-  $contractNumber: String
-  $places: Int
+  $name: String!
+  $city: String!
+  $address: String!
+  $contractNumber: String!
+  $places: Int = 2
+  $legalName: String
 ) {
   createPharmacy(
     data: {
@@ -12,6 +13,7 @@ mutation CreatePharmacy(
       address: $address
       contractNumber: $contractNumber
       places: $places
+      legalName: $legalName
     }
   ) {
     data {
@@ -21,17 +23,9 @@ mutation CreatePharmacy(
         city
         address
         places
-        location
         contractNumber
-        brand
+        legalName
         number
-        logo {
-          data {
-            attributes {
-              url
-            }
-          }
-        }
       }
     }
   }

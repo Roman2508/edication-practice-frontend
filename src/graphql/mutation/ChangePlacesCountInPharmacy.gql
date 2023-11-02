@@ -1,0 +1,10 @@
+mutation changePlacesCountInPharmacy($id: ID!, $places: Int!) {
+  updatePharmacy(id: $id, data: { places: $places }) {
+    data {
+      id
+      attributes {
+        places
+      }
+    }
+  }
+}

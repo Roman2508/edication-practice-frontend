@@ -1,13 +1,21 @@
-import React from "react"
-import { useParams } from "react-router-dom"
-import { Typography, Button, Skeleton } from "@mui/material"
+import React from 'react'
+import { AppContext } from '../App'
+import { useParams, useNavigate } from 'react-router-dom'
+import { Typography, Button, Skeleton } from '@mui/material'
 
-// import { Map } from '../components/Map/Map'
-import { GoogleMapComponent } from "../components/GoogleMap"
-import { GetFullPharmacyQuery, gql } from "../graphql/client"
+import { getAuthData } from '../utils/getAuthData'
+import { GoogleMapComponent } from '../components/GoogleMap'
+import { GetFullPharmacyQuery, gql } from '../graphql/client'
 
 export const PharmacyPage = () => {
+  const { setAlert, canUserChoosePracticeBase } = React.useContext(AppContext)
+
   const { id } = useParams()
+  const navigate = useNavigate()
+
+  const student = getAuthData()
+
+  const [isLoading, setIsLoading] = React.useState(false)
 
   const [data, setData] = React.useState<GetFullPharmacyQuery>()
 
@@ -23,12 +31,40 @@ export const PharmacyPage = () => {
     fetchPharmacy()
   }, [id])
 
+  const onSelectBaseOfPractice = async () => {
+    if (!data || !id || !student) return
+
+    const { name, address, places } = data?.pharmacies.data[0].attributes
+
+    if (window.confirm(`Ви дійсно хочете вибрати ${name}, що знаходиться за адресою ${address}, як базу практики?`)) {
+      try {
+        setIsLoading(true)
+        await gql.selectBaseOfPractice({ pharmacyId: id, studentId: student.id })
+        await gql.changePlacesCountInPharmacy({ id: id, places: places - 1 })
+        setAlert({
+          isShow: true,
+          message: 'Базу практик успішно вибрано :)',
+          severity: 'success',
+        })
+        navigate('/selected')
+      } catch (err) {
+        console.log(err)
+        setAlert({
+          isShow: true,
+          message: 'Помилка',
+          severity: 'error',
+        })
+      } finally {
+        setIsLoading(false)
+        setTimeout(() => {
+          setAlert((prev) => ({ ...prev, isShow: false }))
+        }, 3000)
+      }
+    }
+  }
+
   return (
     <>
-      {/* <div style={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
-        <img src="../podoroznik.png" height={50} />
-      </div> */}
-
       {data ? (
         <div className="test">
           <div>
@@ -41,8 +77,14 @@ export const PharmacyPage = () => {
             </Typography>
           </div>
 
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
-            <Button variant="outlined">Вибрати як базу практики</Button>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+            <Button
+              variant="outlined"
+              onClick={onSelectBaseOfPractice}
+              disabled={!canUserChoosePracticeBase || isLoading}
+            >
+              Вибрати як базу практики
+            </Button>
             <Typography variant="subtitle1" sx={{ mt: 1 }}>
               кількість місць: {data.pharmacies.data[0].attributes.places}
             </Typography>
@@ -55,14 +97,12 @@ export const PharmacyPage = () => {
             <Skeleton variant="rectangular" width={150} height={20} sx={{ mb: 1 }} />
             <Skeleton variant="rectangular" width={300} height={20} />
           </div>
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
             <Skeleton variant="rectangular" width={240} height={36} sx={{ mb: 1 }} />
             <Skeleton variant="rectangular" width={140} height={28} />
           </div>
         </div>
       )}
-
-      {/* <Map city={data.pharmacies.data[0].attributes.city} address={data.pharmacies.data[0].attributes.address} /> */}
 
       {data && (
         <GoogleMapComponent

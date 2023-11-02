@@ -7,18 +7,9 @@ query GetFullPharmacy($id: ID!) {
         city
         address
         places
-        location
         contractNumber
-        brand
+        legalName
         number
-        logo {
-          data {
-            attributes {
-              url
-              name
-            }
-          }
-        }
       }
     }
   }

@@ -1,6 +1,6 @@
-import React from "react"
-import Skeleton from "@mui/material/Skeleton"
-import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api"
+import React from 'react'
+import Skeleton from '@mui/material/Skeleton'
+import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api'
 
 const initialCenter = {
   lat: 50.244395,
@@ -14,25 +14,31 @@ interface IGoogleMapComponentProps {
 
 export const GoogleMapComponent: React.FC<IGoogleMapComponentProps> = ({ city, address }) => {
   const { isLoaded } = useJsApiLoader({
-    id: "google-map-script",
+    id: 'google-map-script',
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_KEY,
-    libraries: ["places"],
+    libraries: ['places'],
   })
 
   const [markerCenter, setMarkerCenter] = React.useState(initialCenter)
+  const [isMapFinded, setIsMapFinded] = React.useState(true)
 
   const onLoad = React.useCallback(function callback(map: google.maps.Map) {
     //
     const request = {
       query: `${city} ${address}`,
-      fields: ["name", "geometry"],
+      fields: ['name', 'geometry'],
     }
 
     const placeService = new google.maps.places.PlacesService(map)
 
     placeService.findPlaceFromQuery(request, (results, status) => {
+      if (!results) {
+        setIsMapFinded(false)
+        return
+      }
+
       if (status === google.maps.places.PlacesServiceStatus.OK) {
-        if (!results || !results[0].geometry || !results[0].geometry.location) return
+        if (!results[0].geometry || !results[0].geometry.location) return
 
         const marker = new google.maps.Marker({
           map,
@@ -52,9 +58,28 @@ export const GoogleMapComponent: React.FC<IGoogleMapComponentProps> = ({ city, a
     })
   }, [])
 
+  if (!isMapFinded) {
+    return (
+      <div
+        style={{
+          height: '350px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          background: '#c6c6c6',
+          color: 'white',
+          fontSize: '80px',
+          fontFamily: 'Roboto, sans-serif',
+        }}
+      >
+        404
+      </div>
+    )
+  }
+
   return isLoaded ? (
     <GoogleMap
-      mapContainerStyle={{ width: "100%", height: "350px" }}
+      mapContainerStyle={{ width: '100%', height: '350px' }}
       center={markerCenter}
       onLoad={onLoad}
       zoom={15}
@@ -66,6 +91,6 @@ export const GoogleMapComponent: React.FC<IGoogleMapComponentProps> = ({ city, a
       <Marker position={markerCenter} />
     </GoogleMap>
   ) : (
-    <Skeleton variant="rectangular" width={"100%"} height={350} />
+    <Skeleton variant="rectangular" width={'100%'} height={350} />
   )
 }
