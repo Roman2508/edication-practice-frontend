@@ -1,24 +1,24 @@
-import React from 'react'
-import Button from '@mui/material/Button'
-import TextField from '@mui/material/TextField'
-import Autocomplete from '@mui/material/Autocomplete'
+import React from "react"
+import Button from "@mui/material/Button"
+import TextField from "@mui/material/TextField"
+import Autocomplete from "@mui/material/Autocomplete"
 
-import styles from './Filter.module.css'
+import styles from "./Filter.module.css"
 
 const filterFields = [
-  { label: 'ПІБ', name: 'studentName' },
-  { label: 'Група', name: 'group' },
-  { label: 'Мережа аптек', name: 'pharmacyName' },
-  { label: 'Місто', name: 'city' },
-  { label: 'Адреса', name: 'address' },
+  { label: "ПІБ", name: "studentName" },
+  { label: "Група", name: "group" },
+  { label: "Мережа аптек", name: "pharmacyName" },
+  { label: "Місто", name: "city" },
+  { label: "Адреса", name: "address" },
 ]
 
 const initialData = {
   termOfPractice: {
-    start: '',
-    end: '',
+    start: "",
+    end: "",
   },
-  typeOfPractice: [''],
+  typeOfPractice: [""],
   practiceDirectionYear: 2023,
   practiceDirectionNumber: 1,
 }
@@ -26,10 +26,10 @@ const initialData = {
 export const StudentsFilter = () => {
   const [printSettings, setPrintSettings] = React.useState(initialData)
 
-  const inputWidth = '220px'
+  const inputWidth = "220px"
 
   return (
-    <div className={styles['students-filter-wrapper']}>
+    <div className={styles["students-filter-wrapper"]}>
       <div className={styles.fields}>
         <Autocomplete
           freeSolo
@@ -43,7 +43,7 @@ export const StudentsFilter = () => {
               label="Пошук за полем"
               InputProps={{
                 ...params.InputProps,
-                type: 'search',
+                type: "search",
               }}
             />
           )}
@@ -54,7 +54,7 @@ export const StudentsFilter = () => {
           label="Пошук"
           sx={{ width: inputWidth }}
           InputProps={{
-            type: 'search',
+            type: "search",
           }}
         />
 
