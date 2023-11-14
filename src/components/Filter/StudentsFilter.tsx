@@ -1,9 +1,31 @@
+import React from 'react'
+import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import Autocomplete from '@mui/material/Autocomplete'
-import Button from '@mui/material/Button'
+
 import styles from './Filter.module.css'
 
+const filterFields = [
+  { label: 'ПІБ', name: 'studentName' },
+  { label: 'Група', name: 'group' },
+  { label: 'Мережа аптек', name: 'pharmacyName' },
+  { label: 'Місто', name: 'city' },
+  { label: 'Адреса', name: 'address' },
+]
+
+const initialData = {
+  termOfPractice: {
+    start: '',
+    end: '',
+  },
+  typeOfPractice: [''],
+  practiceDirectionYear: 2023,
+  practiceDirectionNumber: 1,
+}
+
 export const StudentsFilter = () => {
+  const [printSettings, setPrintSettings] = React.useState(initialData)
+
   const inputWidth = '220px'
 
   return (
@@ -11,10 +33,9 @@ export const StudentsFilter = () => {
       <div className={styles.fields}>
         <Autocomplete
           freeSolo
-          id="free-solo-2-demo"
           disableClearable
           size="small"
-          options={top100Films.map((option) => option.title)}
+          options={filterFields.map((option) => option.label)}
           sx={{ width: inputWidth }}
           renderInput={(params) => (
             <TextField
@@ -72,15 +93,3 @@ export const StudentsFilter = () => {
     </div>
   )
 }
-
-const top100Films = [
-  { title: 'The Shawshank Redemption', year: 1994 },
-  { title: 'The Godfather', year: 1972 },
-  { title: 'The Godfather: Part II', year: 1974 },
-  { title: 'The Dark Knight', year: 2008 },
-  { title: '12 Angry Men', year: 1957 },
-  { title: "Schindler's List", year: 1993 },
-  { title: 'Pulp Fiction', year: 1994 },
-  { title: 'The Good, the Bad and the Ugly', year: 1966 },
-  { title: 'Fight Club', year: 1999 },
-]

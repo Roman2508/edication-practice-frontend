@@ -1,48 +1,30 @@
-import React from "react"
-import Table from "@mui/material/Table"
-import TableBody from "@mui/material/TableBody"
-import TableCell from "@mui/material/TableCell"
-import TableContainer from "@mui/material/TableContainer"
-import TableHead from "@mui/material/TableHead"
-import TableRow from "@mui/material/TableRow"
-import Paper from "@mui/material/Paper"
-import { alpha } from "@mui/material/styles"
-import { Button, Checkbox, Toolbar, Tooltip, Typography } from "@mui/material"
-import Box from "@mui/material/Box"
-import {
-  GetAllSelectedPracticeBaseQuery,
-  SelectedBasesOfPracticeEntity,
-  gql,
-} from "../../graphql/client"
-import CircularProgress from "@mui/material/CircularProgress"
-import { EmptyRow } from "./EmptyRow"
-import { PdfDocument } from "../PdfDocument"
-import { PDFDownloadLink } from "@react-pdf/renderer"
+import React from 'react'
+import Table from '@mui/material/Table'
+import TableBody from '@mui/material/TableBody'
+import TableCell from '@mui/material/TableCell'
+import TableContainer from '@mui/material/TableContainer'
+import TableHead from '@mui/material/TableHead'
+import TableRow from '@mui/material/TableRow'
+import Paper from '@mui/material/Paper'
+import { alpha } from '@mui/material/styles'
+import { Button, Checkbox, Toolbar, Tooltip, Typography } from '@mui/material'
+import Box from '@mui/material/Box'
+import { GetAllSelectedPracticeBaseQuery, SelectedBasesOfPracticeEntity, gql } from '../../graphql/client'
+import CircularProgress from '@mui/material/CircularProgress'
+import { EmptyRow } from './EmptyRow'
+import { PdfDocument } from '../PdfDocument'
+import { PDFDownloadLink } from '@react-pdf/renderer'
 
-function createData(
-  id: number,
-  name: string,
-  calories: string,
-  fat: string,
-  carbs: string,
-  protein: string
-) {
+function createData(id: number, name: string, calories: string, fat: string, carbs: string, protein: string) {
   return { id, name, calories, fat, carbs, protein }
 }
 
 const rows = [
-  createData(1, "Прізвище Ім'я Побатькові", "209", "Подорожник", "Житомир", "Чуднівська 99"),
-  createData(2, "Прізвище Ім'я Побатькові", "209", "Подорожник", "Житомир", "Небесної Сотні 10"),
-  createData(3, "Прізвище Ім'я Побатькові", "209", "Подорожник", "Житомир", "Небесної Сотні 68"),
-  createData(4, "Прізвище Ім'я Побатькові", "209", "Подорожник", "Житомир", "Чуднівська 99"),
-  createData(
-    5,
-    "Прізвище Ім'я Побатькові",
-    "209",
-    "Подорожник",
-    "Житомир",
-    "Велика Бердичівська 33"
-  ),
+  createData(1, "Прізвище Ім'я Побатькові", '209', 'Подорожник', 'Житомир', 'Чуднівська 99'),
+  createData(2, "Прізвище Ім'я Побатькові", '209', 'Подорожник', 'Житомир', 'Небесної Сотні 10'),
+  createData(3, "Прізвище Ім'я Побатькові", '209', 'Подорожник', 'Житомир', 'Небесної Сотні 68'),
+  createData(4, "Прізвище Ім'я Побатькові", '209', 'Подорожник', 'Житомир', 'Чуднівська 99'),
+  createData(5, "Прізвище Ім'я Побатькові", '209', 'Подорожник', 'Житомир', 'Велика Бердичівська 33'),
 ]
 
 const EnhancedTableToolbar = (props: {
@@ -58,17 +40,16 @@ const EnhancedTableToolbar = (props: {
         pl: { sm: 2 },
         pr: { xs: 1, sm: 1 },
         ...(numSelected > 0 && {
-          bgcolor: (theme) =>
-            alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
+          bgcolor: (theme) => alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
         }),
       }}
     >
       {numSelected > 0 ? (
-        <Typography sx={{ flexGrow: "1" }} color="inherit" variant="subtitle1" component="div">
+        <Typography sx={{ flexGrow: '1' }} color="inherit" variant="subtitle1" component="div">
           {numSelected} вибрано
         </Typography>
       ) : (
-        <Typography sx={{ flexGrow: "1" }} variant="h6" id="tableTitle" component="div">
+        <Typography sx={{ flexGrow: '1' }} variant="h6" id="tableTitle" component="div">
           Студенти
         </Typography>
       )}
@@ -78,16 +59,9 @@ const EnhancedTableToolbar = (props: {
             title="Завантажити направлення для вибраних студентів в PDF"
             sx={{ whiteSpace: "nowrap" }}
           > */}
-          <PDFDownloadLink
-            document={<PdfDocument selectedStudents={selectedStudents} />}
-            fileName="Направлення.pdf"
-          >
+          <PDFDownloadLink document={<PdfDocument selectedStudents={selectedStudents} />} fileName="Направлення.pdf">
             {({ blob, url, loading, error }) =>
-              loading ? (
-                <Button disabled>Завантаження...</Button>
-              ) : (
-                <Button>Завантажити направлення</Button>
-              )
+              loading ? <Button disabled>Завантаження...</Button> : <Button>Завантажити направлення</Button>
             }
           </PDFDownloadLink>
           {/* </Tooltip> */}
@@ -106,9 +80,7 @@ export const StudentsTable = () => {
   // const [rowsPerPage, setRowsPerPage] = React.useState(10)
 
   const [selected, setSelected] = React.useState<readonly number[]>([])
-  const [selectedStudents, setSelectedStudents] = React.useState<SelectedBasesOfPracticeEntity[]>(
-    []
-  )
+  const [selectedStudents, setSelectedStudents] = React.useState<SelectedBasesOfPracticeEntity[]>([])
 
   const [isLoading, setIsLoading] = React.useState(false)
   const [data, setData] = React.useState<GetAllSelectedPracticeBaseQuery | null>(null)
@@ -134,6 +106,7 @@ export const StudentsTable = () => {
 
     setSelectedStudents((prev) => {
       const finded = prev.find((el) => el.id === item.id)
+
       if (finded) {
         return prev.filter((el) => el.id !== finded.id)
       } else {
@@ -173,10 +146,7 @@ export const StudentsTable = () => {
     } else if (selectedIndex === selected.length - 1) {
       newSelected = newSelected.concat(selected.slice(0, -1))
     } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      )
+      newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1))
     }
     setSelected(newSelected)
   }
@@ -199,7 +169,7 @@ export const StudentsTable = () => {
                 checked={rows.length > 0 && selected.length === rows.length}
                 onChange={handleSelectAllClick}
                 inputProps={{
-                  "aria-label": "select all desserts",
+                  'aria-label': 'select all desserts',
                 }}
               />
             </TableCell>
@@ -219,11 +189,13 @@ export const StudentsTable = () => {
                 const isItemSelected = isSelected(Number(row.id))
                 const labelId = `enhanced-table-checkbox-${index}`
 
+                const { name, city, address } = row.attributes.pharmacy.data.attributes
+
                 return (
                   <TableRow
                     key={row.id}
                     role="checkbox"
-                    sx={{ cursor: "pointer" }}
+                    sx={{ cursor: 'pointer' }}
                     selected={isItemSelected}
                     aria-checked={isItemSelected}
                     /* @ts-ignore */
@@ -234,26 +206,20 @@ export const StudentsTable = () => {
                         color="primary"
                         checked={isItemSelected}
                         inputProps={{
-                          "aria-labelledby": labelId,
+                          'aria-labelledby': labelId,
                         }}
                       />
                     </TableCell>
 
                     <TableCell component="th" scope="row">
-                      {row.attributes.student.data.attributes.name}
+                      {`${row.attributes.student.data.attributes.name} ${row.attributes.student.data.attributes.middleName}`}
                     </TableCell>
                     <TableCell align="left">
                       {row.attributes.student.data.attributes.group.data[0]?.attributes.name}
                     </TableCell>
-                    <TableCell align="left">
-                      {row.attributes.pharmacy.data.attributes.name}
-                    </TableCell>
-                    <TableCell align="left">
-                      {row.attributes.pharmacy.data.attributes.city}
-                    </TableCell>
-                    <TableCell align="left">
-                      {row.attributes.pharmacy.data.attributes.address}
-                    </TableCell>
+                    <TableCell align="left">{name}</TableCell>
+                    <TableCell align="left">{city}</TableCell>
+                    <TableCell align="left">{address}</TableCell>
                   </TableRow>
                 )
               })
@@ -263,7 +229,7 @@ export const StudentsTable = () => {
           ) : (
             <TableRow>
               <TableCell colSpan={6}>
-                <Box sx={{ display: "flex", justifyContent: "center", padding: "60px 0" }}>
+                <Box sx={{ display: 'flex', justifyContent: 'center', padding: '60px 0' }}>
                   <CircularProgress />
                 </Box>
               </TableCell>

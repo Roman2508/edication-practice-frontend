@@ -121,9 +121,12 @@ export const PdfDocument: React.FC<IPdfDocumentProps> = ({ selectedStudents }) =
     <Document style={styles.wrapper} language="ua">
       {selectedStudents.map((student) => {
         const { contractNumber } = student.attributes.pharmacy.data.attributes
-        const { group, name } = student.attributes.student.data.attributes
+        const { group, name, middleName } = student.attributes.student.data.attributes
 
-        if (!group.data) return
+        if (!group.data[0]) {
+          window.alert('Помилка друку. В одного або в декількох студентів не задано групу.')
+          return
+        }
 
         return (
           <Page size="A4" style={styles.page} key={student.id}>
@@ -178,7 +181,9 @@ export const PdfDocument: React.FC<IPdfDocumentProps> = ({ selectedStudents }) =
             <Text style={{ ...styles.subTitle, marginLeft: 220 }}>( прізвище, ім’я, по батькові)</Text>
 
             <Text style={{ ...styles.mainTitle, marginTop: 40 }}>ПРІЗВИЩА, ІМЕНА ТА ПО БАТЬКОВІ ЗДОБУВАЧІВ ОСВІТИ</Text>
-            <Text style={{ ...styles.defaultText, borderBottom: '1px solid #000', marginTop: '10px' }}>{name}</Text>
+            <Text style={{ ...styles.defaultText, borderBottom: '1px solid #000', marginTop: '10px' }}>
+              {name} {middleName}
+            </Text>
             <Text>____________________________________________________</Text>
             <Text>____________________________________________________</Text>
             <Text>____________________________________________________</Text>
