@@ -18,6 +18,7 @@ mutation selectBaseOfPractice($studentId: ID!, $pharmacyId: ID!) {
                 }
               }
               phone
+              middleName
             }
           }
         }

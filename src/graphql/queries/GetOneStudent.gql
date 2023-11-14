@@ -16,6 +16,7 @@ query GetOneStudent($email: String) {
         phone
         access
         picture
+        middleName
       }
     }
   }

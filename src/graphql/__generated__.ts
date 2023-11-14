@@ -795,6 +795,7 @@ export type Student = {
   readonly createdAt: Maybe<Scalars['DateTime']['output']>;
   readonly email: Scalars['String']['output'];
   readonly group: Maybe<GroupRelationResponseCollection>;
+  readonly middleName: Maybe<Scalars['String']['output']>;
   readonly name: Scalars['String']['output'];
   readonly phone: Maybe<Scalars['String']['output']>;
   readonly picture: Maybe<Scalars['String']['output']>;
@@ -833,6 +834,7 @@ export type StudentFiltersInput = {
   readonly email: InputMaybe<StringFilterInput>;
   readonly group: InputMaybe<GroupFiltersInput>;
   readonly id: InputMaybe<IdFilterInput>;
+  readonly middleName: InputMaybe<StringFilterInput>;
   readonly name: InputMaybe<StringFilterInput>;
   readonly not: InputMaybe<StudentFiltersInput>;
   readonly or: InputMaybe<ReadonlyArray<InputMaybe<StudentFiltersInput>>>;
@@ -845,6 +847,7 @@ export type StudentInput = {
   readonly access: InputMaybe<Enum_Student_Access>;
   readonly email: InputMaybe<Scalars['String']['input']>;
   readonly group: InputMaybe<ReadonlyArray<InputMaybe<Scalars['ID']['input']>>>;
+  readonly middleName: InputMaybe<Scalars['String']['input']>;
   readonly name: InputMaybe<Scalars['String']['input']>;
   readonly phone: InputMaybe<Scalars['String']['input']>;
   readonly picture: InputMaybe<Scalars['String']['input']>;
@@ -1235,10 +1238,11 @@ export type ChangeStudentDataMutationVariables = Exact<{
   id: Scalars['ID']['input'];
   group: Scalars['ID']['input'];
   phone: Scalars['String']['input'];
+  middleName: Scalars['String']['input'];
 }>;
 
 
-export type ChangeStudentDataMutation = { readonly __typename?: 'Mutation', readonly updateStudent: { readonly __typename?: 'StudentEntityResponse', readonly data: { readonly __typename?: 'StudentEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Student', readonly name: string, readonly email: string, readonly picture: string, readonly group: { readonly __typename?: 'GroupRelationResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'GroupEntity', readonly attributes: { readonly __typename?: 'Group', readonly name: string, readonly courseNumber: number } }> } } } } };
+export type ChangeStudentDataMutation = { readonly __typename?: 'Mutation', readonly updateStudent: { readonly __typename?: 'StudentEntityResponse', readonly data: { readonly __typename?: 'StudentEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Student', readonly name: string, readonly email: string, readonly picture: string, readonly middleName: string, readonly group: { readonly __typename?: 'GroupRelationResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'GroupEntity', readonly attributes: { readonly __typename?: 'Group', readonly name: string, readonly courseNumber: number } }> } } } } };
 
 export type CreatePharmacyMutationVariables = Exact<{
   name: Scalars['String']['input'];
@@ -1259,7 +1263,7 @@ export type CreateStudentMutationVariables = Exact<{
 }>;
 
 
-export type CreateStudentMutation = { readonly __typename?: 'Mutation', readonly createStudent: { readonly __typename?: 'StudentEntityResponse', readonly data: { readonly __typename?: 'StudentEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Student', readonly name: string, readonly email: string, readonly picture: string } } } };
+export type CreateStudentMutation = { readonly __typename?: 'Mutation', readonly createStudent: { readonly __typename?: 'StudentEntityResponse', readonly data: { readonly __typename?: 'StudentEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Student', readonly name: string, readonly email: string, readonly picture: string, readonly middleName: string } } } };
 
 export type DeletePharmacyMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1274,7 +1278,7 @@ export type SelectBaseOfPracticeMutationVariables = Exact<{
 }>;
 
 
-export type SelectBaseOfPracticeMutation = { readonly __typename?: 'Mutation', readonly createSelectedBasesOfPractice: { readonly __typename?: 'SelectedBasesOfPracticeEntityResponse', readonly data: { readonly __typename?: 'SelectedBasesOfPracticeEntity', readonly id: string, readonly attributes: { readonly __typename?: 'SelectedBasesOfPractice', readonly student: { readonly __typename?: 'StudentEntityResponse', readonly data: { readonly __typename?: 'StudentEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Student', readonly name: string, readonly email: string, readonly picture: string, readonly phone: string, readonly group: { readonly __typename?: 'GroupRelationResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'GroupEntity', readonly attributes: { readonly __typename?: 'Group', readonly name: string } }> } } } }, readonly pharmacy: { readonly __typename?: 'PharmacyEntityResponse', readonly data: { readonly __typename?: 'PharmacyEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Pharmacy', readonly name: string, readonly city: string, readonly address: string, readonly places: number, readonly contractNumber: string, readonly legalName: string, readonly number: string } } } } } } };
+export type SelectBaseOfPracticeMutation = { readonly __typename?: 'Mutation', readonly createSelectedBasesOfPractice: { readonly __typename?: 'SelectedBasesOfPracticeEntityResponse', readonly data: { readonly __typename?: 'SelectedBasesOfPracticeEntity', readonly id: string, readonly attributes: { readonly __typename?: 'SelectedBasesOfPractice', readonly student: { readonly __typename?: 'StudentEntityResponse', readonly data: { readonly __typename?: 'StudentEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Student', readonly name: string, readonly email: string, readonly picture: string, readonly phone: string, readonly middleName: string, readonly group: { readonly __typename?: 'GroupRelationResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'GroupEntity', readonly attributes: { readonly __typename?: 'Group', readonly name: string } }> } } } }, readonly pharmacy: { readonly __typename?: 'PharmacyEntityResponse', readonly data: { readonly __typename?: 'PharmacyEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Pharmacy', readonly name: string, readonly city: string, readonly address: string, readonly places: number, readonly contractNumber: string, readonly legalName: string, readonly number: string } } } } } } };
 
 export type CanUserChoosePracticeBaseQueryVariables = Exact<{
   userId?: Scalars['ID']['input'];
@@ -1301,12 +1305,12 @@ export type GetAllPharmacyIdsQuery = { readonly __typename?: 'Query', readonly p
 export type GetAllSelectedPracticeBaseQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllSelectedPracticeBaseQuery = { readonly __typename?: 'Query', readonly selectedBasesOfPractices: { readonly __typename?: 'SelectedBasesOfPracticeEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'SelectedBasesOfPracticeEntity', readonly id: string, readonly attributes: { readonly __typename?: 'SelectedBasesOfPractice', readonly student: { readonly __typename?: 'StudentEntityResponse', readonly data: { readonly __typename?: 'StudentEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Student', readonly name: string, readonly group: { readonly __typename?: 'GroupRelationResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'GroupEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Group', readonly name: string, readonly courseNumber: number } }> } } } }, readonly pharmacy: { readonly __typename?: 'PharmacyEntityResponse', readonly data: { readonly __typename?: 'PharmacyEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Pharmacy', readonly name: string, readonly city: string, readonly address: string, readonly contractNumber: string } } } } }> } };
+export type GetAllSelectedPracticeBaseQuery = { readonly __typename?: 'Query', readonly selectedBasesOfPractices: { readonly __typename?: 'SelectedBasesOfPracticeEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'SelectedBasesOfPracticeEntity', readonly id: string, readonly attributes: { readonly __typename?: 'SelectedBasesOfPractice', readonly student: { readonly __typename?: 'StudentEntityResponse', readonly data: { readonly __typename?: 'StudentEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Student', readonly name: string, readonly middleName: string, readonly group: { readonly __typename?: 'GroupRelationResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'GroupEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Group', readonly name: string, readonly courseNumber: number } }> } } } }, readonly pharmacy: { readonly __typename?: 'PharmacyEntityResponse', readonly data: { readonly __typename?: 'PharmacyEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Pharmacy', readonly name: string, readonly city: string, readonly address: string, readonly contractNumber: string } } } } }> } };
 
 export type GetAllStudentsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllStudentsQuery = { readonly __typename?: 'Query', readonly students: { readonly __typename?: 'StudentEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'StudentEntity', readonly attributes: { readonly __typename?: 'Student', readonly email: string, readonly name: string, readonly access: Enum_Student_Access, readonly picture: string, readonly phone: string, readonly group: { readonly __typename?: 'GroupRelationResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'GroupEntity', readonly attributes: { readonly __typename?: 'Group', readonly name: string, readonly courseNumber: number } }> } } }> } };
+export type GetAllStudentsQuery = { readonly __typename?: 'Query', readonly students: { readonly __typename?: 'StudentEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'StudentEntity', readonly attributes: { readonly __typename?: 'Student', readonly email: string, readonly name: string, readonly access: Enum_Student_Access, readonly picture: string, readonly phone: string, readonly middleName: string, readonly group: { readonly __typename?: 'GroupRelationResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'GroupEntity', readonly attributes: { readonly __typename?: 'Group', readonly name: string, readonly courseNumber: number } }> } } }> } };
 
 export type GetFullPharmacyQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1320,7 +1324,7 @@ export type GetOneStudentQueryVariables = Exact<{
 }>;
 
 
-export type GetOneStudentQuery = { readonly __typename?: 'Query', readonly students: { readonly __typename?: 'StudentEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'StudentEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Student', readonly email: string, readonly name: string, readonly phone: string, readonly access: Enum_Student_Access, readonly picture: string, readonly group: { readonly __typename?: 'GroupRelationResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'GroupEntity', readonly attributes: { readonly __typename?: 'Group', readonly name: string, readonly courseNumber: number } }> } } }> } };
+export type GetOneStudentQuery = { readonly __typename?: 'Query', readonly students: { readonly __typename?: 'StudentEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'StudentEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Student', readonly email: string, readonly name: string, readonly phone: string, readonly access: Enum_Student_Access, readonly picture: string, readonly middleName: string, readonly group: { readonly __typename?: 'GroupRelationResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'GroupEntity', readonly attributes: { readonly __typename?: 'Group', readonly name: string, readonly courseNumber: number } }> } } }> } };
 
 export type GetSearchPharmaciesQueryVariables = Exact<{
   name?: InputMaybe<Scalars['String']['input']>;
@@ -1345,8 +1349,11 @@ export const ChangePlacesCountInPharmacyDocument = gql`
 }
     `;
 export const ChangeStudentDataDocument = gql`
-    mutation ChangeStudentData($id: ID!, $group: ID!, $phone: String!) {
-  updateStudent(id: $id, data: {group: [$group], phone: $phone}) {
+    mutation ChangeStudentData($id: ID!, $group: ID!, $phone: String!, $middleName: String!) {
+  updateStudent(
+    id: $id
+    data: {group: [$group], phone: $phone, middleName: $middleName}
+  ) {
     data {
       id
       attributes {
@@ -1361,6 +1368,7 @@ export const ChangeStudentDataDocument = gql`
             }
           }
         }
+        middleName
       }
     }
   }
@@ -1395,6 +1403,7 @@ export const CreateStudentDocument = gql`
         name
         email
         picture
+        middleName
       }
     }
   }
@@ -1432,6 +1441,7 @@ export const SelectBaseOfPracticeDocument = gql`
                 }
               }
               phone
+              middleName
             }
           }
         }
@@ -1522,6 +1532,7 @@ export const GetAllSelectedPracticeBaseDocument = gql`
                   }
                 }
               }
+              middleName
             }
           }
         }
@@ -1559,6 +1570,7 @@ export const GetAllStudentsDocument = gql`
         access
         picture
         phone
+        middleName
       }
     }
   }
@@ -1601,6 +1613,7 @@ export const GetOneStudentDocument = gql`
         phone
         access
         picture
+        middleName
       }
     }
   }

@@ -6,6 +6,7 @@ mutation CreateStudent($name: String, $email: String, $picture: String) {
         name
         email
         picture
+        middleName
       }
     }
   }
