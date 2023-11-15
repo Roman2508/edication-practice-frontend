@@ -1,10 +1,25 @@
 import React from 'react'
 import * as XLSX from 'xlsx'
-import { AppContext } from '../../App'
-import { Radio, Paper, Button, FormLabel, RadioGroup, FormControl, FormControlLabel } from '@mui/material'
+import {
+  Radio,
+  Paper,
+  Button,
+  Divider,
+  MenuItem,
+  TextField,
+  FormLabel,
+  Typography,
+  RadioGroup,
+  FormControl,
+  FormControlLabel,
+} from '@mui/material'
 
-import { gql } from '../../graphql/client'
+import { AppContext } from '../../App'
+import { Setting, gql } from '../../graphql/client'
 import styles from './Settings.page.module.css'
+import DatePicker from '../../components/DatePicker'
+import emptyImg from '../../assets/empty-image.png'
+import dayjs from 'dayjs'
 
 interface IButtonDisabled {
   uploadPharmacies: boolean
@@ -16,6 +31,30 @@ export const SettingsPage = () => {
   const fileRef = React.useRef<HTMLInputElement | null>(null)
 
   const { setAlert } = React.useContext(AppContext)
+
+  const [isSaving, setIsSaving] = React.useState(false)
+  const [settings, setSettings] = React.useState<Setting | null>(null)
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const settings = await gql.GetSettings()
+
+        // @ts-ignore
+        setSettings(settings.setting.data.attributes)
+
+        setAlert({ isShow: true, message: 'Завантажено :)', severity: 'success' })
+      } catch (error) {
+        setAlert({ isShow: true, message: 'Помилка при отриманні даних', severity: 'error' })
+      } finally {
+        setTimeout(() => {
+          setAlert((prev) => ({ ...prev, isShow: false }))
+        }, 3000)
+      }
+    }
+
+    fetchData()
+  }, [])
 
   const [buttonDisabled, setButtonDisabled] = React.useState<IButtonDisabled>({
     uploadPharmacies: false,
@@ -131,45 +170,132 @@ export const SettingsPage = () => {
     }
   }
 
+  const saveChanges = async () => {
+    if (!settings) return
+
+    if (window.confirm('Ви дійсно хочете зберегти зміни?')) {
+      try {
+        setIsSaving(true)
+
+        const newSettings = await gql.UpdateSettings({
+          endPracticeDate: settings.endPracticeDate,
+          startPracticeDate: settings.startPracticeDate,
+          canStudentSelectPracticeBase: settings.canStudentSelectPracticeBase,
+          currentPracticeType: settings.currentPracticeType.data.id,
+        })
+
+        // @ts-ignore
+        setSettings(newSettings.updateSetting.data.attributes)
+
+        setAlert({ isShow: true, message: 'Налаштування збережені!', severity: 'success' })
+      } catch (error) {
+        setAlert({ isShow: true, message: 'Помилка при збереженні даних', severity: 'error' })
+      } finally {
+        setIsSaving(false)
+
+        setTimeout(() => {
+          setAlert((prev) => ({ ...prev, isShow: false }))
+        }, 3000)
+      }
+    }
+  }
+
+  const onChangePracticeTerm = (e: dayjs.Dayjs, practiceDate: 'startPracticeDate' | 'endPracticeDate') => {
+    const selectedDate = dayjs(e).format('YYYY-MM-DD')
+    // @ts-ignore
+    setSettings((prev) => {
+      return { ...prev, [practiceDate]: selectedDate }
+    })
+  }
+
+  if (!settings) {
+    return (
+      <Paper elevation={3} className={styles.wrapper} sx={{ alignItems: 'center' }}>
+        <img style={{ width: '200px' }} src={emptyImg} alt="empty" />
+        <Typography>Завантаження...</Typography>
+      </Paper>
+    )
+  }
+
   return (
-    <>
-      <div>
-        <Paper elevation={3} className={styles.wrapper}>
-          <input type="file" ref={fileRef} onChange={handleChangeUpload} style={{ display: 'none' }} />
-          <Button
-            variant="outlined"
-            disabled={buttonDisabled.uploadPharmacies}
-            onClick={onClickUpload}
-            className={styles.button}
-          >
-            {buttonDisabled.uploadPharmacies ? 'Завантаження...' : 'Завантажити бази практик'}
-          </Button>
+    <Paper elevation={3} className={styles.wrapper}>
+      <input type="file" ref={fileRef} onChange={handleChangeUpload} style={{ display: 'none' }} />
+      <Button
+        variant="outlined"
+        disabled={buttonDisabled.uploadPharmacies}
+        onClick={onClickUpload}
+        className={styles.button}
+      >
+        {buttonDisabled.uploadPharmacies ? 'Завантаження...' : 'Завантажити бази практик'}
+      </Button>
 
-          <Button
-            variant="outlined"
-            color="error"
-            className={styles.button}
-            onClick={onDeleteAllPharmacies}
-            disabled={buttonDisabled.deletePharmacies}
-          >
-            {buttonDisabled.uploadPharmacies ? 'Видалення...' : 'Видалити всі бази практик'}
-          </Button>
+      <Button
+        variant="outlined"
+        color="error"
+        className={styles.button}
+        onClick={onDeleteAllPharmacies}
+        disabled={buttonDisabled.deletePharmacies}
+      >
+        {buttonDisabled.uploadPharmacies ? 'Видалення...' : 'Видалити всі бази практик'}
+      </Button>
 
-          <Button variant="outlined" color="error" className={styles.button}>
-            Видалити всіх студентів
-          </Button>
+      <Button variant="outlined" color="error" className={styles.button}>
+        Видалити всіх студентів
+      </Button>
 
-          <FormControl>
-            <FormLabel id="demo-radio-buttons-group-label">
-              Дозволити студентам вказувати терміни проходження практики:
-            </FormLabel>
-            <RadioGroup defaultValue={false} className={styles.ragioGroup}>
-              <FormControlLabel value={true} control={<Radio />} label="Так" />
-              <FormControlLabel value={false} control={<Radio />} label="Ні" />
-            </RadioGroup>
-          </FormControl>
-        </Paper>
-      </div>
-    </>
+      <Divider sx={{ margin: '16px 0' }} />
+
+      <FormControl>
+        <FormLabel id="demo-radio-buttons-group-label">
+          Дозволити студентам вказувати терміни проходження практики:
+        </FormLabel>
+        <RadioGroup
+          className={styles.ragioGroup}
+          value={settings.canStudentSelectPracticeBase}
+          onChange={(e) => {
+            const value = e.target.value === 'true' ? true : false
+
+            // @ts-ignore
+            setSettings((prev) => {
+              return { ...prev, canStudentSelectPracticeBase: value }
+            })
+          }}
+        >
+          <FormControlLabel value={true} control={<Radio />} label="Так" />
+          <FormControlLabel value={false} control={<Radio />} label="Ні" />
+        </RadioGroup>
+      </FormControl>
+
+      <Divider sx={{ margin: '16px 0' }} />
+
+      <Typography>Початок практики:</Typography>
+      <DatePicker value={settings.startPracticeDate} onChange={(e) => onChangePracticeTerm(e, 'startPracticeDate')} />
+
+      <Divider sx={{ margin: '16px 0' }} />
+
+      <Typography>Кінець практики:</Typography>
+      <DatePicker value={settings.endPracticeDate} onChange={(e) => onChangePracticeTerm(e, 'endPracticeDate')} />
+
+      <Divider sx={{ margin: '16px 0' }} />
+
+      <TextField
+        select
+        fullWidth
+        label="Тип практики:"
+        defaultValue={settings.currentPracticeType.data.attributes?.name}
+      >
+        {settings.practiceTypes.data.map((option) => (
+          <MenuItem key={option.id} value={option.attributes.name}>
+            {option.attributes.name}
+          </MenuItem>
+        ))}
+      </TextField>
+
+      <Divider sx={{ margin: '16px 0' }} />
+
+      <Button variant="contained" disabled={isSaving} onClick={saveChanges}>
+        {isSaving ? 'Збереження...' : 'Зберегти зміни'}
+      </Button>
+    </Paper>
   )
 }

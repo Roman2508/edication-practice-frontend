@@ -1,0 +1,27 @@
+query GetSettings {
+  setting {
+    data {
+      attributes {
+        startPracticeDate
+        endPracticeDate
+        canStudentSelectPracticeBase
+        practiceTypes {
+          data {
+            id
+            attributes {
+              name
+            }
+          }
+        }
+        currentPracticeType {
+          data {
+            id
+            attributes {
+              name
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+query GetMe($id: ID! = "6") {
+  students(filters: { id: { eq: $id } }) {
+    data {
+      id
+      attributes {
+        name
+        middleName
+        email
+        picture
+        access
+        group {
+          data {
+            attributes {
+              name
+              courseNumber
+            }
+          }
+        }
+      }
+    }
+  }
+}

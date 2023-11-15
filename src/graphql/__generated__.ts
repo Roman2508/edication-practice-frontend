@@ -15,6 +15,7 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  Date: { input: any; output: any; }
   DateTime: { input: any; output: any; }
   JSON: { input: any; output: any; }
   Upload: { input: any; output: any; }
@@ -106,7 +107,7 @@ export type FloatFilterInput = {
   readonly startsWith: InputMaybe<Scalars['Float']['input']>;
 };
 
-export type GenericMorph = Group | I18NLocale | Pharmacy | SelectedBasesOfPractice | Student | UploadFile | UploadFolder | UsersPermissionsPermission | UsersPermissionsRole | UsersPermissionsUser;
+export type GenericMorph = Group | I18NLocale | Pharmacy | PracticeType | SelectedBasesOfPractice | Setting | Student | UploadFile | UploadFolder | UsersPermissionsPermission | UsersPermissionsRole | UsersPermissionsUser;
 
 export type Group = {
   readonly __typename?: 'Group';
@@ -277,6 +278,7 @@ export type Mutation = {
   readonly changePassword: Maybe<UsersPermissionsLoginPayload>;
   readonly createGroup: Maybe<GroupEntityResponse>;
   readonly createPharmacy: Maybe<PharmacyEntityResponse>;
+  readonly createPracticeType: Maybe<PracticeTypeEntityResponse>;
   readonly createSelectedBasesOfPractice: Maybe<SelectedBasesOfPracticeEntityResponse>;
   readonly createStudent: Maybe<StudentEntityResponse>;
   readonly createUploadFile: Maybe<UploadFileEntityResponse>;
@@ -287,7 +289,9 @@ export type Mutation = {
   readonly createUsersPermissionsUser: UsersPermissionsUserEntityResponse;
   readonly deleteGroup: Maybe<GroupEntityResponse>;
   readonly deletePharmacy: Maybe<PharmacyEntityResponse>;
+  readonly deletePracticeType: Maybe<PracticeTypeEntityResponse>;
   readonly deleteSelectedBasesOfPractice: Maybe<SelectedBasesOfPracticeEntityResponse>;
+  readonly deleteSetting: Maybe<SettingEntityResponse>;
   readonly deleteStudent: Maybe<StudentEntityResponse>;
   readonly deleteUploadFile: Maybe<UploadFileEntityResponse>;
   readonly deleteUploadFolder: Maybe<UploadFolderEntityResponse>;
@@ -309,7 +313,9 @@ export type Mutation = {
   readonly updateFileInfo: UploadFileEntityResponse;
   readonly updateGroup: Maybe<GroupEntityResponse>;
   readonly updatePharmacy: Maybe<PharmacyEntityResponse>;
+  readonly updatePracticeType: Maybe<PracticeTypeEntityResponse>;
   readonly updateSelectedBasesOfPractice: Maybe<SelectedBasesOfPracticeEntityResponse>;
+  readonly updateSetting: Maybe<SettingEntityResponse>;
   readonly updateStudent: Maybe<StudentEntityResponse>;
   readonly updateUploadFile: Maybe<UploadFileEntityResponse>;
   readonly updateUploadFolder: Maybe<UploadFolderEntityResponse>;
@@ -335,6 +341,11 @@ export type MutationCreateGroupArgs = {
 
 export type MutationCreatePharmacyArgs = {
   data: PharmacyInput;
+};
+
+
+export type MutationCreatePracticeTypeArgs = {
+  data: PracticeTypeInput;
 };
 
 
@@ -374,6 +385,11 @@ export type MutationDeleteGroupArgs = {
 
 
 export type MutationDeletePharmacyArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationDeletePracticeTypeArgs = {
   id: Scalars['ID']['input'];
 };
 
@@ -466,9 +482,20 @@ export type MutationUpdatePharmacyArgs = {
 };
 
 
+export type MutationUpdatePracticeTypeArgs = {
+  data: PracticeTypeInput;
+  id: Scalars['ID']['input'];
+};
+
+
 export type MutationUpdateSelectedBasesOfPracticeArgs = {
   data: SelectedBasesOfPracticeInput;
   id: Scalars['ID']['input'];
+};
+
+
+export type MutationUpdateSettingArgs = {
+  data: SettingInput;
 };
 
 
@@ -581,6 +608,49 @@ export type PharmacyInput = {
   readonly places: InputMaybe<Scalars['Int']['input']>;
 };
 
+export type PracticeType = {
+  readonly __typename?: 'PracticeType';
+  readonly createdAt: Maybe<Scalars['DateTime']['output']>;
+  readonly name: Maybe<Scalars['String']['output']>;
+  readonly updatedAt: Maybe<Scalars['DateTime']['output']>;
+};
+
+export type PracticeTypeEntity = {
+  readonly __typename?: 'PracticeTypeEntity';
+  readonly attributes: Maybe<PracticeType>;
+  readonly id: Maybe<Scalars['ID']['output']>;
+};
+
+export type PracticeTypeEntityResponse = {
+  readonly __typename?: 'PracticeTypeEntityResponse';
+  readonly data: Maybe<PracticeTypeEntity>;
+};
+
+export type PracticeTypeEntityResponseCollection = {
+  readonly __typename?: 'PracticeTypeEntityResponseCollection';
+  readonly data: ReadonlyArray<PracticeTypeEntity>;
+  readonly meta: ResponseCollectionMeta;
+};
+
+export type PracticeTypeFiltersInput = {
+  readonly and: InputMaybe<ReadonlyArray<InputMaybe<PracticeTypeFiltersInput>>>;
+  readonly createdAt: InputMaybe<DateTimeFilterInput>;
+  readonly id: InputMaybe<IdFilterInput>;
+  readonly name: InputMaybe<StringFilterInput>;
+  readonly not: InputMaybe<PracticeTypeFiltersInput>;
+  readonly or: InputMaybe<ReadonlyArray<InputMaybe<PracticeTypeFiltersInput>>>;
+  readonly updatedAt: InputMaybe<DateTimeFilterInput>;
+};
+
+export type PracticeTypeInput = {
+  readonly name: InputMaybe<Scalars['String']['input']>;
+};
+
+export type PracticeTypeRelationResponseCollection = {
+  readonly __typename?: 'PracticeTypeRelationResponseCollection';
+  readonly data: ReadonlyArray<PracticeTypeEntity>;
+};
+
 export enum PublicationState {
   Live = 'LIVE',
   Preview = 'PREVIEW'
@@ -595,8 +665,11 @@ export type Query = {
   readonly me: Maybe<UsersPermissionsMe>;
   readonly pharmacies: Maybe<PharmacyEntityResponseCollection>;
   readonly pharmacy: Maybe<PharmacyEntityResponse>;
+  readonly practiceType: Maybe<PracticeTypeEntityResponse>;
+  readonly practiceTypes: Maybe<PracticeTypeEntityResponseCollection>;
   readonly selectedBasesOfPractice: Maybe<SelectedBasesOfPracticeEntityResponse>;
   readonly selectedBasesOfPractices: Maybe<SelectedBasesOfPracticeEntityResponseCollection>;
+  readonly setting: Maybe<SettingEntityResponse>;
   readonly student: Maybe<StudentEntityResponse>;
   readonly students: Maybe<StudentEntityResponseCollection>;
   readonly uploadFile: Maybe<UploadFileEntityResponse>;
@@ -647,6 +720,18 @@ export type QueryPharmacyArgs = {
 };
 
 
+export type QueryPracticeTypeArgs = {
+  id: InputMaybe<Scalars['ID']['input']>;
+};
+
+
+export type QueryPracticeTypesArgs = {
+  filters: InputMaybe<PracticeTypeFiltersInput>;
+  pagination?: InputMaybe<PaginationArg>;
+  sort?: InputMaybe<ReadonlyArray<InputMaybe<Scalars['String']['input']>>>;
+};
+
+
 export type QuerySelectedBasesOfPracticeArgs = {
   id: InputMaybe<Scalars['ID']['input']>;
 };
@@ -656,6 +741,11 @@ export type QuerySelectedBasesOfPracticesArgs = {
   filters: InputMaybe<SelectedBasesOfPracticeFiltersInput>;
   pagination?: InputMaybe<PaginationArg>;
   sort?: InputMaybe<ReadonlyArray<InputMaybe<Scalars['String']['input']>>>;
+};
+
+
+export type QuerySettingArgs = {
+  publicationState?: InputMaybe<PublicationState>;
 };
 
 
@@ -762,6 +852,45 @@ export type SelectedBasesOfPracticeFiltersInput = {
 export type SelectedBasesOfPracticeInput = {
   readonly pharmacy: InputMaybe<Scalars['ID']['input']>;
   readonly student: InputMaybe<Scalars['ID']['input']>;
+};
+
+export type Setting = {
+  readonly __typename?: 'Setting';
+  readonly canStudentSelectPracticeBase: Scalars['Boolean']['output'];
+  readonly createdAt: Maybe<Scalars['DateTime']['output']>;
+  readonly currentPracticeType: Maybe<PracticeTypeEntityResponse>;
+  readonly endPracticeDate: Scalars['Date']['output'];
+  readonly practiceTypes: Maybe<PracticeTypeRelationResponseCollection>;
+  readonly publishedAt: Maybe<Scalars['DateTime']['output']>;
+  readonly startPracticeDate: Scalars['Date']['output'];
+  readonly updatedAt: Maybe<Scalars['DateTime']['output']>;
+};
+
+
+export type SettingPracticeTypesArgs = {
+  filters: InputMaybe<PracticeTypeFiltersInput>;
+  pagination?: InputMaybe<PaginationArg>;
+  sort?: InputMaybe<ReadonlyArray<InputMaybe<Scalars['String']['input']>>>;
+};
+
+export type SettingEntity = {
+  readonly __typename?: 'SettingEntity';
+  readonly attributes: Maybe<Setting>;
+  readonly id: Maybe<Scalars['ID']['output']>;
+};
+
+export type SettingEntityResponse = {
+  readonly __typename?: 'SettingEntityResponse';
+  readonly data: Maybe<SettingEntity>;
+};
+
+export type SettingInput = {
+  readonly canStudentSelectPracticeBase: InputMaybe<Scalars['Boolean']['input']>;
+  readonly currentPracticeType: InputMaybe<Scalars['ID']['input']>;
+  readonly endPracticeDate: InputMaybe<Scalars['Date']['input']>;
+  readonly practiceTypes: InputMaybe<ReadonlyArray<InputMaybe<Scalars['ID']['input']>>>;
+  readonly publishedAt: InputMaybe<Scalars['DateTime']['input']>;
+  readonly startPracticeDate: InputMaybe<Scalars['Date']['input']>;
 };
 
 export type StringFilterInput = {
@@ -1280,6 +1409,16 @@ export type SelectBaseOfPracticeMutationVariables = Exact<{
 
 export type SelectBaseOfPracticeMutation = { readonly __typename?: 'Mutation', readonly createSelectedBasesOfPractice: { readonly __typename?: 'SelectedBasesOfPracticeEntityResponse', readonly data: { readonly __typename?: 'SelectedBasesOfPracticeEntity', readonly id: string, readonly attributes: { readonly __typename?: 'SelectedBasesOfPractice', readonly student: { readonly __typename?: 'StudentEntityResponse', readonly data: { readonly __typename?: 'StudentEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Student', readonly name: string, readonly email: string, readonly picture: string, readonly phone: string, readonly middleName: string, readonly group: { readonly __typename?: 'GroupRelationResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'GroupEntity', readonly attributes: { readonly __typename?: 'Group', readonly name: string } }> } } } }, readonly pharmacy: { readonly __typename?: 'PharmacyEntityResponse', readonly data: { readonly __typename?: 'PharmacyEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Pharmacy', readonly name: string, readonly city: string, readonly address: string, readonly places: number, readonly contractNumber: string, readonly legalName: string, readonly number: string } } } } } } };
 
+export type UpdateSettingsMutationVariables = Exact<{
+  startPracticeDate: InputMaybe<Scalars['Date']['input']>;
+  endPracticeDate: InputMaybe<Scalars['Date']['input']>;
+  canStudentSelectPracticeBase: InputMaybe<Scalars['Boolean']['input']>;
+  currentPracticeType: InputMaybe<Scalars['ID']['input']>;
+}>;
+
+
+export type UpdateSettingsMutation = { readonly __typename?: 'Mutation', readonly updateSetting: { readonly __typename?: 'SettingEntityResponse', readonly data: { readonly __typename?: 'SettingEntity', readonly attributes: { readonly __typename?: 'Setting', readonly startPracticeDate: any, readonly endPracticeDate: any, readonly canStudentSelectPracticeBase: boolean, readonly practiceTypes: { readonly __typename?: 'PracticeTypeRelationResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'PracticeTypeEntity', readonly id: string, readonly attributes: { readonly __typename?: 'PracticeType', readonly name: string } }> }, readonly currentPracticeType: { readonly __typename?: 'PracticeTypeEntityResponse', readonly data: { readonly __typename?: 'PracticeTypeEntity', readonly id: string, readonly attributes: { readonly __typename?: 'PracticeType', readonly name: string } } } } } } };
+
 export type CanUserChoosePracticeBaseQueryVariables = Exact<{
   userId?: Scalars['ID']['input'];
 }>;
@@ -1319,6 +1458,13 @@ export type GetFullPharmacyQueryVariables = Exact<{
 
 export type GetFullPharmacyQuery = { readonly __typename?: 'Query', readonly pharmacies: { readonly __typename?: 'PharmacyEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'PharmacyEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Pharmacy', readonly name: string, readonly city: string, readonly address: string, readonly places: number, readonly contractNumber: string, readonly legalName: string, readonly number: string } }> } };
 
+export type GetMeQueryVariables = Exact<{
+  id?: Scalars['ID']['input'];
+}>;
+
+
+export type GetMeQuery = { readonly __typename?: 'Query', readonly students: { readonly __typename?: 'StudentEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'StudentEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Student', readonly name: string, readonly middleName: string, readonly email: string, readonly picture: string, readonly access: Enum_Student_Access, readonly group: { readonly __typename?: 'GroupRelationResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'GroupEntity', readonly attributes: { readonly __typename?: 'Group', readonly name: string, readonly courseNumber: number } }> } } }> } };
+
 export type GetOneStudentQueryVariables = Exact<{
   email: InputMaybe<Scalars['String']['input']>;
 }>;
@@ -1334,6 +1480,11 @@ export type GetSearchPharmaciesQueryVariables = Exact<{
 
 
 export type GetSearchPharmaciesQuery = { readonly __typename?: 'Query', readonly pharmacies: { readonly __typename?: 'PharmacyEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'PharmacyEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Pharmacy', readonly name: string, readonly city: string, readonly address: string, readonly places: number, readonly legalName: string, readonly number: string } }> } };
+
+export type GetSettingsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetSettingsQuery = { readonly __typename?: 'Query', readonly setting: { readonly __typename?: 'SettingEntityResponse', readonly data: { readonly __typename?: 'SettingEntity', readonly attributes: { readonly __typename?: 'Setting', readonly startPracticeDate: any, readonly endPracticeDate: any, readonly canStudentSelectPracticeBase: boolean, readonly practiceTypes: { readonly __typename?: 'PracticeTypeRelationResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'PracticeTypeEntity', readonly id: string, readonly attributes: { readonly __typename?: 'PracticeType', readonly name: string } }> }, readonly currentPracticeType: { readonly __typename?: 'PracticeTypeEntityResponse', readonly data: { readonly __typename?: 'PracticeTypeEntity', readonly id: string, readonly attributes: { readonly __typename?: 'PracticeType', readonly name: string } } } } } } };
 
 
 export const ChangePlacesCountInPharmacyDocument = gql`
@@ -1456,6 +1607,37 @@ export const SelectBaseOfPracticeDocument = gql`
               contractNumber
               legalName
               number
+            }
+          }
+        }
+      }
+    }
+  }
+}
+    `;
+export const UpdateSettingsDocument = gql`
+    mutation UpdateSettings($startPracticeDate: Date, $endPracticeDate: Date, $canStudentSelectPracticeBase: Boolean, $currentPracticeType: ID) {
+  updateSetting(
+    data: {startPracticeDate: $startPracticeDate, endPracticeDate: $endPracticeDate, canStudentSelectPracticeBase: $canStudentSelectPracticeBase, currentPracticeType: $currentPracticeType}
+  ) {
+    data {
+      attributes {
+        startPracticeDate
+        endPracticeDate
+        canStudentSelectPracticeBase
+        practiceTypes {
+          data {
+            id
+            attributes {
+              name
+            }
+          }
+        }
+        currentPracticeType {
+          data {
+            id
+            attributes {
+              name
             }
           }
         }
@@ -1594,6 +1776,30 @@ export const GetFullPharmacyDocument = gql`
   }
 }
     `;
+export const GetMeDocument = gql`
+    query GetMe($id: ID! = "6") {
+  students(filters: {id: {eq: $id}}) {
+    data {
+      id
+      attributes {
+        name
+        middleName
+        email
+        picture
+        access
+        group {
+          data {
+            attributes {
+              name
+              courseNumber
+            }
+          }
+        }
+      }
+    }
+  }
+}
+    `;
 export const GetOneStudentDocument = gql`
     query GetOneStudent($email: String) {
   students(filters: {email: {contains: $email}}) {
@@ -1638,6 +1844,35 @@ export const GetSearchPharmaciesDocument = gql`
   }
 }
     `;
+export const GetSettingsDocument = gql`
+    query GetSettings {
+  setting {
+    data {
+      attributes {
+        startPracticeDate
+        endPracticeDate
+        canStudentSelectPracticeBase
+        practiceTypes {
+          data {
+            id
+            attributes {
+              name
+            }
+          }
+        }
+        currentPracticeType {
+          data {
+            id
+            attributes {
+              name
+            }
+          }
+        }
+      }
+    }
+  }
+}
+    `;
 
 export type SdkFunctionWrapper = <T>(action: (requestHeaders?:Record<string, string>) => Promise<T>, operationName: string, operationType?: string) => Promise<T>;
 
@@ -1664,6 +1899,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     selectBaseOfPractice(variables: SelectBaseOfPracticeMutationVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<SelectBaseOfPracticeMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<SelectBaseOfPracticeMutation>(SelectBaseOfPracticeDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'selectBaseOfPractice', 'mutation');
     },
+    UpdateSettings(variables?: UpdateSettingsMutationVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<UpdateSettingsMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<UpdateSettingsMutation>(UpdateSettingsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'UpdateSettings', 'mutation');
+    },
     CanUserChoosePracticeBase(variables?: CanUserChoosePracticeBaseQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<CanUserChoosePracticeBaseQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<CanUserChoosePracticeBaseQuery>(CanUserChoosePracticeBaseDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'CanUserChoosePracticeBase', 'query');
     },
@@ -1685,11 +1923,17 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     GetFullPharmacy(variables: GetFullPharmacyQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetFullPharmacyQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetFullPharmacyQuery>(GetFullPharmacyDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetFullPharmacy', 'query');
     },
+    GetMe(variables?: GetMeQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetMeQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetMeQuery>(GetMeDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetMe', 'query');
+    },
     GetOneStudent(variables?: GetOneStudentQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetOneStudentQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetOneStudentQuery>(GetOneStudentDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetOneStudent', 'query');
     },
     GetSearchPharmacies(variables?: GetSearchPharmaciesQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetSearchPharmaciesQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetSearchPharmaciesQuery>(GetSearchPharmaciesDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetSearchPharmacies', 'query');
+    },
+    GetSettings(variables?: GetSettingsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetSettingsQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetSettingsQuery>(GetSettingsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetSettings', 'query');
     }
   };
 }

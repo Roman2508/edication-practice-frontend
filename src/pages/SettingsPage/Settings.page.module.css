@@ -1,9 +1,9 @@
 .wrapper {
-  padding: 20px;
+  padding: 40px;
   display: flex;
   flex-direction: column;
   max-width: 600px;
-  margin: 0 auto 10px;
+  margin: 0 auto 60px;
 }
 
 .button {

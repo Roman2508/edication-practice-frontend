@@ -1,18 +1,27 @@
-import React from "react"
-import AppBar from "@mui/material/AppBar"
-import { googleLogout } from "@react-oauth/google"
-import { Link, useNavigate } from "react-router-dom"
-import { IconButton, Menu, MenuItem, Toolbar, Typography } from "@mui/material"
+import React from 'react'
+import AppBar from '@mui/material/AppBar'
+import { googleLogout } from '@react-oauth/google'
+import { Link, useNavigate } from 'react-router-dom'
+import { IconButton, Menu, MenuItem, Toolbar, Typography } from '@mui/material'
 
-import styles from "./Header.module.css"
-import logo from "../../assets/logo.png"
-import { getAuthData } from "../../utils/getAuthData"
-import { IAuthData } from "../GoogleLogin/GoogleLogin"
+import styles from './Header.module.css'
+import logo from '../../assets/logo.png'
+import { getAuthData } from '../../utils/getAuthData'
+import { IAuthData } from '../GoogleLogin/GoogleLogin'
+import { gql } from '../../graphql/client'
 
 export const Header = () => {
   const navigate = useNavigate()
 
-  const initialAuthData = { name: "", email: "", picture: "" }
+  const initialAuthData = {
+    id: '',
+    name: '',
+    middleName: '',
+    email: '',
+    picture: '',
+    access: '',
+    group: { name: '', courseNumber: 1 },
+  }
 
   const [auth, setAuth] = React.useState<IAuthData>(initialAuthData)
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
@@ -20,10 +29,38 @@ export const Header = () => {
   React.useEffect(() => {
     const data = getAuthData()
 
-    if (data) {
-      setAuth(data)
+    if (data && data.id) {
+      const fetchData = async () => {
+        const responce = await gql.GetMe({ id: data.id })
+
+        if (!responce.students.data[0]) {
+          alert('404 error!')
+          return
+        }
+
+        const { name, middleName, email, access, picture, group } = responce.students.data[0].attributes
+
+        const groupData = group.data[0]
+          ? { name: group.data[0].attributes.name, courseNumber: group.data[0].attributes.courseNumber }
+          : null
+
+        const me = {
+          name,
+          email,
+          access,
+          picture,
+          middleName,
+          id: data.id,
+          group: groupData,
+        }
+
+        window.localStorage.setItem('pharm-practice', JSON.stringify(me))
+
+        setAuth(me)
+      }
+      fetchData()
     } else {
-      navigate("/auth")
+      navigate('/auth')
     }
   }, [])
 
@@ -36,11 +73,11 @@ export const Header = () => {
   }
 
   const logout = () => {
-    if (window.confirm("Ви дійсно хочете вийти з акаунта?")) {
-      window.localStorage.removeItem("pharm-practice")
+    if (window.confirm('Ви дійсно хочете вийти з акаунта?')) {
+      window.localStorage.removeItem('pharm-practice')
       googleLogout()
       handleClose()
-      navigate("/auth")
+      navigate('/auth')
     }
   }
 
@@ -56,7 +93,7 @@ export const Header = () => {
         </Typography>
 
         {auth.name && (
-          <div className={styles["account-wrapper"]}>
+          <div className={styles['account-wrapper']}>
             <Typography>{auth.name}</Typography>
 
             <IconButton
@@ -74,13 +111,13 @@ export const Header = () => {
               id="menu-appbar"
               anchorEl={anchorEl}
               anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
+                vertical: 'top',
+                horizontal: 'right',
               }}
               keepMounted
               transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
+                vertical: 'top',
+                horizontal: 'right',
               }}
               open={Boolean(anchorEl)}
               onClose={handleClose}

@@ -1,0 +1,39 @@
+mutation UpdateSettings(
+  $startPracticeDate: Date
+  $endPracticeDate: Date
+  $canStudentSelectPracticeBase: Boolean
+  $currentPracticeType: ID
+) {
+  updateSetting(
+    data: {
+      startPracticeDate: $startPracticeDate
+      endPracticeDate: $endPracticeDate
+      canStudentSelectPracticeBase: $canStudentSelectPracticeBase
+      currentPracticeType: $currentPracticeType
+    }
+  ) {
+    data {
+      attributes {
+        startPracticeDate
+        endPracticeDate
+        canStudentSelectPracticeBase
+        practiceTypes {
+          data {
+            id
+            attributes {
+              name
+            }
+          }
+        }
+        currentPracticeType {
+          data {
+            id
+            attributes {
+              name
+            }
+          }
+        }
+      }
+    }
+  }
+}
