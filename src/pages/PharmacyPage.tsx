@@ -6,6 +6,7 @@ import { Typography, Button, Skeleton } from '@mui/material'
 import { getAuthData } from '../utils/getAuthData'
 import { GoogleMapComponent } from '../components/GoogleMap'
 import { GetFullPharmacyQuery, gql } from '../graphql/client'
+import { PharmacyPageModal } from '../components/Modal/PharmacyPageModal'
 
 export const PharmacyPage = () => {
   const { setAlert, canUserChoosePracticeBase } = React.useContext(AppContext)
@@ -16,8 +17,9 @@ export const PharmacyPage = () => {
   const student = getAuthData()
 
   const [isLoading, setIsLoading] = React.useState(false)
-
+  const [isOpenModal, setIsOpenModal] = React.useState(false)
   const [data, setData] = React.useState<GetFullPharmacyQuery>()
+  const [canStudentsSelectPracticeBase, setCanStudentsSelectPracticeBase] = React.useState(false)
 
   React.useEffect(() => {
     if (!id) return
@@ -31,40 +33,70 @@ export const PharmacyPage = () => {
     fetchPharmacy()
   }, [id])
 
-  const onSelectBaseOfPractice = async () => {
-    if (!data || !id || !student) return
-
-    const { name, address, places } = data?.pharmacies.data[0].attributes
-
-    if (window.confirm(`Ви дійсно хочете вибрати ${name}, що знаходиться за адресою ${address}, як базу практики?`)) {
+  React.useEffect(() => {
+    const fetchSettings = async () => {
       try {
-        setIsLoading(true)
-        await gql.selectBaseOfPractice({ pharmacyId: id, studentId: student.id })
-        await gql.changePlacesCountInPharmacy({ id: id, places: places - 1 })
-        setAlert({
-          isShow: true,
-          message: 'Базу практик успішно вибрано :)',
-          severity: 'success',
-        })
-        navigate('/selected')
-      } catch (err) {
-        console.log(err)
-        setAlert({
-          isShow: true,
-          message: 'Помилка',
-          severity: 'error',
-        })
+        const data = await gql.GetCanStudentsSelectPracticeBase()
+        setCanStudentsSelectPracticeBase(data.setting.data.attributes.canStudentSelectPracticeBase)
+      } catch (error) {
+        alert('Error')
       } finally {
-        setIsLoading(false)
-        setTimeout(() => {
-          setAlert((prev) => ({ ...prev, isShow: false }))
-        }, 3000)
       }
     }
-  }
+
+    fetchSettings()
+  }, [])
+
+  // const onSelectBaseOfPractice = async () => {
+  //   if (!data || !id || !student) return
+
+  //   const { name, address, places } = data?.pharmacies.data[0].attributes
+
+  //   if (window.confirm(`Ви дійсно хочете вибрати ${name}, що знаходиться за адресою ${address}, як базу практики?`)) {
+  //     try {
+  //       setIsLoading(true)
+
+  //       await gql.selectBaseOfPractice({ pharmacyId: id, studentId: student.id })
+  //       await gql.changePlacesCountInPharmacy({ id: id, places: places - 1 })
+
+  //       setAlert({
+  //         isShow: true,
+  //         message: 'Базу практик успішно вибрано :)',
+  //         severity: 'success',
+  //       })
+  //       navigate('/selected')
+  //     } catch (err) {
+  //       console.log(err)
+  //       setAlert({
+  //         isShow: true,
+  //         message: 'Помилка',
+  //         severity: 'error',
+  //       })
+  //     } finally {
+  //       setIsLoading(false)
+  //       setTimeout(() => {
+  //         setAlert((prev) => ({ ...prev, isShow: false }))
+  //       }, 3000)
+  //     }
+  //   }
+  // }
 
   return (
     <>
+      <PharmacyPageModal
+        pharmacyId={id}
+        studentId={student?.id}
+        open={isOpenModal}
+        setOpen={setIsOpenModal}
+        title="Терміни проходження практики"
+        pharmacyData={{
+          places: data?.pharmacies.data[0].attributes.places || 0,
+          name: data?.pharmacies.data[0].attributes.name || '',
+          address: data?.pharmacies.data[0].attributes.address || '',
+        }}
+        canStudentsSelectPracticeBase={canStudentsSelectPracticeBase}
+      />
+
       {data ? (
         <div className="test">
           <div>
@@ -80,7 +112,8 @@ export const PharmacyPage = () => {
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
             <Button
               variant="outlined"
-              onClick={onSelectBaseOfPractice}
+              onClick={() => setIsOpenModal(true)}
+              // onClick={onSelectBaseOfPractice}
               disabled={!canUserChoosePracticeBase || isLoading}
             >
               Вибрати як базу практики

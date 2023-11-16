@@ -14,6 +14,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 import { EmptyRow } from './EmptyRow'
 import { PdfDocument } from '../PdfDocument'
 import { PDFDownloadLink } from '@react-pdf/renderer'
+import { printSettingsInitialData } from '../../pages/PrintPage'
 
 function createData(id: number, name: string, calories: string, fat: string, carbs: string, protein: string) {
   return { id, name, calories, fat, carbs, protein }
@@ -31,8 +32,9 @@ const EnhancedTableToolbar = (props: {
   numSelected: number
   selectedStudents: SelectedBasesOfPracticeEntity[]
   onClearSelected: () => void
+  printSettings: typeof printSettingsInitialData
 }) => {
-  const { numSelected, selectedStudents, onClearSelected } = props
+  const { numSelected, selectedStudents, onClearSelected, printSettings } = props
 
   return (
     <Toolbar
@@ -59,7 +61,7 @@ const EnhancedTableToolbar = (props: {
             title="Завантажити направлення для вибраних студентів в PDF"
             sx={{ whiteSpace: "nowrap" }}
           > */}
-          <PDFDownloadLink document={<PdfDocument selectedStudents={selectedStudents} />} fileName="Направлення.pdf">
+          <PDFDownloadLink document={<PdfDocument selectedStudents={selectedStudents} printSettings={printSettings} />} fileName="Направлення.pdf">
             {({ blob, url, loading, error }) =>
               loading ? <Button disabled>Завантаження...</Button> : <Button>Завантажити направлення</Button>
             }
@@ -73,7 +75,11 @@ const EnhancedTableToolbar = (props: {
   )
 }
 
-export const StudentsTable = () => {
+interface IStudentsTableProps {
+  printSettings: typeof printSettingsInitialData
+}
+
+export const StudentsTable: React.FC<IStudentsTableProps> = ({ printSettings }) => {
   // const [order, setOrder] = React.useState<"asc" | "desc">("asc")
   // const [orderBy, setOrderBy] = React.useState<any>("calories")
   // const [page, setPage] = React.useState(0)
@@ -154,6 +160,7 @@ export const StudentsTable = () => {
   return (
     <TableContainer component={Paper}>
       <EnhancedTableToolbar
+        printSettings={printSettings}
         numSelected={selected.length}
         selectedStudents={selectedStudents}
         onClearSelected={onClearSelected}

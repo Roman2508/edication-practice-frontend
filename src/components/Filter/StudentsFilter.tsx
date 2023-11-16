@@ -1,7 +1,9 @@
 import React from 'react'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
-import Autocomplete from '@mui/material/Autocomplete'
+// import Autocomplete from '@mui/material/Autocomplete'
+import Select from '@mui/material/Select'
+import MenuItem from '@mui/material/MenuItem'
 
 import styles from './Filter.module.css'
 
@@ -13,13 +15,13 @@ const filterFields = [
   { label: 'Адреса', name: 'address' },
 ]
 
-export const StudentsFilter = () => {
+export const StudentsFilter: React.FC<{ setOpen: React.Dispatch<React.SetStateAction<boolean>> }> = ({ setOpen }) => {
   const inputWidth = '220px'
 
   return (
     <div className={styles['students-filter-wrapper']}>
       <div className={styles.fields}>
-        <Autocomplete
+        {/* <Autocomplete
           freeSolo
           disableClearable
           size="small"
@@ -35,7 +37,21 @@ export const StudentsFilter = () => {
               }}
             />
           )}
-        />
+        /> */}
+
+        <Select
+          value={filterFields[0].name}
+          label="Пошук за полем"
+          size="small"
+          onChange={() => {}}
+          sx={{ width: inputWidth }}
+        >
+          {filterFields.map((el) => (
+            <MenuItem key={el.name} value={el.name}>
+              {el.label}
+            </MenuItem>
+          ))}
+        </Select>
 
         <TextField
           size="small"
@@ -45,38 +61,14 @@ export const StudentsFilter = () => {
             type: 'search',
           }}
         />
-
-        {/* <TextField
-          size="small"
-          label="Мережа аптек"
-          sx={{ width: inputWidth }}
-          InputProps={{
-            type: "search",
-          }}
-        />
-
-        <TextField
-          size="small"
-          label="Місто"
-          sx={{ width: inputWidth }}
-          InputProps={{
-            type: "search",
-          }}
-        />
-
-        <TextField
-          size="small"
-          label="Адреса"
-          sx={{ width: inputWidth }}
-          InputProps={{
-            type: "search",
-          }}
-        /> */}
       </div>
       <div className={styles.actions}>
         {/* <Button variant="contained">Завантажити направлення в PDF</Button> */}
         {/* <Button variant="contained">Знайти студентів</Button> */}
         <Button variant="contained">Знайти</Button>
+        <Button variant="contained" onClick={() => setOpen(true)}>
+          OPEN MODAL
+        </Button>
       </div>
     </div>
   )

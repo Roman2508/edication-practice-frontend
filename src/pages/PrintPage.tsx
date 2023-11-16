@@ -1,17 +1,19 @@
-import React from "react"
-import { StudentsFilter } from "../components/Filter/StudentsFilter"
-import { StudentsTable } from "../components/Table/StudentsTable"
-import { Modal } from "../components/Modal/Modal"
-import { gql } from "../graphql/client"
-import dayjs from "dayjs"
+import React from 'react'
+import dayjs from 'dayjs'
+import { gql } from '../graphql/client'
+
+import { StudentsTable } from '../components/Table/StudentsTable'
+import { PrintPageModal } from '../components/Modal/PrintPageModal'
+import { StudentsFilter } from '../components/Filter/StudentsFilter'
+// import { Modal } from '../components/Modal/Modal'
 
 export const printSettingsInitialData = {
-  termOfPractice: {
-    start: "",
-    end: "",
-  },
-  currentPracticeType: "",
-  practiceDirectionYear: "2023",
+  /*   termOfPractice: {
+    start: '',
+    end: '',
+  }, */
+  currentPracticeType: '',
+  practiceDirectionYear: '2023',
   practiceDirectionNumber: 1,
 }
 
@@ -25,8 +27,7 @@ const PrintPage = () => {
       try {
         const settings = await gql.GetSettings()
 
-        const { startPracticeDate, endPracticeDate, currentPracticeType } =
-          settings.setting.data.attributes
+        const { startPracticeDate, endPracticeDate, currentPracticeType } = settings.setting.data.attributes
 
         setPrintSettings((prev) => ({
           ...prev,
@@ -37,8 +38,8 @@ const PrintPage = () => {
           currentPracticeType: currentPracticeType.data.attributes.name,
         }))
       } catch (error) {
-        alert("Error")
-        console.log("Error")
+        alert('Error')
+        console.log('Error')
       }
     }
 
@@ -47,51 +48,44 @@ const PrintPage = () => {
 
   const onChangePrintData = (
     e: dayjs.Dayjs | null,
-    type: "year" | "number" | "startDate" | "endDate",
+    type: 'year' | 'number' | 'startDate' | 'endDate',
     value?: number
   ) => {
-    if (type === "year") {
-      const practiceDirectionYear = dayjs(e).format("YYYY")
+    if (type === 'year') {
+      const practiceDirectionYear = dayjs(e).format('YYYY')
       setPrintSettings((prev) => ({ ...prev, practiceDirectionYear }))
       return
     }
 
-    if (value && type === "number") {
+    if (value && type === 'number') {
       setPrintSettings((prev) => ({ ...prev, practiceDirectionNumber: value }))
       return
     }
 
-    if (type === "startDate") {
-      const date = dayjs(e).format("YYYY-MM-DD")
-      setPrintSettings((prev) => ({
-        ...prev,
-        termOfPractice: { ...prev.termOfPractice, start: date },
-      }))
-      return
-    }
+    // if (type === 'startDate') {
+    //   const date = dayjs(e).format('YYYY-MM-DD')
+    //   setPrintSettings((prev) => ({
+    //     ...prev,
+    //     termOfPractice: { ...prev.termOfPractice, start: date },
+    //   }))
+    //   return
+    // }
 
-    if (type === "endDate") {
-      const date = dayjs(e).format("YYYY-MM-DD")
-      setPrintSettings((prev) => ({
-        ...prev,
-        termOfPractice: { ...prev.termOfPractice, end: date },
-      }))
-    }
+    // if (type === 'endDate') {
+    //   const date = dayjs(e).format('YYYY-MM-DD')
+    //   setPrintSettings((prev) => ({
+    //     ...prev,
+    //     termOfPractice: { ...prev.termOfPractice, end: date },
+    //   }))
+    // }
   }
 
   return (
     <>
-      <Modal
-        open={open}
-        setOpen={setOpen}
-        title="Modal Title"
-        // startPracticeDate={printSettings.termOfPractice.start}
-        // endPracticeDate={printSettings.termOfPractice.end}
-        onChangePrintData={onChangePrintData}
-      />
+      <PrintPageModal open={open} setOpen={setOpen} title="Номер направлення" onChangePrintData={onChangePrintData} />
 
-      <StudentsFilter />
-      <StudentsTable />
+      <StudentsFilter setOpen={setOpen} />
+      <StudentsTable printSettings={printSettings} />
     </>
   )
 }

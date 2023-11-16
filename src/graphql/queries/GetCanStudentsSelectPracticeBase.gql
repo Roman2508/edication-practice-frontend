@@ -1,0 +1,9 @@
+query GetCanStudentsSelectPracticeBase {
+  setting {
+    data {
+      attributes {
+        canStudentSelectPracticeBase
+      }
+    }
+  }
+}

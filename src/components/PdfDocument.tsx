@@ -4,6 +4,7 @@ import logo from '../assets/logo-from-pdf.jpg'
 import TimesNewRomanNormal from '../assets/times-new-roman.ttf'
 import TimesNewRomanBold from '../assets/Times New Roman Bold.ttf'
 import { SelectedBasesOfPracticeEntity } from '../graphql/__generated__'
+import { printSettingsInitialData } from '../pages/PrintPage'
 
 Font.register({
   family: 'Times-New-Roman-Normal',
@@ -113,10 +114,13 @@ const styles = StyleSheet.create({
 
 interface IPdfDocumentProps {
   selectedStudents: SelectedBasesOfPracticeEntity[]
+  printSettings: typeof printSettingsInitialData
 }
 
 // Create Document Component
-export const PdfDocument: React.FC<IPdfDocumentProps> = ({ selectedStudents }) => {
+export const PdfDocument: React.FC<IPdfDocumentProps> = ({ selectedStudents, printSettings }) => {
+  console.log(printSettings)
+
   return (
     <Document style={styles.wrapper} language="ua">
       {selectedStudents.map((student) => {

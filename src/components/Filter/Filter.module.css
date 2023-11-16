@@ -10,6 +10,7 @@
 
 .students-filter-wrapper {
   display: flex;
+  align-items: flex-start;
   justify-content: space-between;
   margin-bottom: 20px;
 }

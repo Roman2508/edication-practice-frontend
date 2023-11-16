@@ -1451,6 +1451,11 @@ export type GetAllStudentsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetAllStudentsQuery = { readonly __typename?: 'Query', readonly students: { readonly __typename?: 'StudentEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'StudentEntity', readonly attributes: { readonly __typename?: 'Student', readonly email: string, readonly name: string, readonly access: Enum_Student_Access, readonly picture: string, readonly phone: string, readonly middleName: string, readonly group: { readonly __typename?: 'GroupRelationResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'GroupEntity', readonly attributes: { readonly __typename?: 'Group', readonly name: string, readonly courseNumber: number } }> } } }> } };
 
+export type GetCanStudentsSelectPracticeBaseQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetCanStudentsSelectPracticeBaseQuery = { readonly __typename?: 'Query', readonly setting: { readonly __typename?: 'SettingEntityResponse', readonly data: { readonly __typename?: 'SettingEntity', readonly attributes: { readonly __typename?: 'Setting', readonly canStudentSelectPracticeBase: boolean } } } };
+
 export type GetFullPharmacyQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
@@ -1758,6 +1763,17 @@ export const GetAllStudentsDocument = gql`
   }
 }
     `;
+export const GetCanStudentsSelectPracticeBaseDocument = gql`
+    query GetCanStudentsSelectPracticeBase {
+  setting {
+    data {
+      attributes {
+        canStudentSelectPracticeBase
+      }
+    }
+  }
+}
+    `;
 export const GetFullPharmacyDocument = gql`
     query GetFullPharmacy($id: ID!) {
   pharmacies(filters: {id: {contains: $id}}) {
@@ -1919,6 +1935,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     GetAllStudents(variables?: GetAllStudentsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetAllStudentsQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetAllStudentsQuery>(GetAllStudentsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetAllStudents', 'query');
+    },
+    GetCanStudentsSelectPracticeBase(variables?: GetCanStudentsSelectPracticeBaseQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetCanStudentsSelectPracticeBaseQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetCanStudentsSelectPracticeBaseQuery>(GetCanStudentsSelectPracticeBaseDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetCanStudentsSelectPracticeBase', 'query');
     },
     GetFullPharmacy(variables: GetFullPharmacyQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetFullPharmacyQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetFullPharmacyQuery>(GetFullPharmacyDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetFullPharmacy', 'query');
