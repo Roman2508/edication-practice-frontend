@@ -1,22 +1,21 @@
-import React from 'react'
-import { AppContext } from '../App'
-import { useParams, useNavigate } from 'react-router-dom'
-import { Typography, Button, Skeleton } from '@mui/material'
+import React from "react"
+import { AppContext } from "../App"
+import { useParams } from "react-router-dom"
+import { Typography, Button, Skeleton } from "@mui/material"
 
-import { getAuthData } from '../utils/getAuthData'
-import { GoogleMapComponent } from '../components/GoogleMap'
-import { GetFullPharmacyQuery, gql } from '../graphql/client'
-import { PharmacyPageModal } from '../components/Modal/PharmacyPageModal'
+import { getAuthData } from "../utils/getAuthData"
+import { GoogleMapComponent } from "../components/GoogleMap"
+import { GetFullPharmacyQuery, gql } from "../graphql/client"
+import { PharmacyPageModal } from "../components/Modal/PharmacyPageModal"
 
 export const PharmacyPage = () => {
-  const { setAlert, canUserChoosePracticeBase } = React.useContext(AppContext)
+  const { canUserChoosePracticeBase } = React.useContext(AppContext)
 
   const { id } = useParams()
-  const navigate = useNavigate()
 
   const student = getAuthData()
 
-  const [isLoading, setIsLoading] = React.useState(false)
+  // const [isLoading, setIsLoading] = React.useState(false)
   const [isOpenModal, setIsOpenModal] = React.useState(false)
   const [data, setData] = React.useState<GetFullPharmacyQuery>()
   const [canStudentsSelectPracticeBase, setCanStudentsSelectPracticeBase] = React.useState(false)
@@ -39,7 +38,7 @@ export const PharmacyPage = () => {
         const data = await gql.GetCanStudentsSelectPracticeBase()
         setCanStudentsSelectPracticeBase(data.setting.data.attributes.canStudentSelectPracticeBase)
       } catch (error) {
-        alert('Error')
+        alert("Error")
       } finally {
       }
     }
@@ -91,8 +90,8 @@ export const PharmacyPage = () => {
         title="Терміни проходження практики"
         pharmacyData={{
           places: data?.pharmacies.data[0].attributes.places || 0,
-          name: data?.pharmacies.data[0].attributes.name || '',
-          address: data?.pharmacies.data[0].attributes.address || '',
+          name: data?.pharmacies.data[0].attributes.name || "",
+          address: data?.pharmacies.data[0].attributes.address || "",
         }}
         canStudentsSelectPracticeBase={canStudentsSelectPracticeBase}
       />
@@ -109,12 +108,12 @@ export const PharmacyPage = () => {
             </Typography>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
             <Button
               variant="outlined"
               onClick={() => setIsOpenModal(true)}
               // onClick={onSelectBaseOfPractice}
-              disabled={!canUserChoosePracticeBase || isLoading}
+              disabled={!canUserChoosePracticeBase}
             >
               Вибрати як базу практики
             </Button>
@@ -130,7 +129,7 @@ export const PharmacyPage = () => {
             <Skeleton variant="rectangular" width={150} height={20} sx={{ mb: 1 }} />
             <Skeleton variant="rectangular" width={300} height={20} />
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
             <Skeleton variant="rectangular" width={240} height={36} sx={{ mb: 1 }} />
             <Skeleton variant="rectangular" width={140} height={28} />
           </div>

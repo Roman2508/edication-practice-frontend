@@ -46,6 +46,31 @@ export type BooleanFilterInput = {
   readonly startsWith: InputMaybe<Scalars['Boolean']['input']>;
 };
 
+export type DateFilterInput = {
+  readonly and: InputMaybe<ReadonlyArray<InputMaybe<Scalars['Date']['input']>>>;
+  readonly between: InputMaybe<ReadonlyArray<InputMaybe<Scalars['Date']['input']>>>;
+  readonly contains: InputMaybe<Scalars['Date']['input']>;
+  readonly containsi: InputMaybe<Scalars['Date']['input']>;
+  readonly endsWith: InputMaybe<Scalars['Date']['input']>;
+  readonly eq: InputMaybe<Scalars['Date']['input']>;
+  readonly eqi: InputMaybe<Scalars['Date']['input']>;
+  readonly gt: InputMaybe<Scalars['Date']['input']>;
+  readonly gte: InputMaybe<Scalars['Date']['input']>;
+  readonly in: InputMaybe<ReadonlyArray<InputMaybe<Scalars['Date']['input']>>>;
+  readonly lt: InputMaybe<Scalars['Date']['input']>;
+  readonly lte: InputMaybe<Scalars['Date']['input']>;
+  readonly ne: InputMaybe<Scalars['Date']['input']>;
+  readonly nei: InputMaybe<Scalars['Date']['input']>;
+  readonly not: InputMaybe<DateFilterInput>;
+  readonly notContains: InputMaybe<Scalars['Date']['input']>;
+  readonly notContainsi: InputMaybe<Scalars['Date']['input']>;
+  readonly notIn: InputMaybe<ReadonlyArray<InputMaybe<Scalars['Date']['input']>>>;
+  readonly notNull: InputMaybe<Scalars['Boolean']['input']>;
+  readonly null: InputMaybe<Scalars['Boolean']['input']>;
+  readonly or: InputMaybe<ReadonlyArray<InputMaybe<Scalars['Date']['input']>>>;
+  readonly startsWith: InputMaybe<Scalars['Date']['input']>;
+};
+
 export type DateTimeFilterInput = {
   readonly and: InputMaybe<ReadonlyArray<InputMaybe<Scalars['DateTime']['input']>>>;
   readonly between: InputMaybe<ReadonlyArray<InputMaybe<Scalars['DateTime']['input']>>>;
@@ -816,7 +841,9 @@ export type ResponseCollectionMeta = {
 export type SelectedBasesOfPractice = {
   readonly __typename?: 'SelectedBasesOfPractice';
   readonly createdAt: Maybe<Scalars['DateTime']['output']>;
+  readonly endPractiseTerm: Maybe<Scalars['Date']['output']>;
   readonly pharmacy: Maybe<PharmacyEntityResponse>;
+  readonly startPractiseTerm: Maybe<Scalars['Date']['output']>;
   readonly student: Maybe<StudentEntityResponse>;
   readonly updatedAt: Maybe<Scalars['DateTime']['output']>;
 };
@@ -841,16 +868,20 @@ export type SelectedBasesOfPracticeEntityResponseCollection = {
 export type SelectedBasesOfPracticeFiltersInput = {
   readonly and: InputMaybe<ReadonlyArray<InputMaybe<SelectedBasesOfPracticeFiltersInput>>>;
   readonly createdAt: InputMaybe<DateTimeFilterInput>;
+  readonly endPractiseTerm: InputMaybe<DateFilterInput>;
   readonly id: InputMaybe<IdFilterInput>;
   readonly not: InputMaybe<SelectedBasesOfPracticeFiltersInput>;
   readonly or: InputMaybe<ReadonlyArray<InputMaybe<SelectedBasesOfPracticeFiltersInput>>>;
   readonly pharmacy: InputMaybe<PharmacyFiltersInput>;
+  readonly startPractiseTerm: InputMaybe<DateFilterInput>;
   readonly student: InputMaybe<StudentFiltersInput>;
   readonly updatedAt: InputMaybe<DateTimeFilterInput>;
 };
 
 export type SelectedBasesOfPracticeInput = {
+  readonly endPractiseTerm: InputMaybe<Scalars['Date']['input']>;
   readonly pharmacy: InputMaybe<Scalars['ID']['input']>;
+  readonly startPractiseTerm: InputMaybe<Scalars['Date']['input']>;
   readonly student: InputMaybe<Scalars['ID']['input']>;
 };
 
@@ -1404,6 +1435,8 @@ export type DeletePharmacyMutation = { readonly __typename?: 'Mutation', readonl
 export type SelectBaseOfPracticeMutationVariables = Exact<{
   studentId: Scalars['ID']['input'];
   pharmacyId: Scalars['ID']['input'];
+  startDate: InputMaybe<Scalars['Date']['input']>;
+  endDate: InputMaybe<Scalars['Date']['input']>;
 }>;
 
 
@@ -1575,9 +1608,9 @@ export const DeletePharmacyDocument = gql`
 }
     `;
 export const SelectBaseOfPracticeDocument = gql`
-    mutation selectBaseOfPractice($studentId: ID!, $pharmacyId: ID!) {
+    mutation selectBaseOfPractice($studentId: ID!, $pharmacyId: ID!, $startDate: Date, $endDate: Date) {
   createSelectedBasesOfPractice(
-    data: {student: $studentId, pharmacy: $pharmacyId}
+    data: {student: $studentId, pharmacy: $pharmacyId, startPractiseTerm: $startDate, endPractiseTerm: $endDate}
   ) {
     data {
       id

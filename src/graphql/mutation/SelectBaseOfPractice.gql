@@ -1,5 +1,12 @@
-mutation selectBaseOfPractice($studentId: ID!, $pharmacyId: ID!) {
-  createSelectedBasesOfPractice(data: { student: $studentId, pharmacy: $pharmacyId }) {
+mutation selectBaseOfPractice($studentId: ID!, $pharmacyId: ID!, $startDate: Date, $endDate: Date) {
+  createSelectedBasesOfPractice(
+    data: {
+      student: $studentId
+      pharmacy: $pharmacyId
+      startPractiseTerm: $startDate
+      endPractiseTerm: $endDate
+    }
+  ) {
     data {
       id
       attributes {

@@ -1,16 +1,16 @@
-import React from 'react'
-import dayjs from 'dayjs'
-import { Divider } from '@mui/material'
-import Button from '@mui/material/Button'
-import Typography from '@mui/material/Typography'
-import DialogContent from '@mui/material/DialogContent'
-import DialogActions from '@mui/material/DialogActions'
+import React from "react"
+import dayjs from "dayjs"
+import { Divider } from "@mui/material"
+import Button from "@mui/material/Button"
+import Typography from "@mui/material/Typography"
+import DialogContent from "@mui/material/DialogContent"
+import DialogActions from "@mui/material/DialogActions"
 
-import DatePicker from '../DatePicker'
-import { AppContext } from '../../App'
-import { gql } from '../../graphql/client'
-import { ModalLayout } from './ModalLayout'
-import { useNavigate } from 'react-router-dom'
+import DatePicker from "../DatePicker"
+import { AppContext } from "../../App"
+import { gql } from "../../graphql/client"
+import { ModalLayout } from "./ModalLayout"
+import { useNavigate } from "react-router-dom"
 
 interface IModalProps {
   open: boolean
@@ -30,7 +30,7 @@ export const PharmacyPageModal: React.FC<IModalProps> = ({
   pharmacyId,
   pharmacyData,
 
-  title = '',
+  title = "",
   canStudentsSelectPracticeBase = false,
 }) => {
   const navigate = useNavigate()
@@ -39,10 +39,10 @@ export const PharmacyPageModal: React.FC<IModalProps> = ({
 
   const [step, setStep] = React.useState(1)
   const [isLoading, setIsLoading] = React.useState(false)
-  const [practiceDates, setPracticeDates] = React.useState({ start: '', end: '' })
+  const [practiceDates, setPracticeDates] = React.useState({ start: "", end: "" })
 
-  const handleChangePracticeDates = (e: dayjs.Dayjs | null, type: 'start' | 'end') => {
-    const selectedDate = dayjs(e).format('YYYY-MM-DD')
+  const handleChangePracticeDates = (e: dayjs.Dayjs | null, type: "start" | "end") => {
+    const selectedDate = dayjs(e).format("YYYY-MM-DD")
     setPracticeDates((prev) => ({ ...prev, [type]: selectedDate }))
   }
 
@@ -55,26 +55,40 @@ export const PharmacyPageModal: React.FC<IModalProps> = ({
   }
 
   const onSelectBaseOfPractice = async () => {
-    if (!pharmacyData.name || !pharmacyData.address || !pharmacyData.places || !studentId || !pharmacyId) return
+    if (
+      !pharmacyData.name ||
+      !pharmacyData.address ||
+      !pharmacyData.places ||
+      !studentId ||
+      !pharmacyId
+    ) {
+      alert("Error")
+      return
+    }
 
     try {
       setIsLoading(true)
 
-      await gql.selectBaseOfPractice({ pharmacyId, studentId })
+      await gql.selectBaseOfPractice({
+        pharmacyId,
+        studentId,
+        startDate: practiceDates.start,
+        endDate: practiceDates.end,
+      })
       await gql.changePlacesCountInPharmacy({ id: pharmacyId, places: pharmacyData.places - 1 })
 
       setAlert({
         isShow: true,
-        message: 'Базу практик успішно вибрано :)',
-        severity: 'success',
+        message: "Базу практики успішно вибрано :)",
+        severity: "success",
       })
-      navigate('/selected')
+      navigate("/selected")
     } catch (err) {
       console.log(err)
       setAlert({
         isShow: true,
-        message: 'Помилка',
-        severity: 'error',
+        message: "Помилка",
+        severity: "error",
       })
     } finally {
       setIsLoading(false)
@@ -92,12 +106,13 @@ export const PharmacyPageModal: React.FC<IModalProps> = ({
     }
   }
 
-  const step2Confirm = () => {
-    onSelectBaseOfPractice()
-  }
-
   return (
-    <ModalLayout open={open} setOpen={setOpen} title={step === 1 ? 'Підтвердження' : title} onClose={onClose}>
+    <ModalLayout
+      open={open}
+      setOpen={setOpen}
+      title={step === 1 ? "Підтвердження" : title}
+      onClose={onClose}
+    >
       <DialogContent dividers={!!title}>
         {step === 1 && (
           <Typography>{`Ви дійсно хочете вибрати ${pharmacyData.name}, що знаходиться за адресою ${pharmacyData.address}, як базу практики?`}</Typography>
@@ -106,12 +121,18 @@ export const PharmacyPageModal: React.FC<IModalProps> = ({
         {step === 2 && canStudentsSelectPracticeBase && (
           <>
             <Typography>Початок практики:</Typography>
-            <DatePicker value={practiceDates.start} onChange={(e) => handleChangePracticeDates(e, 'start')} />
+            <DatePicker
+              value={practiceDates.start}
+              onChange={(e) => handleChangePracticeDates(e, "start")}
+            />
 
-            <Divider sx={{ margin: '16px 0' }} />
+            <Divider sx={{ margin: "16px 0" }} />
 
             <Typography>Кінець практики:</Typography>
-            <DatePicker value={practiceDates.end} onChange={(e) => handleChangePracticeDates(e, 'end')} />
+            <DatePicker
+              value={practiceDates.end}
+              onChange={(e) => handleChangePracticeDates(e, "end")}
+            />
           </>
         )}
       </DialogContent>
@@ -122,10 +143,10 @@ export const PharmacyPageModal: React.FC<IModalProps> = ({
             <Button autoFocus color="error" onClick={() => setOpen(false)}>
               Ні
             </Button>
-            <Button onClick={() => setStep(2)}>Так</Button>
+            <Button onClick={step1Confirm}>Так</Button>
           </>
         ) : (
-          <Button autoFocus onClick={() => setOpen(false)}>
+          <Button autoFocus onClick={onSelectBaseOfPractice}>
             Зберегти
           </Button>
         )}
