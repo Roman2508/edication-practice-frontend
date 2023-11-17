@@ -1,10 +1,10 @@
 import { Document, Page, Text, View, StyleSheet, Font, Image } from '@react-pdf/renderer'
 
 import logo from '../assets/logo-from-pdf.jpg'
+import { printSettingsInitialData } from '../pages/PrintPage'
 import TimesNewRomanNormal from '../assets/times-new-roman.ttf'
 import TimesNewRomanBold from '../assets/Times New Roman Bold.ttf'
 import { SelectedBasesOfPracticeEntity } from '../graphql/__generated__'
-import { printSettingsInitialData } from '../pages/PrintPage'
 
 Font.register({
   family: 'Times-New-Roman-Normal',
@@ -119,11 +119,11 @@ interface IPdfDocumentProps {
 
 // Create Document Component
 export const PdfDocument: React.FC<IPdfDocumentProps> = ({ selectedStudents, printSettings }) => {
-  console.log(printSettings)
+  console.log(selectedStudents, printSettings)
 
   return (
     <Document style={styles.wrapper} language="ua">
-      {selectedStudents.map((student) => {
+      {selectedStudents.map((student, index) => {
         const { contractNumber } = student.attributes.pharmacy.data.attributes
         const { group, name, middleName } = student.attributes.student.data.attributes
 
@@ -131,6 +131,20 @@ export const PdfDocument: React.FC<IPdfDocumentProps> = ({ selectedStudents, pri
           window.alert('Помилка друку. В одного або в декількох студентів не задано групу.')
           return
         }
+
+        // if student can selected practice term ? show student term : show admin term
+        const practiceTerm = printSettings.canStudentSelectPracticeBase
+          ? {
+              start: student.attributes.startPractiseTerm || ' - - ',
+              end: student.attributes.endPractiseTerm || ' - - ',
+            }
+          : { start: printSettings.termOfPractice.start, end: printSettings.termOfPractice.end }
+
+        // 0 elem - year, 1 elem - month, 2 elem - day
+        const startTerm = practiceTerm.start.split('-')
+        const endTerm = practiceTerm.end.split('-')
+
+        console.log(startTerm, endTerm)
 
         return (
           <Page size="A4" style={styles.page} key={student.id}>
@@ -161,7 +175,10 @@ export const PdfDocument: React.FC<IPdfDocumentProps> = ({ selectedStudents, pri
               </View>
             </View>
 
-            <Text style={styles.mainTitle}>НАПРАВЛЕННЯ НА ПРАКТИКУ №</Text>
+            <Text style={styles.mainTitle}>
+              НАПРАВЛЕННЯ НА ПРАКТИКУ {printSettings.practiceDirectionYear} №{' '}
+              {printSettings.practiceDirectionNumber + index}
+            </Text>
             <Text style={styles.subTitle}>/є підставою для зарахування на практику/</Text>
             <Text style={styles.defaultText}>
               Згідно із наказом № {contractNumber} направляємо на практику здобувачку(а) освіти{' '}
@@ -171,13 +188,17 @@ export const PdfDocument: React.FC<IPdfDocumentProps> = ({ selectedStudents, pri
 
             <View style={{ ...styles.section, marginTop: 10 }}>
               <Text style={{ ...styles.defaultText, marginLeft: 50 }}>Назва практики:</Text>
-              <Text style={{ ...styles.defaultText, ...styles.practiceName }}>пропедевтична практика</Text>
+              <Text style={{ ...styles.defaultText, ...styles.practiceName }}>{printSettings.currentPracticeType}</Text>
             </View>
 
             <Text style={{ ...styles.defaultText, marginLeft: 50 }}>
-              Термін практики з «___» ______________ 20____ року
+              Термін практики з {startTerm[2]}.{startTerm[1]}.{startTerm[0]} року
+              {/* Термін практики з «___» ______________ 20____ року */}
             </Text>
-            <Text style={{ ...styles.defaultText, marginLeft: 150 }}>по «___» ______________ 20____ року</Text>
+            <Text style={{ ...styles.defaultText, marginLeft: 150 }}>
+              по {endTerm[2]}.{endTerm[1]}.{endTerm[0]} року
+              {/* по «___» ______________ 20____ року */}
+            </Text>
 
             <Text style={{ ...styles.defaultText, marginTop: 20 }}>
               Методичний керівник практики ____________________________________________

@@ -4,15 +4,28 @@ import { TextField, Button, DialogActions, DialogContent, Divider, Typography } 
 
 import DatePicker from '../DatePicker'
 import { ModalLayout } from './ModalLayout'
+import { PDFDownloadLink } from '@react-pdf/renderer'
+import { PdfDocument } from '../PdfDocument'
+import { printSettingsInitialData } from '../../pages/PrintPage'
+import { SelectedBasesOfPracticeEntity } from '../../graphql/__generated__'
 
 interface IModalProps {
   open: boolean
-  onChangePrintData: (e: dayjs.Dayjs | null, type: 'year' | 'number', value?: number) => void
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>
   title?: string
+  printSettings: typeof printSettingsInitialData
+  selectedStudents: SelectedBasesOfPracticeEntity[]
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>
+  onChangePrintData: (e: dayjs.Dayjs | null, type: 'year' | 'number', value?: number) => void
 }
 
-export const PrintPageModal: React.FC<IModalProps> = ({ open, setOpen, onChangePrintData, title = '' }) => {
+export const PrintPageModal: React.FC<IModalProps> = ({
+  open,
+  setOpen,
+  title = '',
+  printSettings,
+  selectedStudents,
+  onChangePrintData,
+}) => {
   return (
     <ModalLayout open={open} title={title} setOpen={setOpen}>
       <DialogContent dividers={!!title}>
@@ -24,15 +37,21 @@ export const PrintPageModal: React.FC<IModalProps> = ({ open, setOpen, onChangeP
         <TextField
           label="Почати друк з №:"
           type="number"
+          value={printSettings.practiceDirectionNumber}
           onChange={(e) => onChangePrintData(null, 'number', Number(e.target.value))}
           fullWidth
         />
       </DialogContent>
 
       <DialogActions>
-        <Button autoFocus onClick={() => setOpen(false)}>
-          Зберегти
-        </Button>
+        <PDFDownloadLink
+          document={<PdfDocument selectedStudents={selectedStudents} printSettings={printSettings} />}
+          fileName="Направлення.pdf"
+        >
+          {({ blob, url, loading, error }) =>
+            loading ? <Button disabled>Завантаження...</Button> : <Button>Завантажити направлення</Button>
+          }
+        </PDFDownloadLink>
       </DialogActions>
     </ModalLayout>
   )

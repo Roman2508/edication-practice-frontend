@@ -1,33 +1,36 @@
 import React from 'react'
 import dayjs from 'dayjs'
-import { gql } from '../graphql/client'
+import { SelectedBasesOfPracticeEntity, gql } from '../graphql/client'
 
-import { StudentsTable } from '../components/Table/StudentsTable'
 import { PrintPageModal } from '../components/Modal/PrintPageModal'
 import { StudentsFilter } from '../components/Filter/StudentsFilter'
+import { StudentsTableBody } from '../components/Table/StudentsTable/StudentsTableBody'
 // import { Modal } from '../components/Modal/Modal'
 
 export const printSettingsInitialData = {
-  /*   termOfPractice: {
+  termOfPractice: {
     start: '',
     end: '',
-  }, */
+  },
   currentPracticeType: '',
-  practiceDirectionYear: '2023',
   practiceDirectionNumber: 1,
+  practiceDirectionYear: '2023',
+  canStudentSelectPracticeBase: false,
 }
 
 const PrintPage = () => {
   const [open, setOpen] = React.useState(false)
   // const [printStep, setPrintStep] = React.useState(1)
   const [printSettings, setPrintSettings] = React.useState(printSettingsInitialData)
+  const [selectedStudents, setSelectedStudents] = React.useState<SelectedBasesOfPracticeEntity[]>([])
 
   React.useEffect(() => {
     const fetchData = async () => {
       try {
         const settings = await gql.GetSettings()
 
-        const { startPracticeDate, endPracticeDate, currentPracticeType } = settings.setting.data.attributes
+        const { startPracticeDate, endPracticeDate, currentPracticeType, canStudentSelectPracticeBase } =
+          settings.setting.data.attributes
 
         setPrintSettings((prev) => ({
           ...prev,
@@ -35,6 +38,7 @@ const PrintPage = () => {
             start: startPracticeDate,
             end: endPracticeDate,
           },
+          canStudentSelectPracticeBase,
           currentPracticeType: currentPracticeType.data.attributes.name,
         }))
       } catch (error) {
@@ -82,10 +86,23 @@ const PrintPage = () => {
 
   return (
     <>
-      <PrintPageModal open={open} setOpen={setOpen} title="Номер направлення" onChangePrintData={onChangePrintData} />
+      <PrintPageModal
+        open={open}
+        setOpen={setOpen}
+        title="Номер направлення"
+        printSettings={printSettings}
+        selectedStudents={selectedStudents}
+        onChangePrintData={onChangePrintData}
+      />
 
-      <StudentsFilter setOpen={setOpen} />
-      <StudentsTable printSettings={printSettings} />
+      <StudentsFilter />
+
+      <StudentsTableBody
+        setOpen={setOpen}
+        printSettings={printSettings}
+        selectedStudents={selectedStudents}
+        setSelectedStudents={setSelectedStudents}
+      />
     </>
   )
 }

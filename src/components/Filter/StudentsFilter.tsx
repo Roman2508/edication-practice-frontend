@@ -15,7 +15,7 @@ const filterFields = [
   { label: 'Адреса', name: 'address' },
 ]
 
-export const StudentsFilter: React.FC<{ setOpen: React.Dispatch<React.SetStateAction<boolean>> }> = ({ setOpen }) => {
+export const StudentsFilter: React.FC<{}> = ({}) => {
   const inputWidth = '220px'
 
   return (
@@ -66,9 +66,6 @@ export const StudentsFilter: React.FC<{ setOpen: React.Dispatch<React.SetStateAc
         {/* <Button variant="contained">Завантажити направлення в PDF</Button> */}
         {/* <Button variant="contained">Знайти студентів</Button> */}
         <Button variant="contained">Знайти</Button>
-        <Button variant="contained" onClick={() => setOpen(true)}>
-          OPEN MODAL
-        </Button>
       </div>
     </div>
   )
