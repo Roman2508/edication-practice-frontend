@@ -583,9 +583,10 @@ export type Pharmacy = {
   readonly city: Scalars['String']['output'];
   readonly contractNumber: Scalars['String']['output'];
   readonly createdAt: Maybe<Scalars['DateTime']['output']>;
+  readonly headOfPractice: Maybe<Scalars['String']['output']>;
   readonly legalName: Maybe<Scalars['String']['output']>;
   readonly name: Scalars['String']['output'];
-  readonly number: Maybe<Scalars['String']['output']>;
+  readonly number: Maybe<Scalars['Int']['output']>;
   readonly places: Scalars['Int']['output'];
   readonly updatedAt: Maybe<Scalars['DateTime']['output']>;
 };
@@ -613,11 +614,12 @@ export type PharmacyFiltersInput = {
   readonly city: InputMaybe<StringFilterInput>;
   readonly contractNumber: InputMaybe<StringFilterInput>;
   readonly createdAt: InputMaybe<DateTimeFilterInput>;
+  readonly headOfPractice: InputMaybe<StringFilterInput>;
   readonly id: InputMaybe<IdFilterInput>;
   readonly legalName: InputMaybe<StringFilterInput>;
   readonly name: InputMaybe<StringFilterInput>;
   readonly not: InputMaybe<PharmacyFiltersInput>;
-  readonly number: InputMaybe<StringFilterInput>;
+  readonly number: InputMaybe<IntFilterInput>;
   readonly or: InputMaybe<ReadonlyArray<InputMaybe<PharmacyFiltersInput>>>;
   readonly places: InputMaybe<IntFilterInput>;
   readonly updatedAt: InputMaybe<DateTimeFilterInput>;
@@ -627,9 +629,10 @@ export type PharmacyInput = {
   readonly address: InputMaybe<Scalars['String']['input']>;
   readonly city: InputMaybe<Scalars['String']['input']>;
   readonly contractNumber: InputMaybe<Scalars['String']['input']>;
+  readonly headOfPractice: InputMaybe<Scalars['String']['input']>;
   readonly legalName: InputMaybe<Scalars['String']['input']>;
   readonly name: InputMaybe<Scalars['String']['input']>;
-  readonly number: InputMaybe<Scalars['String']['input']>;
+  readonly number: InputMaybe<Scalars['Int']['input']>;
   readonly places: InputMaybe<Scalars['Int']['input']>;
 };
 
@@ -1411,10 +1414,11 @@ export type CreatePharmacyMutationVariables = Exact<{
   contractNumber: Scalars['String']['input'];
   places?: InputMaybe<Scalars['Int']['input']>;
   legalName: InputMaybe<Scalars['String']['input']>;
+  number: InputMaybe<Scalars['Int']['input']>;
 }>;
 
 
-export type CreatePharmacyMutation = { readonly __typename?: 'Mutation', readonly createPharmacy: { readonly __typename?: 'PharmacyEntityResponse', readonly data: { readonly __typename?: 'PharmacyEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Pharmacy', readonly name: string, readonly city: string, readonly address: string, readonly places: number, readonly contractNumber: string, readonly legalName: string, readonly number: string } } } };
+export type CreatePharmacyMutation = { readonly __typename?: 'Mutation', readonly createPharmacy: { readonly __typename?: 'PharmacyEntityResponse', readonly data: { readonly __typename?: 'PharmacyEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Pharmacy', readonly name: string, readonly city: string, readonly address: string, readonly places: number, readonly contractNumber: string, readonly legalName: string, readonly number: number } } } };
 
 export type CreateStudentMutationVariables = Exact<{
   name: InputMaybe<Scalars['String']['input']>;
@@ -1440,7 +1444,7 @@ export type SelectBaseOfPracticeMutationVariables = Exact<{
 }>;
 
 
-export type SelectBaseOfPracticeMutation = { readonly __typename?: 'Mutation', readonly createSelectedBasesOfPractice: { readonly __typename?: 'SelectedBasesOfPracticeEntityResponse', readonly data: { readonly __typename?: 'SelectedBasesOfPracticeEntity', readonly id: string, readonly attributes: { readonly __typename?: 'SelectedBasesOfPractice', readonly student: { readonly __typename?: 'StudentEntityResponse', readonly data: { readonly __typename?: 'StudentEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Student', readonly name: string, readonly email: string, readonly picture: string, readonly phone: string, readonly middleName: string, readonly group: { readonly __typename?: 'GroupRelationResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'GroupEntity', readonly attributes: { readonly __typename?: 'Group', readonly name: string } }> } } } }, readonly pharmacy: { readonly __typename?: 'PharmacyEntityResponse', readonly data: { readonly __typename?: 'PharmacyEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Pharmacy', readonly name: string, readonly city: string, readonly address: string, readonly places: number, readonly contractNumber: string, readonly legalName: string, readonly number: string } } } } } } };
+export type SelectBaseOfPracticeMutation = { readonly __typename?: 'Mutation', readonly createSelectedBasesOfPractice: { readonly __typename?: 'SelectedBasesOfPracticeEntityResponse', readonly data: { readonly __typename?: 'SelectedBasesOfPracticeEntity', readonly id: string, readonly attributes: { readonly __typename?: 'SelectedBasesOfPractice', readonly student: { readonly __typename?: 'StudentEntityResponse', readonly data: { readonly __typename?: 'StudentEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Student', readonly name: string, readonly email: string, readonly picture: string, readonly phone: string, readonly middleName: string, readonly group: { readonly __typename?: 'GroupRelationResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'GroupEntity', readonly attributes: { readonly __typename?: 'Group', readonly name: string } }> } } } }, readonly pharmacy: { readonly __typename?: 'PharmacyEntityResponse', readonly data: { readonly __typename?: 'PharmacyEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Pharmacy', readonly name: string, readonly city: string, readonly address: string, readonly places: number, readonly contractNumber: string, readonly legalName: string, readonly number: number } } } } } } };
 
 export type UpdateSettingsMutationVariables = Exact<{
   startPracticeDate: InputMaybe<Scalars['Date']['input']>;
@@ -1467,7 +1471,7 @@ export type GetAllGroupsQuery = { readonly __typename?: 'Query', readonly groups
 export type GetAllPharmaciesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllPharmaciesQuery = { readonly __typename?: 'Query', readonly pharmacies: { readonly __typename?: 'PharmacyEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'PharmacyEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Pharmacy', readonly name: string, readonly city: string, readonly address: string, readonly places: number, readonly legalName: string, readonly number: string } }> } };
+export type GetAllPharmaciesQuery = { readonly __typename?: 'Query', readonly pharmacies: { readonly __typename?: 'PharmacyEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'PharmacyEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Pharmacy', readonly name: string, readonly city: string, readonly address: string, readonly places: number, readonly legalName: string, readonly number: number } }> } };
 
 export type GetAllPharmacyIdsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1477,7 +1481,7 @@ export type GetAllPharmacyIdsQuery = { readonly __typename?: 'Query', readonly p
 export type GetAllSelectedPracticeBaseQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllSelectedPracticeBaseQuery = { readonly __typename?: 'Query', readonly selectedBasesOfPractices: { readonly __typename?: 'SelectedBasesOfPracticeEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'SelectedBasesOfPracticeEntity', readonly id: string, readonly attributes: { readonly __typename?: 'SelectedBasesOfPractice', readonly student: { readonly __typename?: 'StudentEntityResponse', readonly data: { readonly __typename?: 'StudentEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Student', readonly name: string, readonly middleName: string, readonly group: { readonly __typename?: 'GroupRelationResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'GroupEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Group', readonly name: string, readonly courseNumber: number } }> } } } }, readonly pharmacy: { readonly __typename?: 'PharmacyEntityResponse', readonly data: { readonly __typename?: 'PharmacyEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Pharmacy', readonly name: string, readonly city: string, readonly address: string, readonly contractNumber: string } } } } }> } };
+export type GetAllSelectedPracticeBaseQuery = { readonly __typename?: 'Query', readonly selectedBasesOfPractices: { readonly __typename?: 'SelectedBasesOfPracticeEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'SelectedBasesOfPracticeEntity', readonly id: string, readonly attributes: { readonly __typename?: 'SelectedBasesOfPractice', readonly student: { readonly __typename?: 'StudentEntityResponse', readonly data: { readonly __typename?: 'StudentEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Student', readonly name: string, readonly phone: string, readonly middleName: string, readonly group: { readonly __typename?: 'GroupRelationResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'GroupEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Group', readonly name: string, readonly courseNumber: number } }> } } } }, readonly pharmacy: { readonly __typename?: 'PharmacyEntityResponse', readonly data: { readonly __typename?: 'PharmacyEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Pharmacy', readonly name: string, readonly city: string, readonly address: string, readonly contractNumber: string, readonly headOfPractice: string } } } } }> } };
 
 export type GetAllStudentsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1494,7 +1498,7 @@ export type GetFullPharmacyQueryVariables = Exact<{
 }>;
 
 
-export type GetFullPharmacyQuery = { readonly __typename?: 'Query', readonly pharmacies: { readonly __typename?: 'PharmacyEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'PharmacyEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Pharmacy', readonly name: string, readonly city: string, readonly address: string, readonly places: number, readonly contractNumber: string, readonly legalName: string, readonly number: string } }> } };
+export type GetFullPharmacyQuery = { readonly __typename?: 'Query', readonly pharmacies: { readonly __typename?: 'PharmacyEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'PharmacyEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Pharmacy', readonly name: string, readonly city: string, readonly address: string, readonly places: number, readonly contractNumber: string, readonly legalName: string, readonly number: number } }> } };
 
 export type GetMeQueryVariables = Exact<{
   id?: Scalars['ID']['input'];
@@ -1517,7 +1521,7 @@ export type GetSearchPharmaciesQueryVariables = Exact<{
 }>;
 
 
-export type GetSearchPharmaciesQuery = { readonly __typename?: 'Query', readonly pharmacies: { readonly __typename?: 'PharmacyEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'PharmacyEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Pharmacy', readonly name: string, readonly city: string, readonly address: string, readonly places: number, readonly legalName: string, readonly number: string } }> } };
+export type GetSearchPharmaciesQuery = { readonly __typename?: 'Query', readonly pharmacies: { readonly __typename?: 'PharmacyEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'PharmacyEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Pharmacy', readonly name: string, readonly city: string, readonly address: string, readonly places: number, readonly legalName: string, readonly number: number } }> } };
 
 export type GetSettingsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1564,9 +1568,9 @@ export const ChangeStudentDataDocument = gql`
 }
     `;
 export const CreatePharmacyDocument = gql`
-    mutation CreatePharmacy($name: String!, $city: String!, $address: String!, $contractNumber: String!, $places: Int = 2, $legalName: String) {
+    mutation CreatePharmacy($name: String!, $city: String!, $address: String!, $contractNumber: String!, $places: Int = 2, $legalName: String, $number: Int) {
   createPharmacy(
-    data: {name: $name, city: $city, address: $address, contractNumber: $contractNumber, places: $places, legalName: $legalName}
+    data: {name: $name, city: $city, address: $address, contractNumber: $contractNumber, places: $places, legalName: $legalName, number: $number}
   ) {
     data {
       id
@@ -1752,6 +1756,7 @@ export const GetAllSelectedPracticeBaseDocument = gql`
                   }
                 }
               }
+              phone
               middleName
             }
           }
@@ -1764,6 +1769,7 @@ export const GetAllSelectedPracticeBaseDocument = gql`
               city
               address
               contractNumber
+              headOfPractice
             }
           }
         }

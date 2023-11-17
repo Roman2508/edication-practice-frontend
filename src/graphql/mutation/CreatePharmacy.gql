@@ -5,6 +5,7 @@ mutation CreatePharmacy(
   $contractNumber: String!
   $places: Int = 2
   $legalName: String
+  $number: Int
 ) {
   createPharmacy(
     data: {
@@ -14,6 +15,7 @@ mutation CreatePharmacy(
       contractNumber: $contractNumber
       places: $places
       legalName: $legalName
+      number: $number
     }
   ) {
     data {

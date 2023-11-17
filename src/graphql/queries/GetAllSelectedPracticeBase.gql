@@ -17,6 +17,7 @@ query GetAllSelectedPracticeBase {
                   }
                 }
               }
+              phone
               middleName
             }
           }
@@ -29,6 +30,7 @@ query GetAllSelectedPracticeBase {
               city
               address
               contractNumber
+              headOfPractice
             }
           }
         }

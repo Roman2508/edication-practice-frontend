@@ -5,6 +5,7 @@ import { printSettingsInitialData } from '../pages/PrintPage'
 import TimesNewRomanNormal from '../assets/times-new-roman.ttf'
 import TimesNewRomanBold from '../assets/Times New Roman Bold.ttf'
 import { SelectedBasesOfPracticeEntity } from '../graphql/__generated__'
+import { getPracticeTerm } from '../utils/GetPracticeTerm'
 
 Font.register({
   family: 'Times-New-Roman-Normal',
@@ -119,7 +120,7 @@ interface IPdfDocumentProps {
 
 // Create Document Component
 export const PdfDocument: React.FC<IPdfDocumentProps> = ({ selectedStudents, printSettings }) => {
-  console.log(selectedStudents, printSettings)
+  // Керівнику аптеки № ТОВ "Фармавін"
 
   return (
     <Document style={styles.wrapper} language="ua">
@@ -133,18 +134,26 @@ export const PdfDocument: React.FC<IPdfDocumentProps> = ({ selectedStudents, pri
         }
 
         // if student can selected practice term ? show student term : show admin term
-        const practiceTerm = printSettings.canStudentSelectPracticeBase
-          ? {
-              start: student.attributes.startPractiseTerm || ' - - ',
-              end: student.attributes.endPractiseTerm || ' - - ',
-            }
-          : { start: printSettings.termOfPractice.start, end: printSettings.termOfPractice.end }
+        // const practiceTerm = printSettings.canStudentSelectPracticeBase
+        //   ? {
+        //       start: student.attributes.startPractiseTerm || ' - - ',
+        //       end: student.attributes.endPractiseTerm || ' - - ',
+        //     }
+        //   : { start: printSettings.termOfPractice.start, end: printSettings.termOfPractice.end }
 
-        // 0 elem - year, 1 elem - month, 2 elem - day
-        const startTerm = practiceTerm.start.split('-')
-        const endTerm = practiceTerm.end.split('-')
+        // // 0 elem - year, 1 elem - month, 2 elem - day
+        // const startTerm = practiceTerm.start.split('-')
+        // const endTerm = practiceTerm.end.split('-')
 
-        console.log(startTerm, endTerm)
+        // console.log(startTerm, endTerm)
+
+        const { start, end } = getPracticeTerm(
+          printSettings.canStudentSelectPracticeBase,
+          student.attributes.startPractiseTerm,
+          student.attributes.endPractiseTerm,
+          printSettings.termOfPractice.start,
+          printSettings.termOfPractice.end
+        )
 
         return (
           <Page size="A4" style={styles.page} key={student.id}>
@@ -181,7 +190,7 @@ export const PdfDocument: React.FC<IPdfDocumentProps> = ({ selectedStudents, pri
             </Text>
             <Text style={styles.subTitle}>/є підставою для зарахування на практику/</Text>
             <Text style={styles.defaultText}>
-              Згідно із наказом № {contractNumber} направляємо на практику здобувачку(а) освіти{' '}
+              Згідно із договором № {contractNumber} направляємо на практику здобувачку(а) освіти{' '}
               {group.data[0].attributes.courseNumber} курсу, {group.data[0].attributes.name} групи, яка(ий) навчається
               на ОПП «Фармація» спеціальності 226 Фармація, промислова фармація ОПС фаховий молодший бакалавр.
             </Text>
@@ -192,11 +201,11 @@ export const PdfDocument: React.FC<IPdfDocumentProps> = ({ selectedStudents, pri
             </View>
 
             <Text style={{ ...styles.defaultText, marginLeft: 50 }}>
-              Термін практики з {startTerm[2]}.{startTerm[1]}.{startTerm[0]} року
+              Термін практики з {start[2]}.{start[1]}.{start[0]} року
               {/* Термін практики з «___» ______________ 20____ року */}
             </Text>
             <Text style={{ ...styles.defaultText, marginLeft: 150 }}>
-              по {endTerm[2]}.{endTerm[1]}.{endTerm[0]} року
+              по {end[2]}.{end[1]}.{end[0]} року
               {/* по «___» ______________ 20____ року */}
             </Text>
 

@@ -15,8 +15,17 @@ const filterFields = [
   { label: 'Адреса', name: 'address' },
 ]
 
-export const StudentsFilter: React.FC<{}> = ({}) => {
+interface IStudentsFilterProps {
+  filter: { field: string; value: string }
+  setFilter: React.Dispatch<React.SetStateAction<{ field: string; value: string }>>
+}
+
+export const StudentsFilter: React.FC<IStudentsFilterProps> = ({ filter, setFilter }) => {
   const inputWidth = '220px'
+
+  const onChangeFilterField = (value: string, fieldName: 'field' | 'value') => {
+    setFilter((prev) => ({ ...prev, [fieldName]: value }))
+  }
 
   return (
     <div className={styles['students-filter-wrapper']}>
@@ -40,14 +49,15 @@ export const StudentsFilter: React.FC<{}> = ({}) => {
         /> */}
 
         <Select
-          value={filterFields[0].name}
-          label="Пошук за полем"
           size="small"
-          onChange={() => {}}
+          value={filter.field}
+          // defaultValue={filterFields[0].label}
+          label="Пошук за полем"
+          onChange={(e) => onChangeFilterField(e.target.value, 'field')}
           sx={{ width: inputWidth }}
         >
           {filterFields.map((el) => (
-            <MenuItem key={el.name} value={el.name}>
+            <MenuItem key={el.name} value={el.label}>
               {el.label}
             </MenuItem>
           ))}
@@ -56,7 +66,9 @@ export const StudentsFilter: React.FC<{}> = ({}) => {
         <TextField
           size="small"
           label="Пошук"
+          value={filter.value}
           sx={{ width: inputWidth }}
+          onChange={(e) => onChangeFilterField(e.target.value, 'value')}
           InputProps={{
             type: 'search',
           }}

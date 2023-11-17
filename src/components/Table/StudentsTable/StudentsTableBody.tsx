@@ -17,8 +17,8 @@ import { GetAllSelectedPracticeBaseQuery, SelectedBasesOfPracticeEntity, gql } f
 
 interface IStudentsTableProps {
   printSettings: typeof printSettingsInitialData
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>
   selectedStudents: SelectedBasesOfPracticeEntity[]
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>
   setSelectedStudents: React.Dispatch<React.SetStateAction<SelectedBasesOfPracticeEntity[]>>
 }
 
@@ -31,7 +31,6 @@ export const StudentsTableBody: React.FC<IStudentsTableProps> = ({
   const [isLoading, setIsLoading] = React.useState(false)
   const [selected, setSelected] = React.useState<readonly number[]>([])
   const [data, setData] = React.useState<GetAllSelectedPracticeBaseQuery | null>(null)
-//   const [selectedStudents, setSelectedStudents] = React.useState<SelectedBasesOfPracticeEntity[]>([])
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -79,10 +78,10 @@ export const StudentsTableBody: React.FC<IStudentsTableProps> = ({
     })
   }
 
-  const onClearSelected = () => {
-    setSelectedStudents([])
-    setSelected([])
-  }
+  //   const onClearSelected = () => {
+  //     setSelectedStudents([])
+  //     setSelected([])
+  //   }
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!data) return
@@ -101,7 +100,6 @@ export const StudentsTableBody: React.FC<IStudentsTableProps> = ({
         setOpen={setOpen}
         printSettings={printSettings}
         numSelected={selected.length}
-        onClearSelected={onClearSelected}
         selectedStudents={selectedStudents}
       />
 

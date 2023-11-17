@@ -5,7 +5,6 @@ import { SelectedBasesOfPracticeEntity, gql } from '../graphql/client'
 import { PrintPageModal } from '../components/Modal/PrintPageModal'
 import { StudentsFilter } from '../components/Filter/StudentsFilter'
 import { StudentsTableBody } from '../components/Table/StudentsTable/StudentsTableBody'
-// import { Modal } from '../components/Modal/Modal'
 
 export const printSettingsInitialData = {
   termOfPractice: {
@@ -20,7 +19,7 @@ export const printSettingsInitialData = {
 
 const PrintPage = () => {
   const [open, setOpen] = React.useState(false)
-  // const [printStep, setPrintStep] = React.useState(1)
+  const [filter, setFilter] = React.useState({ field: 'ПІБ', value: '' })
   const [printSettings, setPrintSettings] = React.useState(printSettingsInitialData)
   const [selectedStudents, setSelectedStudents] = React.useState<SelectedBasesOfPracticeEntity[]>([])
 
@@ -95,7 +94,7 @@ const PrintPage = () => {
         onChangePrintData={onChangePrintData}
       />
 
-      <StudentsFilter />
+      <StudentsFilter filter={filter} setFilter={setFilter} />
 
       <StudentsTableBody
         setOpen={setOpen}
