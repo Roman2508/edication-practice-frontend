@@ -8,14 +8,16 @@ import DialogActions from "@mui/material/DialogActions"
 
 import DatePicker from "../DatePicker"
 import { AppContext } from "../../App"
-import { gql } from "../../graphql/client"
 import { ModalLayout } from "./ModalLayout"
 import { useNavigate } from "react-router-dom"
+import { GetSettingsQuery, gql } from "../../graphql/client"
+import { getPracticeTerm } from "../../utils/getPracticeTerm"
 
 interface IModalProps {
   open: boolean
-  pharmacyData: { places: number; name: string; address: string }
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
+  settings: GetSettingsQuery | null
+  pharmacyData: { places: number; name: string; address: string }
 
   title?: string
   studentId?: string
@@ -26,6 +28,7 @@ interface IModalProps {
 export const PharmacyPageModal: React.FC<IModalProps> = ({
   open,
   setOpen,
+  settings,
   studentId,
   pharmacyId,
   pharmacyData,
@@ -69,11 +72,19 @@ export const PharmacyPageModal: React.FC<IModalProps> = ({
     try {
       setIsLoading(true)
 
+      const { start, end } = getPracticeTerm(
+        canStudentsSelectPracticeBase,
+        practiceDates.start,
+        practiceDates.end,
+        settings?.setting.data.attributes.startPracticeDate || "",
+        settings?.setting.data.attributes.endPracticeDate || ""
+      )
+
       await gql.selectBaseOfPractice({
         pharmacyId,
         studentId,
-        startDate: practiceDates.start,
-        endDate: practiceDates.end,
+        startDate: `${start[0]}-${start[1]}-${start[2]}`,
+        endDate: `${end[0]}-${end[1]}-${end[2]}`,
       })
       await gql.changePlacesCountInPharmacy({ id: pharmacyId, places: pharmacyData.places - 1 })
 
@@ -143,11 +154,13 @@ export const PharmacyPageModal: React.FC<IModalProps> = ({
             <Button autoFocus color="error" onClick={() => setOpen(false)}>
               Ні
             </Button>
-            <Button onClick={step1Confirm}>Так</Button>
+            <Button onClick={step1Confirm} disabled={isLoading}>
+              {isLoading ? "Завантаження..." : "Так"}
+            </Button>
           </>
         ) : (
-          <Button autoFocus onClick={onSelectBaseOfPractice}>
-            Зберегти
+          <Button autoFocus onClick={onSelectBaseOfPractice} disabled={isLoading}>
+            {isLoading ? "Завантаження..." : "Зберегти"}
           </Button>
         )}
       </DialogActions>

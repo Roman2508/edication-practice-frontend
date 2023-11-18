@@ -1478,10 +1478,16 @@ export type GetAllPharmacyIdsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetAllPharmacyIdsQuery = { readonly __typename?: 'Query', readonly pharmacies: { readonly __typename?: 'PharmacyEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'PharmacyEntity', readonly id: string }> } };
 
-export type GetAllSelectedPracticeBaseQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetAllSelectedPracticeBaseQueryVariables = Exact<{
+  studentName: InputMaybe<Scalars['String']['input']>;
+  studentGroup: InputMaybe<Scalars['String']['input']>;
+  pharmacyName: InputMaybe<Scalars['String']['input']>;
+  pharmacyCity: InputMaybe<Scalars['String']['input']>;
+  pharmacyAddress: InputMaybe<Scalars['String']['input']>;
+}>;
 
 
-export type GetAllSelectedPracticeBaseQuery = { readonly __typename?: 'Query', readonly selectedBasesOfPractices: { readonly __typename?: 'SelectedBasesOfPracticeEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'SelectedBasesOfPracticeEntity', readonly id: string, readonly attributes: { readonly __typename?: 'SelectedBasesOfPractice', readonly student: { readonly __typename?: 'StudentEntityResponse', readonly data: { readonly __typename?: 'StudentEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Student', readonly name: string, readonly phone: string, readonly middleName: string, readonly group: { readonly __typename?: 'GroupRelationResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'GroupEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Group', readonly name: string, readonly courseNumber: number } }> } } } }, readonly pharmacy: { readonly __typename?: 'PharmacyEntityResponse', readonly data: { readonly __typename?: 'PharmacyEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Pharmacy', readonly name: string, readonly city: string, readonly address: string, readonly contractNumber: string, readonly headOfPractice: string } } } } }> } };
+export type GetAllSelectedPracticeBaseQuery = { readonly __typename?: 'Query', readonly selectedBasesOfPractices: { readonly __typename?: 'SelectedBasesOfPracticeEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'SelectedBasesOfPracticeEntity', readonly id: string, readonly attributes: { readonly __typename?: 'SelectedBasesOfPractice', readonly student: { readonly __typename?: 'StudentEntityResponse', readonly data: { readonly __typename?: 'StudentEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Student', readonly name: string, readonly phone: string, readonly middleName: string, readonly group: { readonly __typename?: 'GroupRelationResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'GroupEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Group', readonly name: string, readonly courseNumber: number } }> } } } }, readonly pharmacy: { readonly __typename?: 'PharmacyEntityResponse', readonly data: { readonly __typename?: 'PharmacyEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Pharmacy', readonly name: string, readonly city: string, readonly number: number, readonly address: string, readonly legalName: string, readonly contractNumber: string, readonly headOfPractice: string } } } } }> } };
 
 export type GetAllStudentsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1737,8 +1743,11 @@ export const GetAllPharmacyIdsDocument = gql`
 }
     `;
 export const GetAllSelectedPracticeBaseDocument = gql`
-    query GetAllSelectedPracticeBase {
-  selectedBasesOfPractices(pagination: {pageSize: 10000}) {
+    query GetAllSelectedPracticeBase($studentName: String, $studentGroup: String, $pharmacyName: String, $pharmacyCity: String, $pharmacyAddress: String) {
+  selectedBasesOfPractices(
+    pagination: {pageSize: 10000}
+    filters: {student: {name: {contains: $studentName}, group: {name: {eq: $studentGroup}}}, pharmacy: {name: {contains: $pharmacyName}, city: {contains: $pharmacyCity}, address: {contains: $pharmacyAddress}}}
+  ) {
     data {
       id
       attributes {
@@ -1767,7 +1776,9 @@ export const GetAllSelectedPracticeBaseDocument = gql`
             attributes {
               name
               city
+              number
               address
+              legalName
               contractNumber
               headOfPractice
             }

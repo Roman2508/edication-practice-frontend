@@ -5,7 +5,7 @@ import { Typography, Button, Skeleton } from "@mui/material"
 
 import { getAuthData } from "../utils/getAuthData"
 import { GoogleMapComponent } from "../components/GoogleMap"
-import { GetFullPharmacyQuery, gql } from "../graphql/client"
+import { GetFullPharmacyQuery, GetSettingsQuery, gql } from "../graphql/client"
 import { PharmacyPageModal } from "../components/Modal/PharmacyPageModal"
 
 export const PharmacyPage = () => {
@@ -18,6 +18,7 @@ export const PharmacyPage = () => {
   // const [isLoading, setIsLoading] = React.useState(false)
   const [isOpenModal, setIsOpenModal] = React.useState(false)
   const [data, setData] = React.useState<GetFullPharmacyQuery>()
+  const [settings, setSettings] = React.useState<GetSettingsQuery | null>(null)
   const [canStudentsSelectPracticeBase, setCanStudentsSelectPracticeBase] = React.useState(false)
 
   React.useEffect(() => {
@@ -35,8 +36,13 @@ export const PharmacyPage = () => {
   React.useEffect(() => {
     const fetchSettings = async () => {
       try {
-        const data = await gql.GetCanStudentsSelectPracticeBase()
-        setCanStudentsSelectPracticeBase(data.setting.data.attributes.canStudentSelectPracticeBase)
+        const settings = await gql.GetSettings()
+        // const data = await gql.GetCanStudentsSelectPracticeBase()
+
+        setSettings(settings)
+        setCanStudentsSelectPracticeBase(
+          settings.setting.data.attributes.canStudentSelectPracticeBase
+        )
       } catch (error) {
         alert("Error")
       } finally {
@@ -84,8 +90,9 @@ export const PharmacyPage = () => {
     <>
       <PharmacyPageModal
         pharmacyId={id}
-        studentId={student?.id}
         open={isOpenModal}
+        settings={settings}
+        studentId={student?.id}
         setOpen={setIsOpenModal}
         title="Терміни проходження практики"
         pharmacyData={{

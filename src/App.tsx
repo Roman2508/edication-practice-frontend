@@ -59,7 +59,7 @@ const App = () => {
 
   React.useEffect(() => {
     if (!canUserChoosePracticeBase) {
-      navigate("/selected")
+      // navigate("/selected")
     }
   }, [canUserChoosePracticeBase])
 

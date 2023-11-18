@@ -1,5 +1,21 @@
-query GetAllSelectedPracticeBase {
-  selectedBasesOfPractices(pagination: { pageSize: 10000 }) {
+query GetAllSelectedPracticeBase(
+  $studentName: String
+  $studentGroup: String
+  $pharmacyName: String
+  $pharmacyCity: String
+  $pharmacyAddress: String
+) {
+  selectedBasesOfPractices(
+    pagination: { pageSize: 10000 }
+    filters: {
+      student: { name: { contains: $studentName }, group: { name: { eq: $studentGroup } } }
+      pharmacy: {
+        name: { contains: $pharmacyName }
+        city: { contains: $pharmacyCity }
+        address: { contains: $pharmacyAddress }
+      }
+    }
+  ) {
     data {
       id
       attributes {
@@ -28,7 +44,9 @@ query GetAllSelectedPracticeBase {
             attributes {
               name
               city
+              number
               address
+              legalName
               contractNumber
               headOfPractice
             }
