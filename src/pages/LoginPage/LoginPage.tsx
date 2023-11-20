@@ -116,7 +116,7 @@ const LoginPage = () => {
             Практика
           </Typography>
 
-          {registerStep === 2 ? (
+          {registerStep === 1 ? (
             <Login setRegisterStep={setRegisterStep} />
           ) : (
             <Box className={styles['box']}>

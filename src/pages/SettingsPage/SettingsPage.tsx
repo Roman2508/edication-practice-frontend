@@ -20,6 +20,7 @@ import styles from './Settings.page.module.css'
 import DatePicker from '../../components/DatePicker'
 import emptyImg from '../../assets/empty-image.png'
 import dayjs from 'dayjs'
+import { useNavigate } from 'react-router-dom'
 
 interface IButtonDisabled {
   uploadPharmacies: boolean
@@ -30,7 +31,9 @@ interface IButtonDisabled {
 export const SettingsPage = () => {
   const fileRef = React.useRef<HTMLInputElement | null>(null)
 
-  const { setAlert } = React.useContext(AppContext)
+  const navigate = useNavigate()
+
+  const { setAlert, user } = React.useContext(AppContext)
 
   const [isSaving, setIsSaving] = React.useState(false)
   const [settings, setSettings] = React.useState<Setting | null>(null)
@@ -227,6 +230,10 @@ export const SettingsPage = () => {
       ...prev,
       currentPracticeType: { data: { id: data[1], attributes: { name: data[0] } } },
     }))
+  }
+
+  if (user && user.access !== 'owner') {
+    navigate('/auth')
   }
 
   if (!settings) {

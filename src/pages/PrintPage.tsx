@@ -1,39 +1,39 @@
-import React from "react"
-import dayjs from "dayjs"
-import {
-  GetAllSelectedPracticeBaseQuery,
-  SelectedBasesOfPracticeEntity,
-  gql,
-} from "../graphql/client"
+import React from 'react'
+import dayjs from 'dayjs'
+import { GetAllSelectedPracticeBaseQuery, SelectedBasesOfPracticeEntity, gql } from '../graphql/client'
 
-import { PrintPageModal } from "../components/Modal/PrintPageModal"
-import { StudentsFilter } from "../components/Filter/StudentsFilter"
-import { StudentsTableBody } from "../components/Table/StudentsTable/StudentsTableBody"
+import { PrintPageModal } from '../components/Modal/PrintPageModal'
+import { StudentsFilter } from '../components/Filter/StudentsFilter'
+import { StudentsTableBody } from '../components/Table/StudentsTable/StudentsTableBody'
+import { useNavigate } from 'react-router-dom'
+import { AppContext } from '../App'
 
 export const printSettingsInitialData = {
   termOfPractice: {
-    start: "",
-    end: "",
+    start: '',
+    end: '',
   },
-  currentPracticeType: "",
+  currentPracticeType: '',
   practiceDirectionNumber: 1,
-  practiceDirectionYear: "2023",
+  practiceDirectionYear: '2023',
   canStudentSelectPracticeBase: false,
 }
 
 const PrintPage = () => {
+  const navigate = useNavigate()
+
+  const { user } = React.useContext(AppContext)
+
   const [open, setOpen] = React.useState(false)
   const [isLoading, setIsLoading] = React.useState(false)
   const [filter, setFilter] = React.useState({
-    fieldName: "studentName",
-    fieldLabel: "ПІБ",
-    value: "",
+    fieldName: 'studentName',
+    fieldLabel: 'ПІБ',
+    value: '',
   })
   const [printSettings, setPrintSettings] = React.useState(printSettingsInitialData)
   const [students, setStudents] = React.useState<GetAllSelectedPracticeBaseQuery | null>(null)
-  const [selectedStudents, setSelectedStudents] = React.useState<SelectedBasesOfPracticeEntity[]>(
-    []
-  )
+  const [selectedStudents, setSelectedStudents] = React.useState<SelectedBasesOfPracticeEntity[]>([])
 
   const fetchStudents = async () => {
     try {
@@ -61,12 +61,8 @@ const PrintPage = () => {
       try {
         const settings = await gql.GetSettings()
 
-        const {
-          startPracticeDate,
-          endPracticeDate,
-          currentPracticeType,
-          canStudentSelectPracticeBase,
-        } = settings.setting.data.attributes
+        const { startPracticeDate, endPracticeDate, currentPracticeType, canStudentSelectPracticeBase } =
+          settings.setting.data.attributes
 
         setPrintSettings((prev) => ({
           ...prev,
@@ -78,8 +74,8 @@ const PrintPage = () => {
           currentPracticeType: currentPracticeType.data.attributes.name,
         }))
       } catch (error) {
-        alert("Error")
-        console.log("Error")
+        alert('Error')
+        console.log('Error')
       }
     }
 
@@ -88,36 +84,23 @@ const PrintPage = () => {
 
   const onChangePrintData = (
     e: dayjs.Dayjs | null,
-    type: "year" | "number" | "startDate" | "endDate",
+    type: 'year' | 'number' | 'startDate' | 'endDate',
     value?: number
   ) => {
-    if (type === "year") {
-      const practiceDirectionYear = dayjs(e).format("YYYY")
+    if (type === 'year') {
+      const practiceDirectionYear = dayjs(e).format('YYYY')
       setPrintSettings((prev) => ({ ...prev, practiceDirectionYear }))
       return
     }
 
-    if (value && type === "number") {
+    if (value && type === 'number') {
       setPrintSettings((prev) => ({ ...prev, practiceDirectionNumber: value }))
       return
     }
+  }
 
-    // if (type === 'startDate') {
-    //   const date = dayjs(e).format('YYYY-MM-DD')
-    //   setPrintSettings((prev) => ({
-    //     ...prev,
-    //     termOfPractice: { ...prev.termOfPractice, start: date },
-    //   }))
-    //   return
-    // }
-
-    // if (type === 'endDate') {
-    //   const date = dayjs(e).format('YYYY-MM-DD')
-    //   setPrintSettings((prev) => ({
-    //     ...prev,
-    //     termOfPractice: { ...prev.termOfPractice, end: date },
-    //   }))
-    // }
+  if (user && user.access !== 'owner') {
+    navigate('/auth')
   }
 
   return (
@@ -131,12 +114,7 @@ const PrintPage = () => {
         onChangePrintData={onChangePrintData}
       />
 
-      <StudentsFilter
-        filter={filter}
-        setFilter={setFilter}
-        isLoading={isLoading}
-        fetchStudents={fetchStudents}
-      />
+      <StudentsFilter filter={filter} setFilter={setFilter} isLoading={isLoading} fetchStudents={fetchStudents} />
 
       <StudentsTableBody
         filter={filter}
