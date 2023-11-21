@@ -1468,10 +1468,13 @@ export type GetAllGroupsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetAllGroupsQuery = { readonly __typename?: 'Query', readonly groups: { readonly __typename?: 'GroupEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'GroupEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Group', readonly name: string, readonly courseNumber: number } }> } };
 
-export type GetAllPharmaciesQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetAllPharmaciesQueryVariables = Exact<{
+  currentPage?: InputMaybe<Scalars['Int']['input']>;
+  pageSize?: InputMaybe<Scalars['Int']['input']>;
+}>;
 
 
-export type GetAllPharmaciesQuery = { readonly __typename?: 'Query', readonly pharmacies: { readonly __typename?: 'PharmacyEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'PharmacyEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Pharmacy', readonly name: string, readonly city: string, readonly address: string, readonly places: number, readonly legalName: string, readonly number: number } }> } };
+export type GetAllPharmaciesQuery = { readonly __typename?: 'Query', readonly pharmacies: { readonly __typename?: 'PharmacyEntityResponseCollection', readonly meta: { readonly __typename?: 'ResponseCollectionMeta', readonly pagination: { readonly __typename?: 'Pagination', readonly total: number, readonly page: number, readonly pageSize: number, readonly pageCount: number } }, readonly data: ReadonlyArray<{ readonly __typename?: 'PharmacyEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Pharmacy', readonly name: string, readonly city: string, readonly address: string, readonly places: number, readonly legalName: string, readonly number: number } }> } };
 
 export type GetAllPharmacyIdsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1484,10 +1487,12 @@ export type GetAllSelectedPracticeBaseQueryVariables = Exact<{
   pharmacyName: InputMaybe<Scalars['String']['input']>;
   pharmacyCity: InputMaybe<Scalars['String']['input']>;
   pharmacyAddress: InputMaybe<Scalars['String']['input']>;
+  currentPage?: InputMaybe<Scalars['Int']['input']>;
+  pageSize?: InputMaybe<Scalars['Int']['input']>;
 }>;
 
 
-export type GetAllSelectedPracticeBaseQuery = { readonly __typename?: 'Query', readonly selectedBasesOfPractices: { readonly __typename?: 'SelectedBasesOfPracticeEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'SelectedBasesOfPracticeEntity', readonly id: string, readonly attributes: { readonly __typename?: 'SelectedBasesOfPractice', readonly student: { readonly __typename?: 'StudentEntityResponse', readonly data: { readonly __typename?: 'StudentEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Student', readonly name: string, readonly phone: string, readonly middleName: string, readonly group: { readonly __typename?: 'GroupRelationResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'GroupEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Group', readonly name: string, readonly courseNumber: number } }> } } } }, readonly pharmacy: { readonly __typename?: 'PharmacyEntityResponse', readonly data: { readonly __typename?: 'PharmacyEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Pharmacy', readonly name: string, readonly city: string, readonly number: number, readonly address: string, readonly legalName: string, readonly contractNumber: string, readonly headOfPractice: string } } } } }> } };
+export type GetAllSelectedPracticeBaseQuery = { readonly __typename?: 'Query', readonly selectedBasesOfPractices: { readonly __typename?: 'SelectedBasesOfPracticeEntityResponseCollection', readonly meta: { readonly __typename?: 'ResponseCollectionMeta', readonly pagination: { readonly __typename?: 'Pagination', readonly total: number, readonly page: number, readonly pageSize: number, readonly pageCount: number } }, readonly data: ReadonlyArray<{ readonly __typename?: 'SelectedBasesOfPracticeEntity', readonly id: string, readonly attributes: { readonly __typename?: 'SelectedBasesOfPractice', readonly student: { readonly __typename?: 'StudentEntityResponse', readonly data: { readonly __typename?: 'StudentEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Student', readonly name: string, readonly phone: string, readonly middleName: string, readonly group: { readonly __typename?: 'GroupRelationResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'GroupEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Group', readonly name: string, readonly courseNumber: number } }> } } } }, readonly pharmacy: { readonly __typename?: 'PharmacyEntityResponse', readonly data: { readonly __typename?: 'PharmacyEntity', readonly id: string, readonly attributes: { readonly __typename?: 'Pharmacy', readonly name: string, readonly city: string, readonly number: number, readonly address: string, readonly legalName: string, readonly contractNumber: string, readonly headOfPractice: string } } } } }> } };
 
 export type GetAllStudentsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1717,8 +1722,19 @@ export const GetAllGroupsDocument = gql`
 }
     `;
 export const GetAllPharmaciesDocument = gql`
-    query GetAllPharmacies {
-  pharmacies(pagination: {pageSize: 5000}, filters: {places: {notIn: 0}}) {
+    query GetAllPharmacies($currentPage: Int = 1, $pageSize: Int = 10) {
+  pharmacies(
+    pagination: {page: $currentPage, pageSize: $pageSize}
+    filters: {places: {notIn: 0}}
+  ) {
+    meta {
+      pagination {
+        total
+        page
+        pageSize
+        pageCount
+      }
+    }
     data {
       id
       attributes {
@@ -1743,11 +1759,19 @@ export const GetAllPharmacyIdsDocument = gql`
 }
     `;
 export const GetAllSelectedPracticeBaseDocument = gql`
-    query GetAllSelectedPracticeBase($studentName: String, $studentGroup: String, $pharmacyName: String, $pharmacyCity: String, $pharmacyAddress: String) {
+    query GetAllSelectedPracticeBase($studentName: String, $studentGroup: String, $pharmacyName: String, $pharmacyCity: String, $pharmacyAddress: String, $currentPage: Int = 1, $pageSize: Int = 10) {
   selectedBasesOfPractices(
-    pagination: {pageSize: 10000}
+    pagination: {page: $currentPage, pageSize: $pageSize}
     filters: {student: {name: {contains: $studentName}, group: {name: {eq: $studentGroup}}}, pharmacy: {name: {contains: $pharmacyName}, city: {contains: $pharmacyCity}, address: {contains: $pharmacyAddress}}}
   ) {
+    meta {
+      pagination {
+        total
+        page
+        pageSize
+        pageCount
+      }
+    }
     data {
       id
       attributes {

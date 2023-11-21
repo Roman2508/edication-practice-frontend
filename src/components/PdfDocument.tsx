@@ -150,7 +150,7 @@ export const PdfDocument: React.FC<IPdfDocumentProps> = ({ selectedStudents, pri
 
         const text = `аптеки ${number ? `№ ${number}` : ""} «${pharmacyName}» ${
           headOfPractice ? headOfPractice : ""
-        } ${legalName ? legalName : ""}`
+        } ${legalName && legalName !== "-" ? legalName : ""}`
 
         return (
           <Page size="A4" style={styles.page} key={student.id}>

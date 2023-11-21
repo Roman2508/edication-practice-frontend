@@ -1,5 +1,17 @@
-query GetAllPharmacies {
-  pharmacies(pagination: { pageSize: 5000 }, filters: { places: { notIn: 0 } }) {
+query GetAllPharmacies($currentPage: Int = 1, $pageSize: Int = 10) {
+  pharmacies(
+    pagination: { page: $currentPage, pageSize: $pageSize }
+    filters: { places: { notIn: 0 } }
+  ) {
+    meta {
+      pagination {
+        total
+        page
+        pageSize
+        pageCount
+      }
+    }
+
     data {
       id
       attributes {

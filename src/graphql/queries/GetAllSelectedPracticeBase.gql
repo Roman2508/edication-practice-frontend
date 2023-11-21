@@ -4,9 +4,11 @@ query GetAllSelectedPracticeBase(
   $pharmacyName: String
   $pharmacyCity: String
   $pharmacyAddress: String
+  $currentPage: Int = 1
+  $pageSize: Int = 10
 ) {
   selectedBasesOfPractices(
-    pagination: { pageSize: 10000 }
+    pagination: { page: $currentPage, pageSize: $pageSize }
     filters: {
       student: { name: { contains: $studentName }, group: { name: { eq: $studentGroup } } }
       pharmacy: {
@@ -16,6 +18,15 @@ query GetAllSelectedPracticeBase(
       }
     }
   ) {
+    meta {
+      pagination {
+        total
+        page
+        pageSize
+        pageCount
+      }
+    }
+
     data {
       id
       attributes {

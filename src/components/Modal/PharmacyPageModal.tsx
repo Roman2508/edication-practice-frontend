@@ -90,7 +90,7 @@ export const PharmacyPageModal: React.FC<IModalProps> = ({
 
       setAlert({
         isShow: true,
-        message: "Базу практики успішно вибрано :)",
+        message: "Базу практики успішно вибрано!",
         severity: "success",
       })
       navigate("/selected")

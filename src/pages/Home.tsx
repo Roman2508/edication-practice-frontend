@@ -20,6 +20,8 @@ const initialFilterData = {
 
 export const Home = () => {
   const [isLoading, setIsLoading] = React.useState(false)
+  const [currentPage, setCurrentPage] = React.useState(1)
+  const [pagesCount, setPagesCount] = React.useState(1)
   const [pharmacies, setPharmacies] = React.useState<PharmacyEntity[]>([])
   const [filter, setFilter] = React.useState<IPharmacyFilter>(initialFilterData)
 
@@ -27,9 +29,10 @@ export const Home = () => {
     const fetchData = async () => {
       try {
         setIsLoading(true)
-        const res = await gql.GetAllPharmacies()
+        const res = await gql.GetAllPharmacies({ currentPage: currentPage, pageSize: 20 })
         // @ts-ignore
         setPharmacies(res.pharmacies.data)
+        setPagesCount(res.pharmacies.meta.pagination.pageCount)
       } catch (err) {
         console.log(err)
       } finally {
@@ -38,7 +41,7 @@ export const Home = () => {
     }
 
     fetchData()
-  }, [])
+  }, [currentPage])
 
   return (
     <div>
@@ -56,8 +59,10 @@ export const Home = () => {
         filter={filter}
         setFilter={setFilter}
         isLoading={isLoading}
+        pagesCount={pagesCount}
         setIsLoading={setIsLoading}
         setPharmacies={setPharmacies}
+        setCurrentPage={setCurrentPage}
       />
       <PharmacyTable pharmacies={pharmacies} isLoading={isLoading} />
     </div>

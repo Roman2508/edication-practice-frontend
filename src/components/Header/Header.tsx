@@ -1,12 +1,12 @@
-import React from 'react'
-import AppBar from '@mui/material/AppBar'
-import { googleLogout } from '@react-oauth/google'
-import { Link, useNavigate } from 'react-router-dom'
-import { IconButton, Menu, MenuItem, Toolbar, Typography } from '@mui/material'
+import React from "react"
+import AppBar from "@mui/material/AppBar"
+import { googleLogout } from "@react-oauth/google"
+import { Link, useNavigate } from "react-router-dom"
+import { IconButton, Menu, MenuItem, Stack, Toolbar, Typography } from "@mui/material"
 
-import { AppContext } from '../../App'
-import styles from './Header.module.css'
-import logo from '../../assets/logo.png'
+import { AppContext } from "../../App"
+import styles from "./Header.module.css"
+import logo from "../../assets/logo.png"
 
 export const Header = () => {
   const navigate = useNavigate()
@@ -24,17 +24,18 @@ export const Header = () => {
   }
 
   const logout = () => {
-    if (window.confirm('Ви дійсно хочете вийти з акаунта?')) {
-      window.localStorage.removeItem('pharm-practice')
+    if (window.confirm("Ви дійсно хочете вийти з акаунта?")) {
+      window.localStorage.removeItem("pharm-practice")
       googleLogout()
       handleClose()
-      navigate('/auth')
+      navigate("/auth")
     }
   }
 
   return (
     <div /* position="static" */ className={styles.header}>
-      <Toolbar>
+      <Toolbar /* sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }} */
+      >
         <Typography sx={{ flexGrow: 1 }}>
           <Link to="/">
             <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
@@ -43,8 +44,20 @@ export const Header = () => {
           </Link>
         </Typography>
 
+        {/* <Stack sx={{ display: "flex", flexDirection: "row" }}>
+          <Typography sx={{ color: "#ddd", margin: "0 32px 0 64px" }}>
+            <Link to="/">Головна</Link>
+          </Typography>
+          <Typography sx={{ color: "#ddd", marginRight: "32px" }}>
+            <Link to="/print">Друк</Link>
+          </Typography>
+          <Typography sx={{ color: "#ddd" }}>
+            <Link to="/settings">Налаштування</Link>
+          </Typography>
+        </Stack> */}
+
         {user && user.name && (
-          <div className={styles['account-wrapper']}>
+          <div className={styles["account-wrapper"]}>
             <Typography>{user.name}</Typography>
 
             <IconButton
@@ -62,26 +75,26 @@ export const Header = () => {
               id="menu-appbar"
               anchorEl={anchorEl}
               anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
+                vertical: "top",
+                horizontal: "right",
               }}
               keepMounted
               transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
+                vertical: "top",
+                horizontal: "right",
               }}
               open={Boolean(anchorEl)}
               onClose={handleClose}
             >
-              {user.access === 'owner' && (
-                <>
-                  <Link to="/print">
-                    <MenuItem onClick={handleClose}>Друк</MenuItem>
-                  </Link>
-                  <Link to="/settings">
-                    <MenuItem onClick={handleClose}>Налаштування</MenuItem>
-                  </Link>
-                </>
+              {user.access === "owner" && (
+                <Link to="/print">
+                  <MenuItem onClick={handleClose}>Друк</MenuItem>
+                </Link>
+              )}
+              {user.access === "owner" && (
+                <Link to="/settings">
+                  <MenuItem onClick={handleClose}>Налаштування</MenuItem>
+                </Link>
               )}
 
               <MenuItem onClick={logout}>Вихід</MenuItem>

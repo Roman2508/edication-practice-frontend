@@ -1,7 +1,7 @@
 import React from "react"
 import { Alert, IconButton } from "@mui/material"
 import CloseIcon from "@mui/icons-material/Close"
-import { Routes, Route, useNavigate } from "react-router-dom"
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom"
 
 import { Home } from "./pages/Home"
 import { gql } from "./graphql/client"
@@ -40,6 +40,7 @@ export const AppContext = React.createContext<IAppContext>(appInitialData)
 const App = () => {
   const auth = getAuthData()
   const navigate = useNavigate()
+  const { pathname } = useLocation()
 
   const [alert, setAlert] = React.useState({
     isShow: false,
@@ -61,7 +62,7 @@ const App = () => {
         const responce = await gql.GetMe({ id: auth.id })
 
         if (!responce.students.data[0]) {
-          window.alert("404 error!")
+          navigate("/auth")
           return
         }
 
@@ -98,6 +99,9 @@ const App = () => {
   React.useEffect(() => {
     if (!canUserChoosePracticeBase) {
       navigate("/selected")
+    }
+    if (pathname === "/selected" && canUserChoosePracticeBase) {
+      navigate("/")
     }
   }, [canUserChoosePracticeBase])
 
