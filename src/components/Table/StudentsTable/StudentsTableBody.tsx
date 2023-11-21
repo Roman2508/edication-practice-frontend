@@ -1,23 +1,19 @@
-import React from "react"
-import Box from "@mui/material/Box"
-import Paper from "@mui/material/Paper"
-import Table from "@mui/material/Table"
-import Checkbox from "@mui/material/Checkbox"
-import TableRow from "@mui/material/TableRow"
-import TableBody from "@mui/material/TableBody"
-import TableCell from "@mui/material/TableCell"
-import TableHead from "@mui/material/TableHead"
-import TableContainer from "@mui/material/TableContainer"
-import CircularProgress from "@mui/material/CircularProgress"
+import React from 'react'
+import Box from '@mui/material/Box'
+import Paper from '@mui/material/Paper'
+import Table from '@mui/material/Table'
+import Checkbox from '@mui/material/Checkbox'
+import TableRow from '@mui/material/TableRow'
+import TableBody from '@mui/material/TableBody'
+import TableCell from '@mui/material/TableCell'
+import TableHead from '@mui/material/TableHead'
+import TableContainer from '@mui/material/TableContainer'
+import CircularProgress from '@mui/material/CircularProgress'
 
-import { EmptyRow } from "../EmptyRow"
-import { StudentsTableToolbar } from "./StudentsTableToolbar"
-import { printSettingsInitialData } from "../../../pages/PrintPage"
-import {
-  GetAllSelectedPracticeBaseQuery,
-  SelectedBasesOfPracticeEntity,
-  gql,
-} from "../../../graphql/client"
+import { EmptyRow } from '../EmptyRow'
+import { StudentsTableToolbar } from './StudentsTableToolbar'
+import { printSettingsInitialData } from '../../../pages/PrintPage'
+import { GetAllSelectedPracticeBaseQuery, SelectedBasesOfPracticeEntity } from '../../../graphql/client'
 
 interface IStudentsTableProps {
   isLoading: boolean
@@ -26,12 +22,10 @@ interface IStudentsTableProps {
   students: GetAllSelectedPracticeBaseQuery | null
   selectedStudents: SelectedBasesOfPracticeEntity[]
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
-  filter: { fieldName: string; fieldLabel: string; value: string }
   setSelectedStudents: React.Dispatch<React.SetStateAction<SelectedBasesOfPracticeEntity[]>>
 }
 
 export const StudentsTableBody: React.FC<IStudentsTableProps> = ({
-  filter,
   setOpen,
   students,
   isLoading,
@@ -40,26 +34,10 @@ export const StudentsTableBody: React.FC<IStudentsTableProps> = ({
   selectedStudents,
   setSelectedStudents,
 }) => {
-  // const [isLoading, setIsLoading] = React.useState(false)
   const [selected, setSelected] = React.useState<readonly number[]>([])
-  // const [data, setData] = React.useState<GetAllSelectedPracticeBaseQuery | null>(null)
 
   React.useEffect(() => {
     fetchStudents()
-
-    // const fetchData = async () => {
-    //   try {
-    //     setIsLoading(true)
-    //     const data = await gql.GetAllSelectedPracticeBase()
-    //     setData(data)
-    //   } catch (err) {
-    //     console.log(err)
-    //   } finally {
-    //     setIsLoading(false)
-    //   }
-    // }
-
-    // fetchData()
   }, [])
 
   const handleClick = (id: number) => {
@@ -73,10 +51,7 @@ export const StudentsTableBody: React.FC<IStudentsTableProps> = ({
     } else if (selectedIndex === selected.length - 1) {
       newSelected = newSelected.concat(selected.slice(0, -1))
     } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      )
+      newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1))
     }
     setSelected(newSelected)
   }
@@ -95,11 +70,6 @@ export const StudentsTableBody: React.FC<IStudentsTableProps> = ({
     })
   }
 
-  //   const onClearSelected = () => {
-  //     setSelectedStudents([])
-  //     setSelected([])
-  //   }
-
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!students) return
 
@@ -112,7 +82,7 @@ export const StudentsTableBody: React.FC<IStudentsTableProps> = ({
   }
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} sx={{ boxShadow: 0 }}>
       <StudentsTableToolbar
         setOpen={setOpen}
         printSettings={printSettings}
@@ -161,18 +131,19 @@ export const StudentsTableBody: React.FC<IStudentsTableProps> = ({
                   <TableRow
                     key={row.id}
                     role="checkbox"
-                    sx={{ cursor: "pointer" }}
+                    sx={{ cursor: 'pointer' }}
                     selected={isItemSelected}
                     aria-checked={isItemSelected}
                     /* @ts-ignore */
                     onClick={() => onSelectStudents(row)}
+                    className="table-row"
                   >
                     <TableCell padding="checkbox">
                       <Checkbox
                         color="primary"
                         checked={isItemSelected}
                         inputProps={{
-                          "aria-labelledby": labelId,
+                          'aria-labelledby': labelId,
                         }}
                       />
                     </TableCell>
@@ -195,7 +166,7 @@ export const StudentsTableBody: React.FC<IStudentsTableProps> = ({
           ) : (
             <TableRow>
               <TableCell colSpan={6}>
-                <Box sx={{ display: "flex", justifyContent: "center", padding: "60px 0" }}>
+                <Box sx={{ display: 'flex', justifyContent: 'center', padding: '60px 0' }}>
                   <CircularProgress />
                 </Box>
               </TableCell>

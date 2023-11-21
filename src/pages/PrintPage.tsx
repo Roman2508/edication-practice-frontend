@@ -117,7 +117,6 @@ const PrintPage = () => {
       <StudentsFilter filter={filter} setFilter={setFilter} isLoading={isLoading} fetchStudents={fetchStudents} />
 
       <StudentsTableBody
-        filter={filter}
         setOpen={setOpen}
         students={students}
         isLoading={isLoading}

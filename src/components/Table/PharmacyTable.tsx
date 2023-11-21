@@ -19,8 +19,8 @@ interface IPharmacyTableProps {
 
 export const PharmacyTable: React.FC<IPharmacyTableProps> = ({ pharmacies, isLoading }) => {
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="table">
+    <TableContainer component={Paper} sx={{ boxShadow: 0 }}>
+      <Table sx={{ minWidth: 650, boxShadow: 0 }} aria-label="table">
         <TableHead>
           <TableRow>
             <TableCell>Мережа аптек</TableCell>
@@ -46,7 +46,7 @@ export const PharmacyTable: React.FC<IPharmacyTableProps> = ({ pharmacies, isLoa
           {!isLoading &&
             !!pharmacies.length &&
             pharmacies.map((row: PharmacyEntity) => (
-              <TableRow component={Link} to={`/pharmacy/${row.id}`}>
+              <TableRow component={Link} to={`/pharmacy/${row.id}`} className="table-row">
                 <TableCell component="th" scope="row">
                   {row.attributes.name}
                 </TableCell>
@@ -60,30 +60,3 @@ export const PharmacyTable: React.FC<IPharmacyTableProps> = ({ pharmacies, isLoa
     </TableContainer>
   )
 }
-
-/* 
-{isLoading ? (
-    pharmacies && pharmacies.length ? (
-      pharmacies.map((row: PharmacyEntity) => (
-        <TableRow key={row.id} component={Link} to={`/pharmacy/${row.id}`}>
-          <TableCell component="th" scope="row">
-            {row.attributes.name}
-          </TableCell>
-          <TableCell align="left">{row.attributes.city}</TableCell>
-          <TableCell align="left">{row.attributes.address}</TableCell>
-          <TableCell align="left">{row.attributes.places}</TableCell>
-        </TableRow>
-      ))
-    ) : (
-      <EmptyRow colSpan={6} />
-    )
-  ) : (
-    <TableRow>
-      <TableCell colSpan={4}>
-        <Box sx={{ display: "flex", justifyContent: "center", padding: "60px 0" }}>
-          <CircularProgress />
-        </Box>
-      </TableCell>
-    </TableRow>
-)} 
-*/

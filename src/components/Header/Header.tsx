@@ -7,65 +7,13 @@ import { IconButton, Menu, MenuItem, Toolbar, Typography } from '@mui/material'
 import { AppContext } from '../../App'
 import styles from './Header.module.css'
 import logo from '../../assets/logo.png'
-// import { getAuthData } from '../../utils/getAuthData'
-// import { IAuthData } from '../GoogleLogin/GoogleLogin'
-// import { gql } from '../../graphql/client'
 
 export const Header = () => {
   const navigate = useNavigate()
 
   const { user } = React.useContext(AppContext)
 
-  // const initialAuthData: IAuthData = {
-  //   id: '',
-  //   name: '',
-  //   middleName: '',
-  //   email: '',
-  //   picture: '',
-  //   access: 'student',
-  //   group: { name: '', courseNumber: 1 },
-  // }
-
-  // const [auth, setAuth] = React.useState<IAuthData>(initialAuthData)
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
-
-  // React.useEffect(() => {
-  //   const data = getAuthData()
-
-  //   if (data && data.id) {
-  //     const fetchData = async () => {
-  //       const responce = await gql.GetMe({ id: data.id })
-
-  //       if (!responce.students.data[0]) {
-  //         alert('404 error!')
-  //         return
-  //       }
-
-  //       const { name, middleName, email, access, picture, group } = responce.students.data[0].attributes
-
-  //       const groupData = group.data[0]
-  //         ? { name: group.data[0].attributes.name, courseNumber: group.data[0].attributes.courseNumber }
-  //         : null
-
-  //       const me = {
-  //         name,
-  //         email,
-  //         access,
-  //         picture,
-  //         middleName,
-  //         id: data.id,
-  //         group: groupData,
-  //       }
-
-  //       window.localStorage.setItem('pharm-practice', JSON.stringify(me))
-
-  //       setAuth(me)
-  //     }
-  //     fetchData()
-  //   } else {
-  //     navigate('/auth')
-  //   }
-  // }, [])
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
@@ -85,7 +33,7 @@ export const Header = () => {
   }
 
   return (
-    <AppBar position="static">
+    <div /* position="static" */ className={styles.header}>
       <Toolbar>
         <Typography sx={{ flexGrow: 1 }}>
           <Link to="/">
@@ -141,6 +89,6 @@ export const Header = () => {
           </div>
         )}
       </Toolbar>
-    </AppBar>
+    </div>
   )
 }

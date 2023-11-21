@@ -246,7 +246,8 @@ export const SettingsPage = () => {
   }
 
   return (
-    <Paper elevation={3} className={styles.wrapper}>
+    // <Paper elevation={3} className={styles.wrapper}>
+    <div className={styles.wrapper}>
       <input type="file" ref={fileRef} onChange={handleChangeUpload} style={{ display: 'none' }} />
       <Button
         variant="outlined"
@@ -319,6 +320,6 @@ export const SettingsPage = () => {
       <Button variant="contained" disabled={isSaving} onClick={saveChanges}>
         {isSaving ? 'Збереження...' : 'Зберегти зміни'}
       </Button>
-    </Paper>
+    </div>
   )
 }
