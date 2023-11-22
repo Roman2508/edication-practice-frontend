@@ -9,8 +9,9 @@ import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import CircularProgress from '@mui/material/CircularProgress'
 
-import { EmptyRow } from './EmptyRow'
-import { PharmacyEntity } from '../../graphql/__generated__'
+import { EmptyRow } from '../EmptyRow'
+import styles from '../Table.module.css'
+import { PharmacyEntity } from '../../../graphql/__generated__'
 
 interface IPharmacyTableProps {
   pharmacies: PharmacyEntity[]
@@ -20,7 +21,7 @@ interface IPharmacyTableProps {
 export const PharmacyTable: React.FC<IPharmacyTableProps> = ({ pharmacies, isLoading }) => {
   return (
     <TableContainer component={Paper} sx={{ boxShadow: 0 }}>
-      <Table sx={{ minWidth: 650, boxShadow: 0 }} aria-label="table">
+      <Table sx={{ boxShadow: 0 }} aria-label="table" className={styles.table}>
         <TableHead>
           <TableRow>
             <TableCell>Мережа аптек</TableCell>

@@ -1,5 +1,5 @@
 .header {
-  position: fixed;
+  /* position: fixed; */
   z-index: 9;
   top: 0px;
   width: calc(100% - 64px);
@@ -24,4 +24,19 @@
   width: 28px;
   height: 28px;
   border-radius: 50%;
+}
+
+@media (max-width: 640px) {
+  .header {
+    width: calc(100% - 32px);
+    margin: 16px;
+  }
+}
+
+@media (max-width: 540px) {
+  .header {
+    width: 100%;
+    margin: 0;
+    border-radius: 0;
+  }
 }

@@ -1,7 +1,7 @@
-import React from "react"
-import { PharmacyEntity, gql } from "../graphql/client"
-import { PharmacyTable } from "../components/Table/PharmacyTable"
-import { PharmacyFilter } from "../components/Filter/PharmacyFilter"
+import React from 'react'
+import { PharmacyEntity, gql } from '../graphql/client'
+import { PharmacyTable } from '../components/Table/PharmacyTable/PharmacyTable'
+import { PharmacyFilter } from '../components/Filter/PharmacyFilter'
 
 // import { PdfDocument } from "../components/PdfDocument"
 // import { PDFViewer, PDFDownloadLink } from "@react-pdf/renderer"
@@ -13,9 +13,9 @@ export interface IPharmacyFilter {
 }
 
 const initialFilterData = {
-  name: "",
-  city: "",
-  address: "",
+  name: '',
+  city: '',
+  address: '',
 }
 
 export const Home = () => {
@@ -44,16 +44,16 @@ export const Home = () => {
   }, [currentPage])
 
   return (
-    <div>
-      <div className="pdf-iframe">
-        {/* <PDFViewer>
+    <>
+      {/*  <div className="pdf-iframe">
+        <PDFViewer>
         <PdfDocument />
         </PDFViewer>
         
         <PDFDownloadLink document={<PdfDocument />} fileName="somename.pdf">
         {({ blob, url, loading, error }) => (loading ? 'Loading document...' : 'Download now!')}
-      </PDFDownloadLink> */}
-      </div>
+      </PDFDownloadLink> 
+      </div>*/}
 
       <PharmacyFilter
         filter={filter}
@@ -65,6 +65,6 @@ export const Home = () => {
         setCurrentPage={setCurrentPage}
       />
       <PharmacyTable pharmacies={pharmacies} isLoading={isLoading} />
-    </div>
+    </>
   )
 }

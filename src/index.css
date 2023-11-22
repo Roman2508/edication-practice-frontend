@@ -17,9 +17,6 @@
 html,
 body {
   overflow-x: hidden;
-  /* background-color: #d3e3fd; */
-  /* background-color: #f4f9ff; */
-  /* background-color: var(--light-blue); */
 }
 
 body {
@@ -36,31 +33,23 @@ body {
 }
 
 .layout {
-  margin-top: 100px;
-  padding: 40px 0 10px;
+  padding: 0 0 10px;
   border-top-left-radius: 60px;
   border-top-right-radius: 60px;
-  min-height: calc(100vh - 100px);
+  min-height: calc(100vh - 167px);
   height: 100%;
-  /* background-color: #fff; */
 }
 .container-wrapper {
   background-color: #fff;
   border-radius: 8px;
-  /* border-radius: 60px; */
   box-shadow: 0 0 15px gray;
   margin: 0 32px 32px;
 }
 .container {
-  /* background-color: #fff; */
   max-width: 1300px;
-  /* padding: 0 20px; */
   position: relative;
-
   padding: 40px;
   margin: 0 auto;
-  /* border-radius: 40px; */
-  /* box-shadow: 0 0 15px gray; */
 }
 
 .test {
@@ -98,9 +87,8 @@ body {
 }
 
 .back-button span {
-  /* color: rgba(0, 0, 0, 0.8); */
   color: var(--gray);
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-weight: 700;
   font-size: 20px;
 }
@@ -120,31 +108,25 @@ body {
   cursor: pointer;
   transition: all 0.3s linear;
 }
-/* 
-.outlined-button {
-  border-radius: 16px;
-  background: #fff;
-  color: black;
-  padding: 8px 16px;
-  transition: all 0.3s linear;
-}
-.outlined-button:hover {
-  background: var(--root-bg-color);
-  background: var(--root-bg-gradient);
-  transition: all 0.3s linear;
-}
-.outlined-button:hover .outlined-button-text {
-  transition: all 0.3s linear;
-  background: transparent;
-  color: white;
-  -webkit-text-fill-color: white;
+
+@media (max-width: 640px) {
+  .container {
+    padding: 32px 16px;
+  }
+  .container-wrapper {
+    margin: 0 16px 8px;
+  }
 }
 
-.outlined-button-text {
-  transition: all 0.3s linear;
-  font-size: 18px !important;
-  font-weight: 700 !important;
-  background: -webkit-linear-gradient(90deg, rgba(19, 173, 163, 1) 0%, rgba(102, 92, 206, 1) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-} */
+@media (max-width: 540px) {
+  .container {
+    padding: 32px 8px;
+  }
+  .layout {
+    padding: 0;
+  }
+  .container-wrapper {
+    margin: 0;
+    border-radius: 0;
+  }
+}
