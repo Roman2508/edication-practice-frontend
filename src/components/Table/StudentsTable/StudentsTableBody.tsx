@@ -1,22 +1,20 @@
-import React from "react"
-import Box from "@mui/material/Box"
-import Paper from "@mui/material/Paper"
-import Table from "@mui/material/Table"
-import Checkbox from "@mui/material/Checkbox"
-import TableRow from "@mui/material/TableRow"
-import TableBody from "@mui/material/TableBody"
-import TableCell from "@mui/material/TableCell"
-import TableHead from "@mui/material/TableHead"
-import TableContainer from "@mui/material/TableContainer"
-import CircularProgress from "@mui/material/CircularProgress"
+import React from 'react'
+import Box from '@mui/material/Box'
+import Paper from '@mui/material/Paper'
+import Table from '@mui/material/Table'
+import Checkbox from '@mui/material/Checkbox'
+import TableRow from '@mui/material/TableRow'
+import TableBody from '@mui/material/TableBody'
+import TableCell from '@mui/material/TableCell'
+import TableHead from '@mui/material/TableHead'
+import TableContainer from '@mui/material/TableContainer'
+import CircularProgress from '@mui/material/CircularProgress'
 
-import {
-  GetAllSelectedPracticeBaseQuery,
-  SelectedBasesOfPracticeEntity,
-} from "../../../graphql/client"
-import { EmptyRow } from "../EmptyRow"
-import { StudentsTableToolbar } from "./StudentsTableToolbar"
-import { printSettingsInitialData } from "../../../pages/PrintPage"
+import { EmptyRow } from '../EmptyRow'
+import styles from '../Table.module.css'
+import { StudentsTableToolbar } from './StudentsTableToolbar'
+import { printSettingsInitialData } from '../../../pages/PrintPage'
+import { GetAllSelectedPracticeBaseQuery, SelectedBasesOfPracticeEntity } from '../../../graphql/client'
 
 interface IStudentsTableProps {
   isLoading: boolean
@@ -48,10 +46,7 @@ export const StudentsTableBody: React.FC<IStudentsTableProps> = ({
     } else if (selectedIndex === selected.length - 1) {
       newSelected = newSelected.concat(selected.slice(0, -1))
     } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      )
+      newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1))
     }
     setSelected(newSelected)
   }
@@ -90,7 +85,7 @@ export const StudentsTableBody: React.FC<IStudentsTableProps> = ({
         selectedStudents={selectedStudents}
       />
 
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <Table sx={{ boxShadow: 0 }} aria-label="simple table" className={styles.table}>
         <TableHead>
           <TableRow>
             <TableCell padding="checkbox">
@@ -131,7 +126,7 @@ export const StudentsTableBody: React.FC<IStudentsTableProps> = ({
                   <TableRow
                     key={row.id}
                     role="checkbox"
-                    sx={{ cursor: "pointer" }}
+                    sx={{ cursor: 'pointer' }}
                     selected={isItemSelected}
                     aria-checked={isItemSelected}
                     /* @ts-ignore */
@@ -143,7 +138,7 @@ export const StudentsTableBody: React.FC<IStudentsTableProps> = ({
                         color="primary"
                         checked={isItemSelected}
                         inputProps={{
-                          "aria-labelledby": labelId,
+                          'aria-labelledby': labelId,
                         }}
                       />
                     </TableCell>
@@ -166,7 +161,7 @@ export const StudentsTableBody: React.FC<IStudentsTableProps> = ({
           ) : (
             <TableRow>
               <TableCell colSpan={6}>
-                <Box sx={{ display: "flex", justifyContent: "center", padding: "60px 0" }}>
+                <Box sx={{ display: 'flex', justifyContent: 'center', padding: '60px 0' }}>
                   <CircularProgress />
                 </Box>
               </TableCell>

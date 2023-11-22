@@ -49,4 +49,22 @@
   .button {
     width: 100% !important;
   }
+  .students-filter-wrapper {
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 100%;
+  }
+  .fields {
+    max-width: 100%;
+    width: 100%;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    margin-right: 0;
+  }
+  .button,
+  .textField,
+  .actions {
+    width: 100% !important;
+  }
 }

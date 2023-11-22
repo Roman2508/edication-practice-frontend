@@ -116,6 +116,10 @@ body {
   .container-wrapper {
     margin: 0 16px 8px;
   }
+  .alert {
+    right: 16px;
+    bottom: 16px;
+  }
 }
 
 @media (max-width: 540px) {
@@ -128,5 +132,6 @@ body {
   .container-wrapper {
     margin: 0;
     border-radius: 0;
+    min-height: calc(100vh - 67px);
   }
 }

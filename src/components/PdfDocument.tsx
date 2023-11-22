@@ -1,11 +1,11 @@
 import { Document, Page, Text, View, StyleSheet, Font, Image } from '@react-pdf/renderer'
 
 import logo from '../assets/logo-from-pdf.jpg'
+import { getPracticeTerm } from '../utils/getPracticeTerm'
 import { printSettingsInitialData } from '../pages/PrintPage'
 import TimesNewRomanNormal from '../assets/times-new-roman.ttf'
 import TimesNewRomanBold from '../assets/Times New Roman Bold.ttf'
 import { SelectedBasesOfPracticeEntity } from '../graphql/__generated__'
-import { getPracticeTerm } from '../utils/getPracticeTerm'
 
 Font.register({
   family: 'Times-New-Roman-Normal',
@@ -120,8 +120,6 @@ interface IPdfDocumentProps {
 
 // Create Document Component
 export const PdfDocument: React.FC<IPdfDocumentProps> = ({ selectedStudents, printSettings }) => {
-  // Керівнику аптеки № ТОВ "Фармавін"
-
   return (
     <Document style={styles.wrapper} language="ua">
       {selectedStudents.map((student, index) => {
@@ -135,9 +133,9 @@ export const PdfDocument: React.FC<IPdfDocumentProps> = ({ selectedStudents, pri
 
         const { group, name, middleName } = student.attributes.student.data.attributes
 
-        if (!group.data[0]) {
-          window.alert('Помилка друку. В одного або в декількох студентів не задано групу.')
-          return
+        const groupData = {
+          name: group.data[0] ? group.data[0].attributes.name : '-',
+          courseNumber: group.data[0] ? group.data[0].attributes.courseNumber : '-',
         }
 
         const { start, end } = getPracticeTerm(
@@ -148,9 +146,6 @@ export const PdfDocument: React.FC<IPdfDocumentProps> = ({ selectedStudents, pri
           printSettings.termOfPractice.end
         )
 
-        // const text = `аптеки ${number ? `№ ${number}` : ""} «${pharmacyName}» ${
-        //   headOfPractice ? headOfPractice : ""
-        // } ${legalName && legalName !== "-" ? legalName : ""}`
         const text = `аптеки ${number ? `№ ${number}` : ''} «${pharmacyName}» ${
           legalName && legalName !== '-' ? legalName : ''
         }`
@@ -212,8 +207,8 @@ export const PdfDocument: React.FC<IPdfDocumentProps> = ({ selectedStudents, pri
             <Text style={styles.subTitle}>/є підставою для зарахування на практику/</Text>
             <Text style={styles.defaultText}>
               Згідно із договором № {contractNumber} направляємо на практику здобувачку(а) освіти{' '}
-              {group.data[0].attributes.courseNumber} курсу, {group.data[0].attributes.name} групи, яка(ий) навчається
-              на ОПП «Фармація» спеціальності 226 Фармація, промислова фармація ОПС фаховий молодший бакалавр.
+              {groupData.courseNumber} курсу, {groupData.name} групи, яка(ий) навчається на ОПП «Фармація» спеціальності
+              226 Фармація, промислова фармація ОПС фаховий молодший бакалавр.
             </Text>
 
             <View style={{ ...styles.section, marginTop: 10 }}>

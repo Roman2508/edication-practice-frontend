@@ -96,10 +96,12 @@ export const PharmacyFilter: React.FC<IPharmacyFilterProps> = ({
       </div>
 
       <Pagination
+        hideNextButton
+        hidePrevButton
+        shape="rounded"
+        variant="outlined"
         count={pagesCount}
         sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}
-        variant="outlined"
-        shape="rounded"
         onChange={(_: React.ChangeEvent<unknown>, page: number) => setCurrentPage(page)}
       />
     </>

@@ -40,7 +40,7 @@
   min-height: 240px;
   background: transparent;
   border: 2px solid rgba(255, 255, 255, 0.5);
-  border-radius: 20px;
+  border-radius: 8px;
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
   background-color: #fff;
 }
@@ -58,6 +58,7 @@
 
 .practice {
   margin-bottom: 20px !important;
+  text-align: center;
 }
 
 .box {
@@ -114,7 +115,7 @@
   padding: 2px;
 }
 .phone-label::before {
-  content: "";
+  content: '';
   z-index: -1;
   position: absolute;
   top: 7px;
@@ -122,4 +123,21 @@
   width: 100%;
   height: 10px;
   background-color: white;
+}
+
+@media (max-width: 440px) {
+  .collage-name {
+    font-size: 20px;
+  }
+
+  .practice {
+    font-size: 16px !important;
+    font-weight: 400 !important;
+  }
+}
+
+@media (max-width: 375px) {
+  .collage-name {
+    font-size: 18px;
+  }
 }

@@ -22,3 +22,10 @@
   right: 20px;
   bottom: 20px;
 }
+
+@media (max-width: 768px) {
+  .wrapper {
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+}
