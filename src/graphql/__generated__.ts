@@ -1482,11 +1482,11 @@ export type GetAllPharmacyIdsQueryVariables = Exact<{ [key: string]: never; }>;
 export type GetAllPharmacyIdsQuery = { readonly __typename?: 'Query', readonly pharmacies: { readonly __typename?: 'PharmacyEntityResponseCollection', readonly data: ReadonlyArray<{ readonly __typename?: 'PharmacyEntity', readonly id: string }> } };
 
 export type GetAllSelectedPracticeBaseQueryVariables = Exact<{
-  studentName: InputMaybe<Scalars['String']['input']>;
-  studentGroup: InputMaybe<Scalars['String']['input']>;
-  pharmacyName: InputMaybe<Scalars['String']['input']>;
-  pharmacyCity: InputMaybe<Scalars['String']['input']>;
-  pharmacyAddress: InputMaybe<Scalars['String']['input']>;
+  studentName?: InputMaybe<Scalars['String']['input']>;
+  studentGroup?: InputMaybe<Scalars['String']['input']>;
+  pharmacyName?: InputMaybe<Scalars['String']['input']>;
+  pharmacyCity?: InputMaybe<Scalars['String']['input']>;
+  pharmacyAddress?: InputMaybe<Scalars['String']['input']>;
   currentPage?: InputMaybe<Scalars['Int']['input']>;
   pageSize?: InputMaybe<Scalars['Int']['input']>;
 }>;
@@ -1759,7 +1759,7 @@ export const GetAllPharmacyIdsDocument = gql`
 }
     `;
 export const GetAllSelectedPracticeBaseDocument = gql`
-    query GetAllSelectedPracticeBase($studentName: String, $studentGroup: String, $pharmacyName: String, $pharmacyCity: String, $pharmacyAddress: String, $currentPage: Int = 1, $pageSize: Int = 10) {
+    query GetAllSelectedPracticeBase($studentName: String = "", $studentGroup: String = "", $pharmacyName: String = "", $pharmacyCity: String = "", $pharmacyAddress: String = "", $currentPage: Int = 1, $pageSize: Int = 10) {
   selectedBasesOfPractices(
     pagination: {page: $currentPage, pageSize: $pageSize}
     filters: {student: {name: {contains: $studentName}, group: {name: {eq: $studentGroup}}}, pharmacy: {name: {contains: $pharmacyName}, city: {contains: $pharmacyCity}, address: {contains: $pharmacyAddress}}}

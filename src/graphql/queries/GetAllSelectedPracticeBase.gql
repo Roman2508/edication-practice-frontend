@@ -1,9 +1,9 @@
 query GetAllSelectedPracticeBase(
-  $studentName: String
-  $studentGroup: String
-  $pharmacyName: String
-  $pharmacyCity: String
-  $pharmacyAddress: String
+  $studentName: String = ""
+  $studentGroup: String = ""
+  $pharmacyName: String = ""
+  $pharmacyCity: String = ""
+  $pharmacyAddress: String = ""
   $currentPage: Int = 1
   $pageSize: Int = 10
 ) {

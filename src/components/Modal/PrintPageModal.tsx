@@ -48,7 +48,7 @@ export const PrintPageModal: React.FC<IModalProps> = ({
           document={<PdfDocument selectedStudents={selectedStudents} printSettings={printSettings} />}
           fileName="Направлення.pdf"
         >
-          {({ blob, url, loading, error }) =>
+          {({ /* blob, url, */ loading /* error */ }) =>
             loading ? <Button disabled>Завантаження...</Button> : <Button>Завантажити направлення</Button>
           }
         </PDFDownloadLink>
