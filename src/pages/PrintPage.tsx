@@ -51,6 +51,7 @@ const PrintPage = () => {
         setStudents(data)
         setPagesCount(data.selectedBasesOfPractices.meta.pagination.pageCount)
       } else {
+        // @ts-ignore
         const data = await gql.GetAllSelectedPracticeBase({
           currentPage,
           pageSize: 20,
