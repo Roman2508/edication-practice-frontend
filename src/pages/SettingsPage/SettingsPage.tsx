@@ -1,5 +1,5 @@
-import React from "react"
-import * as XLSX from "xlsx"
+import React from 'react'
+import * as XLSX from 'xlsx'
 import {
   Radio,
   Paper,
@@ -12,16 +12,16 @@ import {
   RadioGroup,
   FormControl,
   FormControlLabel,
-} from "@mui/material"
+} from '@mui/material'
 
-import { AppContext } from "../../App"
-import { Setting, gql } from "../../graphql/client"
-import styles from "./Settings.page.module.css"
-import DatePicker from "../../components/DatePicker"
-import emptyImg from "../../assets/empty-image.png"
-import dayjs from "dayjs"
-import { useNavigate } from "react-router-dom"
-import ContainedButton from "../../components/ContainedButton"
+import { AppContext } from '../../App'
+import { Setting, gql } from '../../graphql/client'
+import styles from './Settings.page.module.css'
+import DatePicker from '../../components/DatePicker'
+import emptyImg from '../../assets/empty-image.png'
+import dayjs from 'dayjs'
+import { useNavigate } from 'react-router-dom'
+import ContainedButton from '../../components/ContainedButton'
 
 interface IButtonDisabled {
   uploadPharmacies: boolean
@@ -47,9 +47,9 @@ export const SettingsPage = () => {
         // @ts-ignore
         setSettings(settings.setting.data.attributes)
 
-        setAlert({ isShow: true, message: "Завантажено", severity: "success" })
+        setAlert({ isShow: true, message: 'Завантажено', severity: 'success' })
       } catch (error) {
-        setAlert({ isShow: true, message: "Помилка при отриманні даних", severity: "error" })
+        setAlert({ isShow: true, message: 'Помилка при отриманні даних', severity: 'error' })
       } finally {
         setTimeout(() => {
           setAlert((prev) => ({ ...prev, isShow: false }))
@@ -85,7 +85,7 @@ export const SettingsPage = () => {
       if (e.target === null) return
 
       const data = e.target.result
-      let readedData = XLSX.read(data, { type: "binary" })
+      let readedData = XLSX.read(data, { type: 'binary' })
       const wsname = readedData.SheetNames[0]
       const ws = readedData.Sheets[wsname]
 
@@ -100,11 +100,11 @@ export const SettingsPage = () => {
 
           const obj = {
             number: element[0] || 0,
-            city: element[1] || "-",
-            address: element[2] || "-",
-            name: element[3] || "-",
-            contractNumber: element[4] || "-",
-            legalName: element[5] || "-",
+            city: element[1] || '-',
+            address: element[2] || '-',
+            name: element[3] || '-',
+            contractNumber: element[4] || '-',
+            legalName: element[5] || '-',
             places: element[6] || 1,
           }
 
@@ -119,14 +119,14 @@ export const SettingsPage = () => {
             await gql.CreatePharmacy(el)
             setAlert({
               isShow: true,
-              message: "Бази практик успішно завантажені",
-              severity: "success",
+              message: 'Бази практик успішно завантажені',
+              severity: 'success',
             })
           } catch (err) {
             setAlert({
               isShow: true,
-              message: "Помилка при завантажені баз практик",
-              severity: "error",
+              message: 'Помилка при завантажені баз практик',
+              severity: 'error',
             })
             console.log(err)
           } finally {
@@ -142,7 +142,7 @@ export const SettingsPage = () => {
   }
 
   const onDeleteAllPharmacies = async () => {
-    if (window.confirm("Ви дійсно хочете видалити всі бази практик?")) {
+    if (window.confirm('Ви дійсно хочете видалити всі бази практик?')) {
       try {
         setButtonDisabled((prev) => ({ ...prev, deletePharmacies: true }))
         const allPharmacyIds = await gql.GetAllPharmacyIds()
@@ -157,14 +157,14 @@ export const SettingsPage = () => {
 
         setAlert({
           isShow: true,
-          message: "Бази практик успішно видалені!",
-          severity: "success",
+          message: 'Бази практик успішно видалені!',
+          severity: 'success',
         })
       } catch (err) {
         setAlert({
           isShow: true,
-          message: "Помилка при видалені баз практик!",
-          severity: "error",
+          message: 'Помилка при видалені баз практик!',
+          severity: 'error',
         })
         console.log(err)
       } finally {
@@ -179,7 +179,7 @@ export const SettingsPage = () => {
   const saveChanges = async () => {
     if (!settings) return
 
-    if (window.confirm("Ви дійсно хочете зберегти зміни?")) {
+    if (window.confirm('Ви дійсно хочете зберегти зміни?')) {
       try {
         setIsSaving(true)
 
@@ -193,9 +193,9 @@ export const SettingsPage = () => {
         // @ts-ignore
         setSettings(newSettings.updateSetting.data.attributes)
 
-        setAlert({ isShow: true, message: "Налаштування збережені!", severity: "success" })
+        setAlert({ isShow: true, message: 'Налаштування збережені!', severity: 'success' })
       } catch (error) {
-        setAlert({ isShow: true, message: "Помилка при збереженні даних", severity: "error" })
+        setAlert({ isShow: true, message: 'Помилка при збереженні даних', severity: 'error' })
       } finally {
         setIsSaving(false)
 
@@ -206,11 +206,8 @@ export const SettingsPage = () => {
     }
   }
 
-  const onChangePracticeTerm = (
-    e: dayjs.Dayjs | null,
-    practiceDate: "startPracticeDate" | "endPracticeDate"
-  ) => {
-    const selectedDate = dayjs(e).format("YYYY-MM-DD")
+  const onChangePracticeTerm = (e: dayjs.Dayjs | null, practiceDate: 'startPracticeDate' | 'endPracticeDate') => {
+    const selectedDate = dayjs(e).format('YYYY-MM-DD')
     // @ts-ignore
     setSettings((prev) => {
       return { ...prev, [practiceDate]: selectedDate }
@@ -218,7 +215,7 @@ export const SettingsPage = () => {
   }
 
   const onChangeStudentSelectPracticeBase = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value === "true" ? true : false
+    const value = e.target.value === 'true' ? true : false
 
     // @ts-ignore
     setSettings((prev) => {
@@ -227,7 +224,7 @@ export const SettingsPage = () => {
   }
 
   const onChangePracticeType = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const data = e.target.value.split("_")
+    const data = e.target.value.split('_')
 
     // @ts-ignore
     setSettings((prev) => ({
@@ -236,14 +233,14 @@ export const SettingsPage = () => {
     }))
   }
 
-  if (user && user.access !== "owner") {
-    navigate("/auth")
+  if (user && user.access !== 'owner') {
+    navigate('/auth')
   }
 
   if (!settings) {
     return (
-      <Paper elevation={3} className={styles.wrapper} sx={{ alignItems: "center", boxShadow: 0 }}>
-        <img style={{ width: "200px" }} src={emptyImg} alt="empty" />
+      <Paper elevation={3} className={styles.wrapper} sx={{ alignItems: 'center', boxShadow: 0 }}>
+        <img style={{ width: '200px' }} src={emptyImg} alt="empty" />
         <Typography>Завантаження...</Typography>
       </Paper>
     )
@@ -252,14 +249,14 @@ export const SettingsPage = () => {
   return (
     // <Paper elevation={3} className={styles.wrapper}>
     <div className={styles.wrapper}>
-      <input type="file" ref={fileRef} onChange={handleChangeUpload} style={{ display: "none" }} />
+      <input type="file" ref={fileRef} onChange={handleChangeUpload} style={{ display: 'none' }} />
       <Button
         variant="outlined"
         disabled={buttonDisabled.uploadPharmacies}
         onClick={onClickUpload}
         className={styles.button}
       >
-        {buttonDisabled.uploadPharmacies ? "Завантаження..." : "Завантажити бази практик"}
+        {buttonDisabled.uploadPharmacies ? 'Завантаження...' : 'Завантажити бази практик'}
       </Button>
 
       <Button
@@ -269,14 +266,14 @@ export const SettingsPage = () => {
         onClick={onDeleteAllPharmacies}
         disabled={buttonDisabled.deletePharmacies}
       >
-        {buttonDisabled.uploadPharmacies ? "Видалення..." : "Видалити всі бази практик"}
+        {buttonDisabled.deletePharmacies ? 'Видалення...' : 'Видалити всі бази практик'}
       </Button>
 
       <Button variant="outlined" color="error" className={styles.button}>
         Видалити всіх студентів
       </Button>
 
-      <Divider sx={{ margin: "16px 0" }} />
+      <Divider sx={{ margin: '16px 0' }} />
 
       <FormControl>
         <FormLabel id="demo-radio-buttons-group-label">
@@ -292,23 +289,17 @@ export const SettingsPage = () => {
         </RadioGroup>
       </FormControl>
 
-      <Divider sx={{ margin: "16px 0" }} />
+      <Divider sx={{ margin: '16px 0' }} />
 
       <Typography>Початок практики:</Typography>
-      <DatePicker
-        value={settings.startPracticeDate}
-        onChange={(e) => onChangePracticeTerm(e, "startPracticeDate")}
-      />
+      <DatePicker value={settings.startPracticeDate} onChange={(e) => onChangePracticeTerm(e, 'startPracticeDate')} />
 
-      <Divider sx={{ margin: "16px 0" }} />
+      <Divider sx={{ margin: '16px 0' }} />
 
       <Typography>Кінець практики:</Typography>
-      <DatePicker
-        value={settings.endPracticeDate}
-        onChange={(e) => onChangePracticeTerm(e, "endPracticeDate")}
-      />
+      <DatePicker value={settings.endPracticeDate} onChange={(e) => onChangePracticeTerm(e, 'endPracticeDate')} />
 
-      <Divider sx={{ margin: "16px 0" }} />
+      <Divider sx={{ margin: '16px 0' }} />
 
       <TextField
         select
@@ -325,10 +316,10 @@ export const SettingsPage = () => {
         ))}
       </TextField>
 
-      <Divider sx={{ margin: "16px 0" }} />
+      <Divider sx={{ margin: '16px 0' }} />
 
-      <ContainedButton variant="contained" disabled={isSaving} onClick={saveChanges} >
-        {isSaving ? "Збереження..." : "Зберегти зміни"}
+      <ContainedButton variant="contained" disabled={isSaving} onClick={saveChanges}>
+        {isSaving ? 'Збереження...' : 'Зберегти зміни'}
       </ContainedButton>
     </div>
   )
