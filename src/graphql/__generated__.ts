@@ -1625,11 +1625,11 @@ export type GetAllPharmacyIdsQuery = {
 }
 
 export type GetAllSelectedPracticeBaseQueryVariables = Exact<{
-  studentName?: InputMaybe<Scalars['String']['input']>
-  studentGroup?: InputMaybe<Scalars['String']['input']>
-  pharmacyName?: InputMaybe<Scalars['String']['input']>
-  pharmacyCity?: InputMaybe<Scalars['String']['input']>
-  pharmacyAddress?: InputMaybe<Scalars['String']['input']>
+  studentName: InputMaybe<Scalars['String']['input']>
+  studentGroup: InputMaybe<Scalars['String']['input']>
+  pharmacyName: InputMaybe<Scalars['String']['input']>
+  pharmacyCity: InputMaybe<Scalars['String']['input']>
+  pharmacyAddress: InputMaybe<Scalars['String']['input']>
   currentPage?: InputMaybe<Scalars['Int']['input']>
   pageSize?: InputMaybe<Scalars['Int']['input']>
 }>
@@ -2127,11 +2127,11 @@ export const GetAllPharmacyIdsDocument = gql`
 `
 export const GetAllSelectedPracticeBaseDocument = gql`
   query GetAllSelectedPracticeBase(
-    $studentName: String = ""
-    $studentGroup: String = ""
-    $pharmacyName: String = ""
-    $pharmacyCity: String = ""
-    $pharmacyAddress: String = ""
+    $studentName: String
+    $studentGroup: String
+    $pharmacyName: String
+    $pharmacyCity: String
+    $pharmacyAddress: String
     $currentPage: Int = 1
     $pageSize: Int = 10
   ) {
