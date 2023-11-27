@@ -28,72 +28,76 @@ const Login: React.FC<{ setRegisterStep: React.Dispatch<React.SetStateAction<1 |
           return
         }
 
-        const student = await gql.GetOneStudent({ email: response.email })
-        const isStudentExisted = !!student.students.data.length
+        try {
+          const student = await gql.GetOneStudent({ email: response.email })
+          const isStudentExisted = !!student.students.data.length
 
-        if (!isStudentExisted) {
-          const userData = {
-            email: response.email,
-            name: response.name,
-            picture: response.picture,
+          if (!isStudentExisted) {
+            const userData = {
+              email: response.email,
+              name: response.name,
+              picture: response.picture,
+            }
+
+            const responce = await gql.CreateStudent({ ...userData })
+
+            window.localStorage.setItem(
+              'pharm-practice',
+              JSON.stringify({
+                ...userData,
+                id: responce.createStudent.data.id,
+                group: null,
+                phone: null,
+                middleName: null,
+              })
+            )
+
+            setRegisterStep(2)
+            return
           }
 
-          const responce = await gql.CreateStudent({ ...userData })
+          const userData = {
+            id: student.students.data[0].id,
+            email: student.students.data[0].attributes.email,
+            name: student.students.data[0].attributes.name,
+            picture: student.students.data[0].attributes.picture,
+          }
+
+          const isStudentHasGroup = !!student.students.data[0].attributes.group.data[0]
+          const userRole = student.students.data[0].attributes.access
+
+          if (!isStudentHasGroup && userRole === 'student') {
+            window.localStorage.setItem(
+              'pharm-practice',
+              JSON.stringify({ ...userData, group: null, phone: null, middleName: null })
+            )
+            setRegisterStep(2)
+            return
+          }
+
+          let group = null
+
+          if (userRole === 'student') {
+            group = {
+              name: student.students.data[0].attributes.group.data[0].attributes.name,
+              courseNumber: student.students.data[0].attributes.group.data[0].attributes.courseNumber,
+            }
+          }
 
           window.localStorage.setItem(
             'pharm-practice',
             JSON.stringify({
               ...userData,
-              id: responce.createStudent.data.id,
-              group: null,
-              phone: null,
-              middleName: null,
+              group,
+              phone: student.students.data[0].attributes.phone,
+              middleName: student.students.data[0].attributes.middleName,
             })
           )
 
-          setRegisterStep(2)
-          return
+          navigate('/')
+        } catch (err) {
+          alert('Помилка при авторизації')
         }
-
-        const userData = {
-          id: student.students.data[0].id,
-          email: student.students.data[0].attributes.email,
-          name: student.students.data[0].attributes.name,
-          picture: student.students.data[0].attributes.picture,
-        }
-
-        const isStudentHasGroup = !!student.students.data[0].attributes.group.data[0]
-        const userRole = student.students.data[0].attributes.access
-
-        if (!isStudentHasGroup && userRole === 'student') {
-          window.localStorage.setItem(
-            'pharm-practice',
-            JSON.stringify({ ...userData, group: null, phone: null, middleName: null })
-          )
-          setRegisterStep(2)
-          return
-        }
-
-        let group = null
-
-        if (userRole === 'student') {
-          group = {
-            name: student.students.data[0].attributes.group.data[0].attributes.name,
-            courseNumber: student.students.data[0].attributes.group.data[0].attributes.courseNumber,
-          }
-        }
-
-        window.localStorage.setItem(
-          'pharm-practice',
-          JSON.stringify({
-            ...userData,
-            group,
-            phone: student.students.data[0].attributes.phone,
-            middleName: student.students.data[0].attributes.middleName,
-          })
-        )
-
-        navigate('/')
       }}
       onError={() => {
         alert('Помилка при авторизації')

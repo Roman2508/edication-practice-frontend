@@ -60,6 +60,8 @@ const LoginPage = () => {
     fetchData()
   }, [])
 
+  console.log(selectedGroup)
+
   const updateGroup = async () => {
     try {
       setIsLoading(true)
