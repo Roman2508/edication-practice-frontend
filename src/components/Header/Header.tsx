@@ -1,7 +1,8 @@
 import React from 'react'
 import { googleLogout } from '@react-oauth/google'
 import { Link, useNavigate } from 'react-router-dom'
-import { IconButton, Menu, MenuItem, Toolbar, Typography } from '@mui/material'
+import CircularProgress from '@mui/material/CircularProgress'
+import { IconButton, Menu, MenuItem, Toolbar, Typography, Box } from '@mui/material'
 
 import { AppContext } from '../../App'
 import styles from './Header.module.css'
@@ -54,7 +55,7 @@ export const Header = () => {
           </Typography>
         </Stack> */}
 
-        {user && user.name && (
+        {user && user.name ? (
           <div className={styles['account-wrapper']}>
             <Typography>{user.name}</Typography>
 
@@ -98,6 +99,10 @@ export const Header = () => {
               <MenuItem onClick={logout}>Вихід</MenuItem>
             </Menu>
           </div>
+        ) : (
+          <Box>
+            <CircularProgress size={28} sx={{ mr: 2 }} />
+          </Box>
         )}
       </Toolbar>
     </div>
