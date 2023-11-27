@@ -53,47 +53,51 @@ const App = () => {
   React.useEffect(() => {
     if (auth && auth.id) {
       const fetchData = async () => {
-        const data = await gql.CanUserChoosePracticeBase({ userId: auth.id })
+        try {
+          const data = await gql.CanUserChoosePracticeBase({ userId: auth.id })
 
-        if (data.selectedBasesOfPractices.data[0]) {
-          setCanUserChoosePracticeBase(false)
+          if (data.selectedBasesOfPractices.data[0]) {
+            setCanUserChoosePracticeBase(false)
+          }
+
+          const responce = await gql.GetMe({ id: auth.id })
+
+          if (!responce.students.data) {
+            navigate('/auth')
+            return
+          }
+
+          const { name, middleName, email, access, picture, group } = responce.students.data[0].attributes
+
+          const groupData = group.data
+            ? {
+                name: group.data[0].attributes.name,
+                courseNumber: group.data[0].attributes.courseNumber,
+              }
+            : null
+
+          const me = {
+            name,
+            email,
+            access,
+            picture,
+            middleName,
+            id: auth.id,
+            group: groupData,
+          }
+
+          window.localStorage.setItem('pharm-practice', JSON.stringify(me))
+
+          setUser(me)
+        } catch (err) {
+          console.log(err, 'App error!')
         }
-
-        const responce = await gql.GetMe({ id: auth.id })
-
-        if (!responce.students.data[0]) {
-          navigate('/auth')
-          return
-        }
-
-        const { name, middleName, email, access, picture, group } = responce.students.data[0].attributes
-
-        const groupData = group.data[0]
-          ? {
-              name: group.data[0].attributes.name,
-              courseNumber: group.data[0].attributes.courseNumber,
-            }
-          : null
-
-        const me = {
-          name,
-          email,
-          access,
-          picture,
-          middleName,
-          id: auth.id,
-          group: groupData,
-        }
-
-        window.localStorage.setItem('pharm-practice', JSON.stringify(me))
-
-        setUser(me)
       }
       fetchData()
     } else {
       navigate('/auth')
     }
-  }, [auth?.id])
+  }, [auth])
 
   React.useEffect(() => {
     if (!canUserChoosePracticeBase) {

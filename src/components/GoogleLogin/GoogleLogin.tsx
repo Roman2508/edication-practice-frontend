@@ -92,8 +92,8 @@ const Login: React.FC<{ setRegisterStep: React.Dispatch<React.SetStateAction<1 |
             picture: student.students.data[0].attributes.picture,
           }
 
-          const isStudentHasGroup = !!student.students.data[0].attributes.group.data[0]
-          const userRole = student.students.data[0].attributes.access
+          const isStudentHasGroup = !!student.students.data[0].attributes.group.data
+          const userRole = student.students.data[0]?.attributes.access
 
           if (!isStudentHasGroup && userRole === 'student') {
             window.localStorage.setItem(
