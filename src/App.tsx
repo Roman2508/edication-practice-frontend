@@ -97,7 +97,7 @@ const App = () => {
     } else {
       navigate('/auth')
     }
-  }, [auth])
+  }, [])
 
   React.useEffect(() => {
     if (!canUserChoosePracticeBase) {
