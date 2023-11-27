@@ -25,11 +25,11 @@ const Login: React.FC<{ setRegisterStep: React.Dispatch<React.SetStateAction<1 |
 
   const { setAlert } = React.useContext(AppContext)
 
-  const setError = () => {
+  const setAlertMessage = (message: string, severity: string) => {
     setAlert({
       isShow: true,
-      message: 'Помилка при авторизації!',
-      severity: 'error',
+      message,
+      severity,
     })
     setTimeout(() => {
       setAlert((prev) => ({ ...prev, isShow: false }))
@@ -51,7 +51,7 @@ const Login: React.FC<{ setRegisterStep: React.Dispatch<React.SetStateAction<1 |
         const response = decoded as IAuthData
 
         if (!Object.keys(response).length) {
-          setError()
+          setAlertMessage('Помилка при авторизації!', 'error')
           return
         }
 
@@ -124,14 +124,15 @@ const Login: React.FC<{ setRegisterStep: React.Dispatch<React.SetStateAction<1 |
           )
 
           navigate('/')
+          setAlertMessage('Авторизований!', 'success')
         } catch (err) {
-          setError()
+          setAlertMessage('Помилка при авторизації!', 'error')
         } finally {
           setIsLoading(false)
         }
       }}
       onError={() => {
-        setError()
+        setAlertMessage('Помилка при авторизації!', 'error')
         console.log('Login Failed')
       }}
       auto_select
