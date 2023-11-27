@@ -16,6 +16,7 @@ export const PharmacyPage = () => {
 
   const student = getAuthData()
 
+  // const [placesCount, setPlacesCount] = React.useState(1)
   const [isOpenModal, setIsOpenModal] = React.useState(false)
   const [data, setData] = React.useState<GetFullPharmacyQuery>()
   const [settings, setSettings] = React.useState<GetSettingsQuery | null>(null)
@@ -25,9 +26,19 @@ export const PharmacyPage = () => {
     if (!id) return
 
     const fetchPharmacy = async () => {
-      const data = await gql.GetFullPharmacy({ id })
+      try {
+        const data = await gql.GetFullPharmacy({ id })
+        // const pharmacyPlaces = await gql.GetSelectedPracticeCountById({ pharmacyId: id })
 
-      setData(data)
+        // const allPlacesCount = data.pharmacies.data[0].attributes.places
+        // const occupiedPlacesCount = pharmacyPlaces.selectedBasesOfPractices.data.length
+
+        // setPlacesCount(allPlacesCount - occupiedPlacesCount)
+
+        setData(data)
+      } catch (err) {
+        alert('Помилка')
+      }
     }
 
     fetchPharmacy()
@@ -59,7 +70,7 @@ export const PharmacyPage = () => {
         setOpen={setIsOpenModal}
         title="Терміни проходження практики"
         pharmacyData={{
-          places: data?.pharmacies.data[0].attributes.places || 0,
+          places: data?.pharmacies.data[0].attributes.places || 0 /* || placesCount  */,
           name: data?.pharmacies.data[0].attributes.name || '',
           address: data?.pharmacies.data[0].attributes.address || '',
         }}

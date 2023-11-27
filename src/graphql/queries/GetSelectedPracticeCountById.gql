@@ -1,0 +1,13 @@
+query GetSelectedPracticeCountById($pharmacyId: ID!) {
+  selectedBasesOfPractices(filters: { pharmacy: { id: { eq: $pharmacyId } } }) {
+    data {
+      attributes {
+        pharmacy {
+          data {
+            id
+          }
+        }
+      }
+    }
+  }
+}
