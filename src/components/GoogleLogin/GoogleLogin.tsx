@@ -1,8 +1,12 @@
 import React from 'react'
 import jwt_decode from 'jwt-decode'
-import { gql } from '../../graphql/client'
+import Box from '@mui/material/Box'
 import { useNavigate } from 'react-router-dom'
 import { GoogleLogin } from '@react-oauth/google'
+import CircularProgress from '@mui/material/CircularProgress'
+
+import { AppContext } from '../../App'
+import { gql } from '../../graphql/client'
 
 export interface IAuthData {
   id: string
@@ -17,6 +21,29 @@ export interface IAuthData {
 const Login: React.FC<{ setRegisterStep: React.Dispatch<React.SetStateAction<1 | 2>> }> = ({ setRegisterStep }) => {
   const navigate = useNavigate()
 
+  const [isLoading, setIsLoading] = React.useState(false)
+
+  const { setAlert } = React.useContext(AppContext)
+
+  const setError = () => {
+    setAlert({
+      isShow: true,
+      message: 'Помилка при авторизації!',
+      severity: 'error',
+    })
+    setTimeout(() => {
+      setAlert((prev) => ({ ...prev, isShow: false }))
+    }, 3000)
+  }
+
+  if (isLoading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+        <CircularProgress />
+      </Box>
+    )
+  }
+
   return (
     <GoogleLogin
       onSuccess={async (credentialResponse) => {
@@ -24,11 +51,13 @@ const Login: React.FC<{ setRegisterStep: React.Dispatch<React.SetStateAction<1 |
         const response = decoded as IAuthData
 
         if (!Object.keys(response).length) {
-          alert('Помилка при авторизації!')
+          setError()
           return
         }
 
         try {
+          setIsLoading(true)
+
           const student = await gql.GetOneStudent({ email: response.email })
           const isStudentExisted = !!student.students.data.length
 
@@ -96,11 +125,13 @@ const Login: React.FC<{ setRegisterStep: React.Dispatch<React.SetStateAction<1 |
 
           navigate('/')
         } catch (err) {
-          alert('Помилка при авторизації')
+          setError()
+        } finally {
+          setIsLoading(false)
         }
       }}
       onError={() => {
-        alert('Помилка при авторизації')
+        setError()
         console.log('Login Failed')
       }}
       auto_select
