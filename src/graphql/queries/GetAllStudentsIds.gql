@@ -1,0 +1,7 @@
+query GetAllStudentsIds {
+  students(pagination: { pageSize: 10000 }, filters: { access: { eq: "student" } }) {
+    data {
+      id
+    }
+  }
+}

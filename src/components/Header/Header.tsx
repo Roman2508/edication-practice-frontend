@@ -32,6 +32,8 @@ export const Header = () => {
     }
   }
 
+  console.log(user)
+
   return (
     <div /* position="static" */ className={styles.header}>
       <Toolbar /* sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }} */>
@@ -68,7 +70,7 @@ export const Header = () => {
               color="inherit"
             >
               {/* <AccountCircle /> */}
-              <img className={styles.avatar} src={user.picture} alt="account avatar" />
+              <img className={styles.avatar} src={user.picture} referrerPolicy="no-referrer" alt="account avatar" />
             </IconButton>
             <Menu
               id="menu-appbar"

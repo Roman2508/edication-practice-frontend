@@ -2,7 +2,8 @@
   --light-blue: #90caf925;
   --gray: #dddddd;
   --root-bg-color: rgb(19, 173, 163);
-  --root-bg-gradient: linear-gradient(90deg, rgba(19, 173, 163, 1) 0%, rgba(102, 92, 206, 1) 100%);
+  /* --root-bg-gradient: linear-gradient(90deg, rgba(19, 173, 163, 1) 0%, rgba(102, 92, 206, 1) 100%); */
+  --root-bg-gradient: radial-gradient(circle at 50% -20.71%, #1d5d9b 5%, #a0a5ff 75%, #788efc 100%);
 }
 
 * {

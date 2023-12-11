@@ -176,6 +176,41 @@ export const SettingsPage = () => {
     }
   }
 
+  const onDeleteAllStudents = async () => {
+    if (window.confirm('Ви дійсно хочете видалити всіх студентів?')) {
+      try {
+        setButtonDisabled((prev) => ({ ...prev, deleteStudents: true }))
+        const allStudentsIds = await gql.GetAllStudentsIds()
+
+        if (!allStudentsIds || !allStudentsIds.students.data.length) return
+
+        Promise.all(
+          allStudentsIds.students.data.map(async (el) => {
+            await gql.DeleteAllStudentsByIds({ id: el.id })
+          })
+        )
+
+        setAlert({
+          isShow: true,
+          message: 'Студенти успішно видалені!',
+          severity: 'success',
+        })
+      } catch (err) {
+        setAlert({
+          isShow: true,
+          message: 'Помилка при видалені студентів!',
+          severity: 'error',
+        })
+        console.log(err)
+      } finally {
+        setButtonDisabled((prev) => ({ ...prev, deleteStudents: false }))
+        setTimeout(() => {
+          setAlert((prev) => ({ ...prev, isShow: false }))
+        }, 3000)
+      }
+    }
+  }
+
   const saveChanges = async () => {
     if (!settings) return
 
@@ -269,8 +304,14 @@ export const SettingsPage = () => {
         {buttonDisabled.deletePharmacies ? 'Видалення...' : 'Видалити всі бази практик'}
       </Button>
 
-      <Button variant="outlined" color="error" className={styles.button}>
-        Видалити всіх студентів
+      <Button
+        variant="outlined"
+        color="error"
+        className={styles.button}
+        onClick={onDeleteAllStudents}
+        disabled={buttonDisabled.deleteStudents}
+      >
+        {buttonDisabled.deleteStudents ? 'Видалення...' : 'Видалити всіх студентів'}
       </Button>
 
       <Divider sx={{ margin: '16px 0' }} />

@@ -122,6 +122,8 @@ export const StudentsTableBody: React.FC<IStudentsTableProps> = ({
 
                 const { name, city, address } = row.attributes.pharmacy.data.attributes
 
+                const groupData = row.attributes.student.data.attributes.group.data
+
                 return (
                   <TableRow
                     key={row.id}
@@ -147,7 +149,8 @@ export const StudentsTableBody: React.FC<IStudentsTableProps> = ({
                       {`${row.attributes.student.data.attributes.name} ${row.attributes.student.data.attributes.middleName}`}
                     </TableCell>
                     <TableCell align="left">
-                      {row.attributes.student.data.attributes.group.data[0]?.attributes.name}
+                      {groupData && groupData.length && groupData[0].attributes.name}
+                      {/* {row.attributes.student.data.attributes.group.data[0]?.attributes.name} */}
                     </TableCell>
                     <TableCell align="left">{name}</TableCell>
                     <TableCell align="left">{city}</TableCell>

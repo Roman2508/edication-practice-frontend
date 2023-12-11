@@ -1,5 +1,5 @@
 mutation ChangeStudentData($id: ID!, $group: ID!, $phone: String!, $middleName: String!) {
-  updateStudent(id: $id, data: { group: [$group], phone: $phone, middleName: $middleName }) {
+  updateStudent(id: $id, data: { group: $group, phone: $phone, middleName: $middleName }) {
     data {
       id
       attributes {

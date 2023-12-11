@@ -1,0 +1,7 @@
+mutation DeleteAllStudentsByIds($id: ID!) {
+  deleteStudent(id: $id) {
+    data {
+      id
+    }
+  }
+}

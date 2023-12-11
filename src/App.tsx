@@ -71,8 +71,8 @@ const App = () => {
 
           const groupData = group.data
             ? {
-                name: group.data[0].attributes.name,
-                courseNumber: group.data[0].attributes.courseNumber,
+                name: group.data.attributes.name,
+                courseNumber: group.data.attributes.courseNumber,
               }
             : null
 
@@ -97,7 +97,7 @@ const App = () => {
     } else {
       navigate('/auth')
     }
-  }, [])
+  }, [auth && auth.id])
 
   React.useEffect(() => {
     if (!canUserChoosePracticeBase) {

@@ -1,5 +1,4 @@
 // @ts-nocheck
-
 import { GraphQLClient } from 'graphql-request'
 import { GraphQLClientRequestHeaders } from 'graphql-request/build/cjs/types'
 import gql from 'graphql-tag'
@@ -154,8 +153,14 @@ export type Group = {
   readonly createdAt: Maybe<Scalars['DateTime']['output']>
   readonly name: Maybe<Scalars['String']['output']>
   readonly publishedAt: Maybe<Scalars['DateTime']['output']>
-  readonly student: Maybe<StudentEntityResponse>
+  readonly students: Maybe<StudentRelationResponseCollection>
   readonly updatedAt: Maybe<Scalars['DateTime']['output']>
+}
+
+export type GroupStudentsArgs = {
+  filters: InputMaybe<StudentFiltersInput>
+  pagination?: InputMaybe<PaginationArg>
+  sort?: InputMaybe<ReadonlyArray<InputMaybe<Scalars['String']['input']>>>
 }
 
 export type GroupEntity = {
@@ -184,7 +189,7 @@ export type GroupFiltersInput = {
   readonly not: InputMaybe<GroupFiltersInput>
   readonly or: InputMaybe<ReadonlyArray<InputMaybe<GroupFiltersInput>>>
   readonly publishedAt: InputMaybe<DateTimeFilterInput>
-  readonly student: InputMaybe<StudentFiltersInput>
+  readonly students: InputMaybe<StudentFiltersInput>
   readonly updatedAt: InputMaybe<DateTimeFilterInput>
 }
 
@@ -192,12 +197,7 @@ export type GroupInput = {
   readonly courseNumber: InputMaybe<Scalars['Int']['input']>
   readonly name: InputMaybe<Scalars['String']['input']>
   readonly publishedAt: InputMaybe<Scalars['DateTime']['input']>
-  readonly student: InputMaybe<Scalars['ID']['input']>
-}
-
-export type GroupRelationResponseCollection = {
-  readonly __typename?: 'GroupRelationResponseCollection'
-  readonly data: ReadonlyArray<GroupEntity>
+  readonly students: InputMaybe<ReadonlyArray<InputMaybe<Scalars['ID']['input']>>>
 }
 
 export type I18NLocale = {
@@ -911,19 +911,12 @@ export type Student = {
   readonly access: Enum_Student_Access
   readonly createdAt: Maybe<Scalars['DateTime']['output']>
   readonly email: Scalars['String']['output']
-  readonly group: Maybe<GroupRelationResponseCollection>
+  readonly group: Maybe<GroupEntityResponse>
   readonly middleName: Maybe<Scalars['String']['output']>
   readonly name: Scalars['String']['output']
   readonly phone: Maybe<Scalars['String']['output']>
   readonly picture: Maybe<Scalars['String']['output']>
   readonly updatedAt: Maybe<Scalars['DateTime']['output']>
-}
-
-export type StudentGroupArgs = {
-  filters: InputMaybe<GroupFiltersInput>
-  pagination?: InputMaybe<PaginationArg>
-  publicationState?: InputMaybe<PublicationState>
-  sort?: InputMaybe<ReadonlyArray<InputMaybe<Scalars['String']['input']>>>
 }
 
 export type StudentEntity = {
@@ -962,11 +955,16 @@ export type StudentFiltersInput = {
 export type StudentInput = {
   readonly access: InputMaybe<Enum_Student_Access>
   readonly email: InputMaybe<Scalars['String']['input']>
-  readonly group: InputMaybe<ReadonlyArray<InputMaybe<Scalars['ID']['input']>>>
+  readonly group: InputMaybe<Scalars['ID']['input']>
   readonly middleName: InputMaybe<Scalars['String']['input']>
   readonly name: InputMaybe<Scalars['String']['input']>
   readonly phone: InputMaybe<Scalars['String']['input']>
   readonly picture: InputMaybe<Scalars['String']['input']>
+}
+
+export type StudentRelationResponseCollection = {
+  readonly __typename?: 'StudentRelationResponseCollection'
+  readonly data: ReadonlyArray<StudentEntity>
 }
 
 export type UploadFile = {
@@ -1376,11 +1374,11 @@ export type ChangeStudentDataMutation = {
         readonly picture: string
         readonly middleName: string
         readonly group: {
-          readonly __typename?: 'GroupRelationResponseCollection'
-          readonly data: ReadonlyArray<{
+          readonly __typename?: 'GroupEntityResponse'
+          readonly data: {
             readonly __typename?: 'GroupEntity'
             readonly attributes: { readonly __typename?: 'Group'; readonly name: string; readonly courseNumber: number }
-          }>
+          }
         }
       }
     }
@@ -1483,11 +1481,11 @@ export type SelectBaseOfPracticeMutation = {
               readonly phone: string
               readonly middleName: string
               readonly group: {
-                readonly __typename?: 'GroupRelationResponseCollection'
-                readonly data: ReadonlyArray<{
+                readonly __typename?: 'GroupEntityResponse'
+                readonly data: {
                   readonly __typename?: 'GroupEntity'
                   readonly attributes: { readonly __typename?: 'Group'; readonly name: string }
-                }>
+                }
               }
             }
           }
@@ -1562,6 +1560,18 @@ export type CanUserChoosePracticeBaseQuery = {
   readonly selectedBasesOfPractices: {
     readonly __typename?: 'SelectedBasesOfPracticeEntityResponseCollection'
     readonly data: ReadonlyArray<{ readonly __typename?: 'SelectedBasesOfPracticeEntity'; readonly id: string }>
+  }
+}
+
+export type DeleteAllStudentsByIdsMutationVariables = Exact<{
+  id: Scalars['ID']['input']
+}>
+
+export type DeleteAllStudentsByIdsMutation = {
+  readonly __typename?: 'Mutation'
+  readonly deleteStudent: {
+    readonly __typename?: 'StudentEntityResponse'
+    readonly data: { readonly __typename?: 'StudentEntity'; readonly id: string }
   }
 }
 
@@ -1664,8 +1674,8 @@ export type GetAllSelectedPracticeBaseQuery = {
               readonly phone: string
               readonly middleName: string
               readonly group: {
-                readonly __typename?: 'GroupRelationResponseCollection'
-                readonly data: ReadonlyArray<{
+                readonly __typename?: 'GroupEntityResponse'
+                readonly data: {
                   readonly __typename?: 'GroupEntity'
                   readonly id: string
                   readonly attributes: {
@@ -1673,7 +1683,7 @@ export type GetAllSelectedPracticeBaseQuery = {
                     readonly name: string
                     readonly courseNumber: number
                   }
-                }>
+                }
               }
             }
           }
@@ -1717,14 +1727,24 @@ export type GetAllStudentsQuery = {
         readonly phone: string
         readonly middleName: string
         readonly group: {
-          readonly __typename?: 'GroupRelationResponseCollection'
-          readonly data: ReadonlyArray<{
+          readonly __typename?: 'GroupEntityResponse'
+          readonly data: {
             readonly __typename?: 'GroupEntity'
             readonly attributes: { readonly __typename?: 'Group'; readonly name: string; readonly courseNumber: number }
-          }>
+          }
         }
       }
     }>
+  }
+}
+
+export type GetAllStudentsIdsQueryVariables = Exact<{ [key: string]: never }>
+
+export type GetAllStudentsIdsQuery = {
+  readonly __typename?: 'Query'
+  readonly students: {
+    readonly __typename?: 'StudentEntityResponseCollection'
+    readonly data: ReadonlyArray<{ readonly __typename?: 'StudentEntity'; readonly id: string }>
   }
 }
 
@@ -1785,11 +1805,11 @@ export type GetMeQuery = {
         readonly picture: string
         readonly access: Enum_Student_Access
         readonly group: {
-          readonly __typename?: 'GroupRelationResponseCollection'
-          readonly data: ReadonlyArray<{
+          readonly __typename?: 'GroupEntityResponse'
+          readonly data: {
             readonly __typename?: 'GroupEntity'
             readonly attributes: { readonly __typename?: 'Group'; readonly name: string; readonly courseNumber: number }
-          }>
+          }
         }
       }
     }>
@@ -1816,11 +1836,11 @@ export type GetOneStudentQuery = {
         readonly picture: string
         readonly middleName: string
         readonly group: {
-          readonly __typename?: 'GroupRelationResponseCollection'
-          readonly data: ReadonlyArray<{
+          readonly __typename?: 'GroupEntityResponse'
+          readonly data: {
             readonly __typename?: 'GroupEntity'
             readonly attributes: { readonly __typename?: 'Group'; readonly name: string; readonly courseNumber: number }
-          }>
+          }
         }
       }
     }>
@@ -1922,7 +1942,7 @@ export const ChangePlacesCountInPharmacyDocument = gql`
 `
 export const ChangeStudentDataDocument = gql`
   mutation ChangeStudentData($id: ID!, $group: ID!, $phone: String!, $middleName: String!) {
-    updateStudent(id: $id, data: { group: [$group], phone: $phone, middleName: $middleName }) {
+    updateStudent(id: $id, data: { group: $group, phone: $phone, middleName: $middleName }) {
       data {
         id
         attributes {
@@ -2099,6 +2119,15 @@ export const CanUserChoosePracticeBaseDocument = gql`
     }
   }
 `
+export const DeleteAllStudentsByIdsDocument = gql`
+  mutation DeleteAllStudentsByIds($id: ID!) {
+    deleteStudent(id: $id) {
+      data {
+        id
+      }
+    }
+  }
+`
 export const GetAllGroupsDocument = gql`
   query GetAllGroups {
     groups {
@@ -2236,6 +2265,15 @@ export const GetAllStudentsDocument = gql`
           phone
           middleName
         }
+      }
+    }
+  }
+`
+export const GetAllStudentsIdsDocument = gql`
+  query GetAllStudentsIds {
+    students(pagination: { pageSize: 10000 }, filters: { access: { eq: "student" } }) {
+      data {
+        id
       }
     }
   }
@@ -2502,6 +2540,20 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
         'query'
       )
     },
+    DeleteAllStudentsByIds(
+      variables: DeleteAllStudentsByIdsMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders
+    ): Promise<DeleteAllStudentsByIdsMutation> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<DeleteAllStudentsByIdsMutation>(DeleteAllStudentsByIdsDocument, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'DeleteAllStudentsByIds',
+        'mutation'
+      )
+    },
     GetAllGroups(
       variables?: GetAllGroupsQueryVariables,
       requestHeaders?: GraphQLClientRequestHeaders
@@ -2569,6 +2621,20 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
             ...wrappedRequestHeaders,
           }),
         'GetAllStudents',
+        'query'
+      )
+    },
+    GetAllStudentsIds(
+      variables?: GetAllStudentsIdsQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders
+    ): Promise<GetAllStudentsIdsQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<GetAllStudentsIdsQuery>(GetAllStudentsIdsDocument, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'GetAllStudentsIds',
         'query'
       )
     },

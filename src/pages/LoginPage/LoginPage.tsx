@@ -78,11 +78,16 @@ const LoginPage = () => {
         middleName,
       })
 
-      const { name, courseNumber } = data.updateStudent.data.attributes.group.data[0].attributes
+      const groupData = data.updateStudent.data.attributes.group.data
+
+      // if (!groupData) return
 
       const updatedUserData = {
         ...user,
-        group: { name, courseNumber },
+        group: {
+          name: groupData.attributes.name,
+          courseNumber: groupData.attributes.courseNumber,
+        },
         phone: phone.value,
         middleName,
       }

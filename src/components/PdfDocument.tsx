@@ -134,8 +134,8 @@ export const PdfDocument: React.FC<IPdfDocumentProps> = ({ selectedStudents, pri
         const { group, name, middleName } = student.attributes.student.data.attributes
 
         const groupData = {
-          name: group.data[0] ? group.data[0].attributes.name : '-',
-          courseNumber: group.data[0] ? group.data[0].attributes.courseNumber : '-',
+          name: group.data[0] ? group.data[0].attributes.name : '_______',
+          courseNumber: group.data[0] ? group.data[0].attributes.courseNumber : '_______',
         }
 
         const { start, end } = getPracticeTerm(
