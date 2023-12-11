@@ -182,11 +182,33 @@ export const SettingsPage = () => {
         setButtonDisabled((prev) => ({ ...prev, deleteStudents: true }))
         const allStudentsIds = await gql.GetAllStudentsIds()
 
-        if (!allStudentsIds || !allStudentsIds.students.data.length) return
+        if (!allStudentsIds || !allStudentsIds.students.data.length) {
+          setAlert({
+            isShow: true,
+            message: 'Студени не знайдені!',
+            severity: 'error',
+          })
+        }
 
         Promise.all(
           allStudentsIds.students.data.map(async (el) => {
             await gql.DeleteAllStudentsByIds({ id: el.id })
+          })
+        )
+
+        const allSelectedPracticeIds = await gql.GetAllSelectedPracticeBase()
+
+        if (!allStudentsIds || !allStudentsIds.students.data.length) {
+          setAlert({
+            isShow: true,
+            message: 'Бази практик не знайдені!',
+            severity: 'error',
+          })
+        }
+
+        Promise.all(
+          allSelectedPracticeIds.selectedBasesOfPractices.data.map(async (el) => {
+            await gql.DeleteSelectedBasesOfPracticeByIds({ id: el.id })
           })
         )
 

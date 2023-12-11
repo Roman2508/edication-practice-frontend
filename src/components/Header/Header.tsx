@@ -32,8 +32,6 @@ export const Header = () => {
     }
   }
 
-  console.log(user)
-
   return (
     <div /* position="static" */ className={styles.header}>
       <Toolbar /* sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }} */>

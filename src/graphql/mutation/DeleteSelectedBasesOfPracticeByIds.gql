@@ -1,0 +1,7 @@
+mutation DeleteSelectedBasesOfPracticeByIds($id: ID!) {
+  deleteSelectedBasesOfPractice(id: $id) {
+    data {
+      id
+    }
+  }
+}
